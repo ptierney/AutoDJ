@@ -51,6 +51,9 @@
     <ClInclude Include="..\include\graph\graph_ParticleSystem.h">
       <Filter>Header Files\graph</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\graph\graph_Attraction.h">
+      <Filter>Header Files\graph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -63,6 +66,9 @@
       <Filter>Source Files\graph</Filter>
     </ClCompile>
     <ClCompile Include="..\src\graph\graph_Particle.cpp">
+      <Filter>Source Files\graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\graph\graph_Attraction.cpp">
       <Filter>Source Files\graph</Filter>
     </ClCompile>
   </ItemGroup>
