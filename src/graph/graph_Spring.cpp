@@ -9,6 +9,7 @@ namespace graph {
 Spring::Spring(Particle& a, Particle& b, float ks, float d, float r)
     : a_(a), b_(b), spring_constant_(ks), damping_(d), rest_length_(r) {
     // nothing here
+    on_ = true;
 }
 
 Spring::~Spring() {
