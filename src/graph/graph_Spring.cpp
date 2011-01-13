@@ -16,7 +16,7 @@ Spring::~Spring() {
 }
 
 float Spring::current_length() {
-    a_.position().distance(b_.position());
+    return a_.position().distance(b_.position());
 }
 
 void Spring::apply() {
@@ -26,7 +26,7 @@ void Spring::apply() {
         float a_to_b_dist = a_to_b.length();
 
         // TODO: replace with better check for zero
-        if (a_to_b_dist <= EPSILON && a_to_b_dist >= -EPSILON) {
+        if (a_to_b_dist <= ci::EPSILON_VALUE && a_to_b_dist >= -ci::EPSILON_VALUE) {
             a_to_b = ci::Vec2f::zero();
         } else {
             a_to_b.normalize();

@@ -13,7 +13,7 @@ Particle::Particle(float m) {
 }
 
 float Particle::distance_to(const Particle& p) {
-    return position_.distance(p);
+    return position_.distance(p.position());
 }
 
 void Particle::make_fixed() {
@@ -32,4 +32,6 @@ void Particle::reset() {
     position_ = ci::Vec2f::zero();
     velocity_ = ci::Vec2f::zero();
     force_ = ci::Vec2f::zero();
+}
+
 }

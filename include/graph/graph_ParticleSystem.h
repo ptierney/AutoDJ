@@ -29,6 +29,9 @@ public:
     void apply_forces();
     void clear_forces();
 
+    void tick();
+    void tick(float t);
+
     std::vector<std::tr1::shared_ptr<Particle> > particles_;
     std::vector<std::tr1::shared_ptr<Spring> > springs_;
     std::vector<std::tr1::shared_ptr<Attraction> > attractions_;

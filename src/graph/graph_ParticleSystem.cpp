@@ -10,6 +10,7 @@
 #include "graph/graph_Particle.h"
 #include "graph/graph_Spring.h"
 #include "graph/graph_Attraction.h"
+#include "graph/graph_Integrator.h"
 
 namespace graph {
 
@@ -29,9 +30,12 @@ std::tr1::shared_ptr<Particle> ParticleSystem::make_particle(float mass,
     return p;
 }
 
-std::tr1::shared_ptr<Spring> make_spring(Particle& a, Particle& b,
+std::tr1::shared_ptr<Spring> ParticleSystem::make_spring(Particle& a, Particle& b,
     float ks, float d, float r) {
 
+    std::tr1::shared_ptr<Spring> s(new Spring(a, b, ks, d, r));
+    springs_.push_back(s);
+    return s;
 }
 
 void ParticleSystem::apply_forces() {
@@ -65,6 +69,14 @@ void ParticleSystem::clear_forces() {
         particles_.begin(); it != particles_.end(); ++it) {
         (*it)->force() = ci::Vec2f::zero();
     }
+}
+
+void ParticleSystem::tick() {
+    tick(1.0f);
+}
+
+void ParticleSystem::tick(float t) {
+    integrator_->step(t);
 }
 
 }
