@@ -26,6 +26,8 @@
     <ClCompile Include="..\src\adj\adj_Visualizer.cpp" />
     <ClCompile Include="..\src\graph\graph_Attraction.cpp" />
     <ClCompile Include="..\src\graph\graph_Particle.cpp" />
+    <ClCompile Include="..\src\graph\graph_ParticleSystem.cpp" />
+    <ClCompile Include="..\src\graph\graph_RungeKuttaIntegrator.cpp" />
     <ClCompile Include="..\src\graph\graph_Spring.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
