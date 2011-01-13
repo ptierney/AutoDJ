@@ -21,6 +21,8 @@ public:
     void update();
     void draw();
 
+    void shutdown();
+
     static AdjApp& instance() { return *instance_; }
 
 private:

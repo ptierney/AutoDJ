@@ -33,6 +33,10 @@ void AdjApp::draw() {
     visualizer_->draw();
 }
 
+void AdjApp::shutdown() {
+    visualizer_.reset();
+}
+
 // This line tells Cinder to actually create the application
 CINDER_APP_BASIC(AdjApp, ci::app::RendererGl)
 

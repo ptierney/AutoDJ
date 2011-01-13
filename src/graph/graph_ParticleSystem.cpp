@@ -15,11 +15,22 @@
 namespace graph {
 
 ParticleSystem::ParticleSystem() {
-    integrator_ = std::tr1::shared_ptr<RungeKuttaIntegrator>(
-        new RungeKuttaIntegrator(*this));
-
     gravity_ = ci::Vec2f::zero();
     drag_ = 0.001f;
+}
+
+ParticleSystem::ParticleSystem(ci::Vec2f gravity, float somedrag) {
+    gravity_ = gravity;
+    drag_ = somedrag;
+}
+
+void ParticleSystem::init() {
+    integrator_ = std::tr1::shared_ptr<RungeKuttaIntegrator>(
+        new RungeKuttaIntegrator(*this));
+}
+
+std::tr1::shared_ptr<Particle> ParticleSystem::make_particle() {
+    return make_particle(1.0f, ci::Vec2f::zero());
 }
 
 std::tr1::shared_ptr<Particle> ParticleSystem::make_particle(float mass, 
@@ -36,6 +47,13 @@ std::tr1::shared_ptr<Spring> ParticleSystem::make_spring(Particle& a, Particle& 
     std::tr1::shared_ptr<Spring> s(new Spring(a, b, ks, d, r));
     springs_.push_back(s);
     return s;
+}
+
+std::tr1::shared_ptr<Attraction> ParticleSystem::make_attraction(Particle& a, 
+    Particle& b, float k, float min_distance) {
+    std::tr1::shared_ptr<Attraction> m(new Attraction(a, b, k, min_distance));
+    attractions_.push_back(m);
+    return m;
 }
 
 void ParticleSystem::apply_forces() {
@@ -77,6 +95,12 @@ void ParticleSystem::tick() {
 
 void ParticleSystem::tick(float t) {
     integrator_->step(t);
+}
+
+void ParticleSystem::clear() {
+    particles_.clear();
+    springs_.clear();
+    attractions_.clear();
 }
 
 }
