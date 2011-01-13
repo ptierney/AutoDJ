@@ -13,10 +13,18 @@
   <ItemGroup>
     <ClInclude Include="..\include\AdjApp.h" />
     <ClInclude Include="..\include\adj\adj_Visualizer.h" />
+    <ClInclude Include="..\include\graph\graph_Force.h" />
+    <ClInclude Include="..\include\graph\graph_Integrator.h" />
+    <ClInclude Include="..\include\graph\graph_Particle.h" />
+    <ClInclude Include="..\include\graph\graph_ParticleSystem.h" />
+    <ClInclude Include="..\include\graph\graph_RungeKuttaIntegrator.h" />
+    <ClInclude Include="..\include\graph\graph_Spring.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp" />
     <ClCompile Include="..\src\adj\adj_Visualizer.cpp" />
+    <ClCompile Include="..\src\graph\graph_Particle.cpp" />
+    <ClCompile Include="..\src\graph\graph_Spring.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{85973A63-C1BB-4919-9F54-D4CA34CF2977}</ProjectGuid>

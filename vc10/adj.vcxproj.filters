@@ -19,6 +19,12 @@
     <Filter Include="Source Files\adj">
       <UniqueIdentifier>{28c367ad-6bd2-4f61-a008-2bfa02fafd63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graph">
+      <UniqueIdentifier>{fdbcda61-30ea-4bce-bc55-e75ac3673453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graph">
+      <UniqueIdentifier>{8aed869f-5687-42b7-9f06-e19b521df990}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AdjApp.h">
@@ -27,6 +33,24 @@
     <ClInclude Include="..\include\adj\adj_Visualizer.h">
       <Filter>Header Files\adj</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\graph\graph_Spring.h">
+      <Filter>Header Files\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\graph\graph_Force.h">
+      <Filter>Header Files\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\graph\graph_Particle.h">
+      <Filter>Header Files\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\graph\graph_Integrator.h">
+      <Filter>Header Files\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\graph\graph_RungeKuttaIntegrator.h">
+      <Filter>Header Files\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\graph\graph_ParticleSystem.h">
+      <Filter>Header Files\graph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -34,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="..\src\adj\adj_Visualizer.cpp">
       <Filter>Source Files\adj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\graph\graph_Spring.cpp">
+      <Filter>Source Files\graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\graph\graph_Particle.cpp">
+      <Filter>Source Files\graph</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
