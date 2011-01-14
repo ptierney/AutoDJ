@@ -22,11 +22,14 @@ Visualizer::Visualizer() {
 
 Visualizer::~Visualizer() {
     AdjApp::instance().unregisterMouseDrag(mouse_drag_cb_id_);
+    AdjApp::instance().unregisterKeyDown(key_cb_id_);
 }
 
 void Visualizer::setup() {
     mouse_drag_cb_id_ = AdjApp::instance().registerMouseDrag(
         this, &Visualizer::mouse_drag);
+    key_cb_id_ = AdjApp::instance().registerKeyDown(this, 
+        &Visualizer::key_down);
 
     glEnable(GL_LINE_SMOOTH);
     ci::gl::enableAlphaBlending();
@@ -154,6 +157,12 @@ void Visualizer::make_edge_between(ParticlePtr a, ParticlePtr b) {
 }
 
 bool Visualizer::mouse_drag(ci::app::MouseEvent) {
+    add_node();
+
+    return true;
+}
+
+bool Visualizer::key_down(ci::app::KeyEvent) {
     add_node();
 
     return true;

@@ -3,7 +3,13 @@
 
 #include <vector>
 
-#include <cinder/Vector.h>
+#include "cinder/Cinder.h"
+
+#if defined (CINDER_MAC)
+    #include <tr1/memory>
+#endif
+
+#include "cinder/Vector.h"
 
 #include "graph/graph_Integrator.h"
 
@@ -16,11 +22,11 @@ class RungeKuttaIntegrator : public Integrator {
 public:
     RungeKuttaIntegrator(ParticleSystem& s);
 
-    void allocate_particles();
-
     void step(float);
 
 private:
+    void allocate_particles();
+
     std::vector<ci::Vec2f> original_positions_;
     std::vector<ci::Vec2f> original_velocities_;
     std::vector<ci::Vec2f> k1_forces_;

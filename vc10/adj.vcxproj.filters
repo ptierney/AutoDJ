@@ -25,6 +25,9 @@
     <Filter Include="Source Files\graph">
       <UniqueIdentifier>{8aed869f-5687-42b7-9f06-e19b521df990}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\json">
+      <UniqueIdentifier>{f714a35a-efd0-4d77-8282-df7439ed0e75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AdjApp.h">
@@ -54,6 +57,15 @@
     <ClInclude Include="..\include\graph\graph_Attraction.h">
       <Filter>Header Files\graph</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\adj\adj_GraphNode.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\adj\adj_Song.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\adj\adj_Adj.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -76,6 +88,18 @@
     </ClCompile>
     <ClCompile Include="..\src\graph\graph_RungeKuttaIntegrator.cpp">
       <Filter>Source Files\graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\adj_Song.cpp">
+      <Filter>Source Files\adj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\json\json_reader.cpp">
+      <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\json\json_value.cpp">
+      <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\json\json_writer.cpp">
+      <Filter>Source Files\json</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

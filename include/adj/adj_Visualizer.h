@@ -9,6 +9,7 @@
 
 #include "cinder/app/App.h"
 
+
 namespace graph {
     class ParticleSystem;
     class Particle;
@@ -29,7 +30,8 @@ public:
 
     void setup_physics();
 
-    virtual bool mouse_drag(ci::app::MouseEvent);
+    bool mouse_drag(ci::app::MouseEvent);
+    bool key_down(ci::app::KeyEvent);
 
 private:
     void add_node();
@@ -42,6 +44,7 @@ private:
     std::tr1::shared_ptr<graph::ParticleSystem> p_system_;
 
     ci::CallbackId mouse_drag_cb_id_;
+    ci::CallbackId key_cb_id_;
 
     float spacer_strength_;
     float edge_strength_;

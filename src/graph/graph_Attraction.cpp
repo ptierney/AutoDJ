@@ -14,33 +14,34 @@ Attraction::Attraction(Particle& a, Particle& b, float k, float distance_min)
 }
 
 void Attraction::apply() {
-    if (on_ && (a_.is_free() || b_.is_free())) {
-        ci::Vec2f a_to_b = a_.position() - b_.position();
+    if (!on_ || (a_.is_fixed() && b_.is_fixed()))
+        return;
 
-        float a_to_b_dist_squared = a_to_b.lengthSquared();
+    ci::Vec2f a_to_b = a_.position() - b_.position();
 
-        if (a_to_b_dist_squared < distance_min_squared_)
-            a_to_b_dist_squared = distance_min_squared_;
+    float a_to_b_dist_squared = a_to_b.lengthSquared();
 
-        float force = k_ * a_.mass_ * b_.mass_ / a_to_b_dist_squared;
+    if (a_to_b_dist_squared < distance_min_squared_)
+        a_to_b_dist_squared = distance_min_squared_;
 
-        // maybe check for 0 ?
-        float length = ci::math<float>::sqrt(a_to_b_dist_squared);
+    float force = k_ * a_.mass_ * b_.mass_ / a_to_b_dist_squared;
 
-        // normalize, save a square root
-        a_to_b /= length;
+    // maybe check for 0 ?
+    float length = ci::math<float>::sqrt(a_to_b_dist_squared);
 
-        // multiply by force
+    // normalize, save a square root
+    a_to_b /= length;
 
-        a_to_b *= force;
+    // multiply by force
 
-        // apply
+    a_to_b *= force;
 
-        if (a_.is_free())
-            a_.force() -= a_to_b;
-        if (b_.is_free())
-            b_.force() += a_to_b;
-    }
+    // apply
+
+    if (a_.is_free())
+        a_.force() -= a_to_b;
+    if (b_.is_free())
+        b_.force() += a_to_b;
 }
 
 }
