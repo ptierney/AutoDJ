@@ -8,13 +8,11 @@
 
 #include "AdjApp.h"
 #include "adj/adj_Visualizer.h"
+#include "adj/adj_GraphPhysics.h"
 
 namespace adj {
 
 Visualizer::Visualizer() {
-    spacer_strength_ = 1000.0f;
-    edge_length_ = 20.0f;
-    edge_strength_ = 0.2f;
     scale_ = 1.0f;
     centroid_ = ci::Vec2i::zero();
     node_size_ = 10.0f;
@@ -34,15 +32,13 @@ void Visualizer::setup() {
     glEnable(GL_LINE_SMOOTH);
     ci::gl::enableAlphaBlending();
 
-    p_system_ = std::tr1::shared_ptr<graph::ParticleSystem>(
-        new graph::ParticleSystem(ci::Vec2f::zero(), 0.1));
-    p_system_->init();
-    p_system_->clear();
+    p_system_ = GraphPhysics::instance().particle_system();
+
     p_system_->make_particle();
 }
 
 void Visualizer::update() {
-    p_system_->tick();
+    GraphPhysics::instance().update();
 }
 
 void Visualizer::draw() {
@@ -54,11 +50,15 @@ void Visualizer::draw() {
 
     ci::gl::color(ci::Color::black());
 
-    ci::gl::translate(AdjApp::instance().getWindowSize() / 2.0f);
+    ci::gl::translate(static_cast<ci::Vec2f>(AdjApp::instance().getWindowSize()) / 2.0f);
     ci::gl::scale(ci::Vec3f::one() * scale_);
     ci::gl::translate(centroid_);
 
     draw_network();
+}
+
+void Visualizer::shutdown() {
+    GraphPhysics::cleanup();
 }
 
 void Visualizer::update_centroid() {
@@ -96,7 +96,7 @@ void Visualizer::update_centroid() {
 }
 
 void Visualizer::draw_network() {
-    ci::gl::color(ci::Color(0.4, 0.4, 0.4));
+    ci::gl::color(ci::Color(0.4f, 0.4f, 0.4f));
 
     for (std::vector<ParticlePtr>::iterator it = p_system_->particles_.begin();
         it != p_system_->particles_.end(); ++it) {
@@ -123,37 +123,7 @@ void Visualizer::draw_network() {
 }
 
 void Visualizer::add_node() {
-    ci::Rand rand;
-    rand.randomize();
-
-    ParticlePtr p = p_system_->make_particle();
-    ParticlePtr q;
-    do {
-        q = p_system_->particles_[rand.randInt(p_system_->particles_.size() - 1)];
-    } while (p.get() == q.get());
-
-    add_spacers_to_node(p, q);
-    make_edge_between(p, q);
-
-    p->position() = q->position() + ci::Vec2f(rand.randFloat(-1.0f, 1.0f),
-        rand.randFloat(-1.0f, 1.0f));
-}
-
-void Visualizer::add_spacers_to_node(ParticlePtr p, ParticlePtr r) {
-    for (std::vector<ParticlePtr>::iterator it = p_system_->particles_.begin();
-        it != p_system_->particles_.end(); ++it) {
-
-        ParticlePtr q = *it;
-
-        if (p.get() != q.get() && p.get() != r.get())
-            p_system_->make_attraction(*(p.get()), *(q.get()),
-            -spacer_strength_, 20);
-    }
-}
-
-void Visualizer::make_edge_between(ParticlePtr a, ParticlePtr b) {
-    p_system_->make_spring(*(a.get()), *(b.get()), edge_strength_,
-        edge_strength_, edge_length_);
+    GraphPhysics::instance().create_node();
 }
 
 bool Visualizer::mouse_drag(ci::app::MouseEvent) {

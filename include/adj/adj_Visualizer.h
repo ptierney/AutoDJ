@@ -1,14 +1,9 @@
 
 #pragma once
 
-#include "cinder/Cinder.h"
-
-#if defined (CINDER_MAC)
-    #include <tr1/memory>
-#endif
+#include "adj/adj_Adj.h"
 
 #include "cinder/app/App.h"
-
 
 namespace graph {
     class ParticleSystem;
@@ -18,6 +13,7 @@ namespace graph {
 namespace adj {
 
 typedef std::tr1::shared_ptr<graph::Particle> ParticlePtr;
+typedef std::tr1::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
 
 class Visualizer {
 public:
@@ -27,6 +23,7 @@ public:
     void setup();
     void update();
     void draw();
+    void shutdown();
 
     void setup_physics();
 
@@ -35,24 +32,19 @@ public:
 
 private:
     void add_node();
-    void add_spacers_to_node(ParticlePtr p, ParticlePtr r);
-    void make_edge_between(ParticlePtr a, ParticlePtr b);
+
     void update_centroid();
     void draw_network();
-
-    // shared_ptrs to all sorts of classes
-    std::tr1::shared_ptr<graph::ParticleSystem> p_system_;
 
     ci::CallbackId mouse_drag_cb_id_;
     ci::CallbackId key_cb_id_;
 
-    float spacer_strength_;
-    float edge_strength_;
-    float edge_length_;
+    ParticleSystemPtr p_system_;
+
     float node_size_;
 
     float scale_;
-    ci::Vec2i centroid_;
+    ci::Vec2f centroid_;
 };
 
 }

@@ -66,6 +66,12 @@
     <ClInclude Include="..\include\adj\adj_Adj.h">
       <Filter>Header Files\adj</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\adj\adj_GraphNodeFactory.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\adj\adj_GraphPhysics.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -100,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="..\src\json\json_writer.cpp">
       <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\adj_GraphPhysics.cpp">
+      <Filter>Source Files\adj</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -14,6 +14,8 @@
     <ClInclude Include="..\include\AdjApp.h" />
     <ClInclude Include="..\include\adj\adj_Adj.h" />
     <ClInclude Include="..\include\adj\adj_GraphNode.h" />
+    <ClInclude Include="..\include\adj\adj_GraphNodeFactory.h" />
+    <ClInclude Include="..\include\adj\adj_GraphPhysics.h" />
     <ClInclude Include="..\include\adj\adj_Song.h" />
     <ClInclude Include="..\include\adj\adj_Visualizer.h" />
     <ClInclude Include="..\include\graph\graph_Attraction.h" />
@@ -26,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp" />
+    <ClCompile Include="..\src\adj\adj_GraphPhysics.cpp" />
     <ClCompile Include="..\src\adj\adj_Song.cpp" />
     <ClCompile Include="..\src\adj\adj_Visualizer.cpp" />
     <ClCompile Include="..\src\graph\graph_Attraction.cpp" />

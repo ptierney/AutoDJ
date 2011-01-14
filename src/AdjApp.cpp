@@ -34,6 +34,8 @@ void AdjApp::draw() {
 }
 
 void AdjApp::shutdown() {
+    visualizer_->shutdown();
+
     visualizer_.reset();
 }
 

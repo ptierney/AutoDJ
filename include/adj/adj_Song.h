@@ -20,7 +20,6 @@ struct Album {
     std::vector<SongPtr> songs;
 };
 
-
 struct Artist {
     std::string name;
     std::vector<AlbumPtr> albums;
@@ -30,8 +29,7 @@ struct Artist {
 class Song {
 public:
     // durration is in seconds
-    Song(std::string name, std::string file_name,
-        int durration);
+    Song(std::string name, std::string file_name, int durration);
 
     void play();
     int time_elapsed();
@@ -45,6 +43,8 @@ public:
 class SongFactory {
     SongFactory& instance();
     static void cleanup();
+
+    void load_song_database();
 
     // input a json (loaded
     SongPtr create_song();

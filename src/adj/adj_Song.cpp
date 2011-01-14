@@ -8,13 +8,18 @@
 
 namespace adj {
 
-
 Song::Song(std::string name, std::string file_name, int durration) {
 
 }
 
-SongPtr SongFactory::create_song() {
+// 
+void SongFactory::load_song_database() {
 
+}
+
+// TODO: make this
+SongPtr SongFactory::create_song() {
+    return std::tr1::shared_ptr<Song>();
 }
 
 std::string SongFactory::get_uuid() {
