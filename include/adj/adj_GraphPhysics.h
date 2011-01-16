@@ -12,16 +12,20 @@ namespace graph {
 
 namespace adj {
 
-typedef std::tr1::shared_ptr<graph::Particle> ParticlePtr;
-typedef std::tr1::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
+typedef std::shared_ptr<graph::Particle> ParticlePtr;
+typedef std::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
 
 class GraphPhysics {
 public:
     static GraphPhysics& instance();
     static void cleanup();
 
-    ParticlePtr create_node(); // Attatch the node to a random node
-    ParticlePtr create_node(ParticlePtr parent); // create new attatched to parent
+    // NOTE: the notion of a parent-child relationship isn't strict in this
+    // physics model: specifying a parent simply means that the two node are
+    // connected by a spring; there's no sense of directionality (that's set 
+    // up in the GraphNode object.
+    ParticlePtr create_particle(); // Attatch the node to a random node
+    ParticlePtr create_particle(ParticlePtr parent); // create new attatched to parent
 
     void update();
 

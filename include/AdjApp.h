@@ -1,9 +1,7 @@
 
 #pragma once
 
-#if defined (CINDER_MAC)
-    #include <tr1/memory>
-#endif
+#include "adj/adj_Adj.h"
 
 #include "cinder/app/AppBasic.h"
 
@@ -26,7 +24,7 @@ public:
     static AdjApp& instance() { return *instance_; }
 
 private:
-    std::tr1::shared_ptr<adj::Visualizer> visualizer_;
+    std::shared_ptr<adj::Visualizer> visualizer_;
 
     static AdjApp* instance_;
 };

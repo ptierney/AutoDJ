@@ -3,7 +3,7 @@
 
 #include "adj/adj_Adj.h"
 
-#include <deque>
+#include <vector>
 
 #include "json/value.h"
 
@@ -15,7 +15,7 @@ namespace graph {
 namespace adj {
 
 class GraphNode;
-typedef std::tr1::shared_ptr<GraphNode> GraphNodePtr;
+typedef std::shared_ptr<GraphNode> GraphNodePtr;
 
 // creates a node, and adds it to the particle system
 class GraphNodeFactory {
@@ -27,6 +27,10 @@ public:
     void add_node_from_song_request(const Json::Value&);
 
     void add_empty_node();
+    void add_to_random_node();
+    void add_to_node(GraphNodePtr node);
+
+    std::vector<GraphNodePtr>& nodes() { return graph_nodes_; }
 
 private:
     GraphNodeFactory();
@@ -34,7 +38,7 @@ private:
 
     static GraphNodeFactory* instance_;
 
-    std::deque<GraphNodePtr> graph_nodes_;
+    std::vector<GraphNodePtr> graph_nodes_;
 };
 
 }

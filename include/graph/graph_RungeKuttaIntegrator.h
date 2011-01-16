@@ -3,11 +3,7 @@
 
 #include <vector>
 
-#include "cinder/Cinder.h"
-
-#if defined (CINDER_MAC)
-    #include <tr1/memory>
-#endif
+#include "adj/adj_Adj.h"
 
 #include "cinder/Vector.h"
 
@@ -40,7 +36,7 @@ private:
 
     ParticleSystem& s_;
 
-    std::vector<std::tr1::shared_ptr<Particle> >::iterator particles_it_;
+    std::vector<std::shared_ptr<Particle> >::iterator particles_it_;
 };
 
 }

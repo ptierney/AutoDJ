@@ -28,7 +28,7 @@ void RungeKuttaIntegrator::allocate_particles() {
 void RungeKuttaIntegrator::step(float delta_t) {
     allocate_particles();
 
-    std::tr1::shared_ptr<Particle> p;
+    std::shared_ptr<Particle> p;
 
     // save original position and velocities
     int i = 0;

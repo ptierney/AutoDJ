@@ -19,7 +19,7 @@ void AdjApp::prepareSettings(Settings* settings) {
 }
 
 void AdjApp::setup() {
-    visualizer_ = std::tr1::shared_ptr<adj::Visualizer>(
+    visualizer_ = std::shared_ptr<adj::Visualizer>(
         new adj::Visualizer());
 
     visualizer_->setup();

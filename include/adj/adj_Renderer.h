@@ -8,8 +8,8 @@ namespace graph {
 
 namespace adj {
 
-typedef std::tr1::shared_ptr<graph::Particle> ParticlePtr;
-typedef std::tr1::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
+typedef std::shared_ptr<graph::Particle> ParticlePtr;
+typedef std::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
 
 class Renderer {
 public:
@@ -24,6 +24,7 @@ private:
     void init();
 
     void draw_nodes();
+    void draw_connections();
 
     static Renderer* instance_;
 

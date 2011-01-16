@@ -6,6 +6,7 @@
 #include "adj/adj_GraphPhysics.h"
 #include "adj/adj_Renderer.h"
 #include "adj/adj_Camera.h"
+#include "adj/adj_GraphNodeFactory.h"
 
 namespace adj {
 
@@ -46,7 +47,7 @@ void Visualizer::shutdown() {
 }
 
 void Visualizer::add_node() {
-    GraphPhysics::instance().create_node();
+    GraphNodeFactory::instance().add_empty_node();
 }
 
 bool Visualizer::mouse_drag(ci::app::MouseEvent) {

@@ -1,4 +1,6 @@
 
+#include <deque>
+
 #include "cinder/gl/gl.h"
 
 #include "graph/graph_Particle.h"
@@ -9,6 +11,8 @@
 #include "adj/adj_Renderer.h"
 #include "adj/adj_Camera.h"
 #include "adj/adj_GraphPhysics.h"
+#include "adj/adj_GraphNodeFactory.h"
+#include "adj/adj_GraphNode.h"
 
 namespace adj {
 
@@ -32,23 +36,26 @@ void Renderer::draw() {
     Camera::instance().transform_draw();
 
     draw_nodes();
+    draw_connections();
 }
 
 void Renderer::draw_nodes() {
     ci::gl::color(ci::Color(0.4f, 0.4f, 0.4f));
 
-    for (std::vector<ParticlePtr>::iterator it = p_system_->particles_.begin();
-        it != p_system_->particles_.end(); ++it) {
+    for (std::vector<GraphNodePtr>::iterator it = GraphNodeFactory::instance().nodes().begin();
+        it != GraphNodeFactory::instance().nodes().end(); ++it) {
 
-        ci::gl::drawSolidCircle((*it)->position(), node_size_);
+        (*it)->draw();
     }
+}
 
+void Renderer::draw_connections() {
     ci::gl::color(ci::Color::black());
     glLineWidth(3.0f);
 
     glBegin(GL_LINES);
 
-    for (std::vector<std::tr1::shared_ptr<graph::Spring> >::iterator it = 
+    for (std::vector<std::shared_ptr<graph::Spring> >::iterator it = 
         p_system_->springs_.begin(); it != p_system_->springs_.end(); ++it)  {
 
         graph::Particle& a = (*it)->get_one_end();

@@ -12,8 +12,8 @@ namespace graph {
 
 namespace adj {
 
-typedef std::tr1::shared_ptr<graph::Particle> ParticlePtr;
-typedef std::tr1::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
+typedef std::shared_ptr<graph::Particle> ParticlePtr;
+typedef std::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
 
 class Visualizer {
 public:

@@ -27,7 +27,7 @@ void GraphPhysics::update() {
     p_system_->tick();
 }
 
-ParticlePtr GraphPhysics::create_node() {
+ParticlePtr GraphPhysics::create_particle() {
     ci::Rand rand;
     rand.randomize();
 
@@ -43,7 +43,7 @@ ParticlePtr GraphPhysics::create_node() {
     return p;
 }
 
-ParticlePtr GraphPhysics::create_node(ParticlePtr q) {
+ParticlePtr GraphPhysics::create_particle(ParticlePtr q) {
     ParticlePtr p = p_system_->make_particle();
 
     setup_new_node(p, q);

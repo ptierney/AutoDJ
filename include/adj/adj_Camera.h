@@ -10,7 +10,7 @@ namespace graph {
 namespace adj {
 
 class GraphNode;
-typedef std::tr1::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
+typedef std::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
 
 // main program must call update() and transform_draw() each draw loop
 // otherwise will center_on_node, etc. and camera 

@@ -23,7 +23,7 @@ private:
     ci::Surface photo_;
 };
 
-typedef std::tr1::shared_ptr<User> UserPtr;
+typedef std::shared_ptr<User> UserPtr;
 
 /*
 Sample User info

@@ -3,11 +3,7 @@
 
 #include <vector>
 
-#include "cinder/Cinder.h"
-
-#if defined (CINDER_MAC)
-    #include <tr1/memory>
-#endif
+#include "adj/adj_Adj.h"
 
 #include "cinder/Vector.h"
 
@@ -18,7 +14,7 @@ class Particle;
 class Spring;
 class Attraction;
 
-typedef std::tr1::shared_ptr<Particle> ParticlePtr;
+typedef std::shared_ptr<Particle> ParticlePtr;
 
 class ParticleSystem {
 public:
@@ -29,9 +25,9 @@ public:
 
     ParticlePtr make_particle();
     ParticlePtr make_particle(float mass, ci::Vec2f pos);
-    std::tr1::shared_ptr<Spring> make_spring(Particle& a, Particle& b,
+    std::shared_ptr<Spring> make_spring(Particle& a, Particle& b,
         float ks, float d, float r);
-    std::tr1::shared_ptr<Attraction> make_attraction(Particle& a, Particle& b,
+    std::shared_ptr<Attraction> make_attraction(Particle& a, Particle& b,
         float k, float min_distance);
 
 
@@ -44,11 +40,11 @@ public:
     void tick(float t);
 
     std::vector<ParticlePtr> particles_;
-    std::vector<std::tr1::shared_ptr<Spring> > springs_;
-    std::vector<std::tr1::shared_ptr<Attraction> > attractions_;
+    std::vector<std::shared_ptr<Spring> > springs_;
+    std::vector<std::shared_ptr<Attraction> > attractions_;
 
 private:
-    std::tr1::shared_ptr<Integrator> integrator_;
+    std::shared_ptr<Integrator> integrator_;
 
     ci::Vec2f gravity_;
     float drag_;
