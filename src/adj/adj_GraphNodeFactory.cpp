@@ -2,10 +2,13 @@
 #include "json/value.h"
 
 #include "cinder/Rand.h"
+#include "cinder/app/App.h"
 
 #include "adj/adj_GraphNodeFactory.h"
 #include "adj/adj_GraphNode.h"
 #include "adj/adj_GraphPhysics.h"
+#include "adj/adj_PlayManager.h"
+#include "adj/adj_Song.h"
 
 namespace adj {
 
@@ -22,12 +25,7 @@ void GraphNodeFactory::add_node_from_song_request(const Json::Value&) {
 }
 
 void GraphNodeFactory::add_empty_node() {
-    GraphNodePtr n(new GraphNode());
-
-    n->particle_ = GraphPhysics::instance().create_particle();
-    n->is_valid_ = false; // this is true when it has a song
-
-    graph_nodes_.push_back(n);
+    add_to_node(GraphNodePtr());
 }
 
 void GraphNodeFactory::add_to_random_node() {
@@ -46,9 +44,21 @@ void GraphNodeFactory::add_to_random_node() {
 
 void GraphNodeFactory::add_to_node(GraphNodePtr p) {
     GraphNodePtr q(new GraphNode());
-    q->parent_ = p;
-    q->particle_ = GraphPhysics::instance().create_particle(p->particle_);
-    p->add_child(q);
+
+    if (p.get() != NULL) {
+        q->parent_ = p;
+        q->particle_ = GraphPhysics::instance().create_particle(p->particle_);
+        p->add_child(q);
+    } else {
+        q->particle_ = GraphPhysics::instance().create_unconnected_particle();
+        ci::app::console() << "**WARNING** Adding loose node to system" << std::endl;
+    }
+
+    q->song_ = SongFactory::instance().get_random_song();
+
+    graph_nodes_.push_back(q);
+
+    PlayManager::instance().register_new_graph_node(q);
 }
 
 GraphNodeFactory* GraphNodeFactory::instance_ = NULL;

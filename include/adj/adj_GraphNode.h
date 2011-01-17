@@ -28,8 +28,11 @@ public:
 
     // checks to see if the child has already been added 
     void add_child(GraphNodePtr);
+    const std::vector<GraphNodePtr>& children() { return children_; }
 
     friend class GraphNodeFactory;
+
+    Song& song() { return *(song_.get()); }
 
 private:
     SongPtr song_;
@@ -41,7 +44,5 @@ private:
 
     float size_;
 };
-
-
 
 }

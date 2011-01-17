@@ -9,6 +9,8 @@
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+#include "json/value.h"
+
 #include "cinder/audio/Io.h"
 #include "cinder/audio/Output.h"
 
@@ -17,7 +19,7 @@ namespace adj {
 class Song;
 typedef std::shared_ptr<Song> SongPtr;
 
-typedef std::string SongId;
+typedef int SongId;
 
 /* NOTE: these are probably not needed
 
@@ -80,19 +82,25 @@ public:
 
     void load_song_database();
 
-    // input a json (loaded
-    SongPtr create_song();
+    SongPtr get_random_song();
 
-    const std::string& base_path() { return base_path_; }
+    // input a json
+    SongPtr create_song(SongId, Json::Value& song);
+
+    const std::string& base_song_directory_path() { 
+        return base_song_directory_path_; }
 
     boost::posix_time::ptime get_current_time();
 
 private:
     SongFactory();
+    void parse_song_database_file();
 
     std::string get_uuid();
 
-    std::string base_path_;
+    std::string base_song_directory_path_;
+    std::string song_database_file_;
+    Json::Value song_database_;
 
     std::map<SongId, SongPtr> song_map_;
 

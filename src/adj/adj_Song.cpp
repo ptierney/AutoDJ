@@ -1,12 +1,20 @@
 
+#include <fstream>
+#include <exception>
+
 #include "boost/uuid/uuid.hpp"
 #include "boost/uuid/uuid_io.hpp"
 #include "boost/uuid/uuid_generators.hpp"
 #include "boost/lexical_cast.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+#include "json/reader.h"
+#include "json/value.h"
+
+#include "cinder/app/App.h"
 #include "cinder/audio/Output.h"
 #include "cinder/audio/Io.h"
+#include "cinder/Rand.h"
 
 #include "adj/adj_Song.h"
 
@@ -20,7 +28,8 @@ Song::Song(SongId id, std::string name, std::string file_name, int duration,
 }
 
 void Song::init() {
-    source_ = ci::audio::load(SongFactory::instance().base_path() + file_name_);
+    source_ = ci::audio::load(SongFactory::instance().base_song_directory_path() + 
+        file_name_);
 }
 
 void Song::play() {
@@ -42,11 +51,43 @@ int Song::time_remaining() {
     return duration_ - time_elapsed();
 }
 
+void SongFactory::parse_song_database_file() {
+    Json::Reader reader;
+
+    std::string msg;
+    std::string line;
+
+    std::ifstream input(song_database_file_.c_str());
+
+    if (input.is_open()) {
+        while (input.good()) {
+            getline (input, line);
+            msg += line;
+            msg += "\n"; // restore the chomped endl
+        }
+        input.close();
+    }
+
+    reader.parse(msg, song_database_);
+}
+
 // 
 void SongFactory::load_song_database() {
-    // for each song in song database, 
-    // create new song
-    // init song
+    parse_song_database_file();
+
+    Json::Value& songs_array = song_database_["songs"];
+
+    if (songs_array.empty())
+        throw (std::runtime_error("Could not find song database file."));
+
+    SongId song_id;
+
+    for (Json::Value::iterator it = songs_array.begin(); it != songs_array.end(); ++it) {
+        Json::Value& song = (*it);
+        song_id = song["id"].asInt();
+
+        song_map_[song_id] = create_song(song_id, song);
+    }
 }
 
 boost::posix_time::ptime SongFactory::get_current_time() {
@@ -59,14 +100,42 @@ SongPtr SongFactory::lookup_song(SongId id) {
     return song_map_[id];
 }
 
-// TODO: make this
-SongPtr SongFactory::create_song() {
-    return std::shared_ptr<Song>();
+SongPtr SongFactory::create_song(SongId id, Json::Value& song) {
+    SongPtr song_ptr =  SongPtr(new Song(id, song["title"].asString(),
+        song["filename"].asString(), song["length"].asInt(), 
+        song["artist"].asString(), song["album"].asString()));
+        
+    song_ptr->init(); // loads the file
+
+    return song_ptr;
 }
 
 std::string SongFactory::get_uuid() {
     boost::uuids::random_generator gen;
     return boost::lexical_cast<std::string>(gen());
+}
+
+SongPtr SongFactory::get_random_song() {
+    int map_size = song_map_.size(); // technically map<...>::size_type
+
+    ci::Rand rand;
+    rand.randomize();
+
+    int index = rand.randInt(map_size - 1);
+    int i = 0;
+
+    for (std::map<SongId, SongPtr>::const_iterator it = song_map_.begin();
+        it != song_map_.end(); ++it, ++i) {
+
+        if (i != index)
+            continue;
+
+        return it->second;
+    }
+
+    ci::app::console() << "**WARNING** Could not find random song." << std::endl;
+
+    return song_map_.begin()->second;
 }
 
 // TODO: should be nullptr
@@ -87,7 +156,8 @@ void SongFactory::cleanup() {
 }
 
 SongFactory::SongFactory() {
-    base_path_ = "/data/";
+    base_song_directory_path_ = "/data/songs/";
+    song_database_file_ = "/data/songs.txt";
 }
 
 }

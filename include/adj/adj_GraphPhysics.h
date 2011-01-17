@@ -24,6 +24,7 @@ public:
     // physics model: specifying a parent simply means that the two node are
     // connected by a spring; there's no sense of directionality (that's set 
     // up in the GraphNode object.
+    ParticlePtr create_unconnected_particle();
     ParticlePtr create_particle(); // Attatch the node to a random node
     ParticlePtr create_particle(ParticlePtr parent); // create new attatched to parent
 

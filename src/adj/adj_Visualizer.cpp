@@ -7,6 +7,8 @@
 #include "adj/adj_Renderer.h"
 #include "adj/adj_Camera.h"
 #include "adj/adj_GraphNodeFactory.h"
+#include "adj/adj_Song.h"
+#include "adj/adj_PlayManager.h"
 
 namespace adj {
 
@@ -28,7 +30,17 @@ void Visualizer::setup() {
     Renderer::instance().setup();
     Camera::instance().setup();
 
-    GraphPhysics::instance().particle_system()->make_particle();
+    PlayManager::instance().setup();
+    
+    try {
+        // load database from file, create song objects
+        SongFactory::instance().load_song_database();
+    } catch (...) {
+        ci::app::console() << "Could not find database file, exiting." << std::endl;
+        exit;
+    }
+
+    GraphNodeFactory::instance().add_to_random_node();
 }
 
 void Visualizer::update() {
@@ -41,13 +53,15 @@ void Visualizer::draw() {
 }
 
 void Visualizer::shutdown() {
+    GraphNodeFactory::cleanup();
+    SongFactory::cleanup();
     GraphPhysics::cleanup();
     Camera::cleanup();
     Renderer::cleanup();
 }
 
 void Visualizer::add_node() {
-    GraphNodeFactory::instance().add_empty_node();
+    GraphNodeFactory::instance().add_to_random_node();
 }
 
 bool Visualizer::mouse_drag(ci::app::MouseEvent) {

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "adj/adj_Adj.h"
+#include "adj/adj_GraphNodeFactory.h"
 
 namespace adj {
 
@@ -22,14 +23,17 @@ public:
     void play();
     void pause();
 
+    friend class GraphNodeFactory;
+
 private:
     PlayManager();
     void init();
     void begin_transition();
     GraphNodePtr get_next_song_randomly();
-    GraphNodePtr get_next_song();
+    GraphNodePtr get_next_song(); //TODO: implement this method, doesn't work.
+    void switch_to_next_song();
 
-    void play_song(GraphNodePtr);
+    void register_new_graph_node(GraphNodePtr);
 
     GraphNodePtr now_playing_;
     GraphNodePtr next_song_; // for transitions

@@ -27,6 +27,10 @@ void GraphPhysics::update() {
     p_system_->tick();
 }
 
+ParticlePtr GraphPhysics::create_unconnected_particle() {
+    return p_system_->make_particle();
+}
+
 ParticlePtr GraphPhysics::create_particle() {
     ci::Rand rand;
     rand.randomize();
