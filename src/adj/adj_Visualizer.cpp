@@ -1,4 +1,6 @@
 
+#include "cinder/app/App.h"
+
 #include "graph/graph_ParticleSystem.h"
 
 #include "AdjApp.h"
@@ -46,6 +48,7 @@ void Visualizer::setup() {
 void Visualizer::update() {
     GraphPhysics::instance().update();
     Camera::instance().update(); // updates centroid
+    PlayManager::instance().update();
 }
 
 void Visualizer::draw() {
@@ -70,8 +73,13 @@ bool Visualizer::mouse_drag(ci::app::MouseEvent) {
     return true;
 }
 
-bool Visualizer::key_down(ci::app::KeyEvent) {
-    add_node();
+bool Visualizer::key_down(ci::app::KeyEvent key) {
+    if (key.getChar() == 'a')
+        add_node();
+    else if (key.getChar() == ' ')
+        PlayManager::instance().next_song();
+    else if (key.getChar() == 's')
+        PlayManager::instance().switch_to_next_song();
 
     return true;
 }

@@ -32,12 +32,33 @@ void Song::init() {
         file_name_);
 }
 
+// TODO: this could cause bugs when dealing with transition times
 void Song::play() {
-    ci::audio::Output::play(source_);
+    if (is_playing_)
+        return;
+
+    track_ = ci::audio::Output::addTrack(source_);
 
     play_start_ = SongFactory::instance().get_current_time();
 
     is_playing_ = true;
+}
+
+void Song::pause() {
+    if (is_playing_ == false)
+        return;
+
+    track_->stop();
+
+    is_playing_ = false;
+}
+
+void Song::stop() {
+    track_->stop();
+
+    is_playing_ = false;
+
+    // TODO: remove from track
 }
 
 int Song::time_elapsed() {

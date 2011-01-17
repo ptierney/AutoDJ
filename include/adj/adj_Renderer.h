@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "cinder/Color.h"
+
 namespace graph {
     class Particle;
     class ParticleSystem;
@@ -27,6 +29,9 @@ private:
     void draw_connections();
 
     static Renderer* instance_;
+
+    ci::Color background_color_;
+    ci::ColorA network_color_;
 
     float node_size_;
 

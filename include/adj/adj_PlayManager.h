@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "boost/date_time/posix_time/posix_time.hpp"
+
 #include "adj/adj_Adj.h"
 #include "adj/adj_GraphNodeFactory.h"
 
@@ -22,6 +24,10 @@ public:
 
     void play();
     void pause();
+    void next_song(); // begins transitioning to next song
+
+    // should be private
+    void switch_to_next_song();
 
     friend class GraphNodeFactory;
 
@@ -31,7 +37,9 @@ private:
     void begin_transition();
     GraphNodePtr get_next_song_randomly();
     GraphNodePtr get_next_song(); //TODO: implement this method, doesn't work.
-    void switch_to_next_song();
+    
+    void begin_override_transition();
+    int override_elapsed();
 
     void register_new_graph_node(GraphNodePtr);
 
@@ -40,6 +48,9 @@ private:
 
     int transition_time_; // time for transition overlap
     bool transitioning_;
+
+    bool override_transitioning_;
+    boost::posix_time::ptime override_timer_;
 
     static PlayManager* instance_;
 

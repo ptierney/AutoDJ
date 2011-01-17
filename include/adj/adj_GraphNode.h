@@ -3,6 +3,9 @@
 
 #include <vector>
 
+#include "cinder/gl/gl.h"
+#include "cinder/gl/Texture.h"
+
 #include "adj/adj_Adj.h"
 #include "adj/adj_GraphNodeFactory.h"
 
@@ -24,6 +27,8 @@ class GraphNode {
 public:
     GraphNode();
 
+    void init();
+
     void draw();
 
     // checks to see if the child has already been added 
@@ -34,11 +39,22 @@ public:
 
     Song& song() { return *(song_.get()); }
 
+    void refresh_text();
+
 private:
     SongPtr song_;
     ParticlePtr particle_;
     GraphNodePtr parent_;
     std::vector<GraphNodePtr> children_;
+
+    float scale_;
+
+    std::string text_font_;
+    std::string text_font_i_;
+    int font_size_;
+    ci::ColorA node_color_;
+    ci::ColorA text_color_;
+    ci::gl::Texture text_texture_;
 
     bool is_valid_; // has a song that can be played
 

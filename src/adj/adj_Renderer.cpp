@@ -2,6 +2,7 @@
 #include <deque>
 
 #include "cinder/gl/gl.h"
+#include "cinder/Color.h"
 
 #include "graph/graph_Particle.h"
 #include "graph/graph_ParticleSystem.h"
@@ -18,6 +19,8 @@ namespace adj {
 
 Renderer::Renderer() {
     node_size_ = 10.0f;
+    background_color_ = ci::Color::black();
+    network_color_ = ci::ColorA(1.0f, 1.0f, 1.0f, 0.25f);
 }
 
 void Renderer::init() {
@@ -31,7 +34,7 @@ void Renderer::setup() {
 
 void Renderer::draw() {
     ci::gl::setMatricesWindow(AdjApp::instance().getWindowSize());
-    ci::gl::clear(ci::Color::white());
+    ci::gl::clear(background_color_);
 
     Camera::instance().transform_draw();
 
@@ -40,8 +43,6 @@ void Renderer::draw() {
 }
 
 void Renderer::draw_nodes() {
-    ci::gl::color(ci::Color(0.4f, 0.4f, 0.4f));
-
     for (std::vector<GraphNodePtr>::iterator it = GraphNodeFactory::instance().nodes().begin();
         it != GraphNodeFactory::instance().nodes().end(); ++it) {
 
@@ -49,8 +50,10 @@ void Renderer::draw_nodes() {
     }
 }
 
+// in the future, the nodes will probably draw their own connections, or at least
+// store their line weight based on their distance to "now playing"
 void Renderer::draw_connections() {
-    ci::gl::color(ci::Color::black());
+    ci::gl::color(network_color_);
     glLineWidth(3.0f);
 
     glBegin(GL_LINES);
@@ -86,7 +89,5 @@ void Renderer::cleanup() {
 
     delete instance_;
 }
-
-
 
 }

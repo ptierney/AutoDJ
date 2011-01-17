@@ -1,4 +1,7 @@
 
+#include "boost/date_time/posix_time/posix_time.hpp"
+
+#include "cinder/app/App.h"
 #include "cinder/Rand.h"
 
 #include "adj/adj_PlayManager.h"
@@ -10,8 +13,9 @@ namespace adj {
 PlayManager* PlayManager::instance_ = NULL;
 
 PlayManager::PlayManager() {
-    transition_time_ = 10; // time in seconds
+    transition_time_ = 5; // time in seconds
     transitioning_ = false;
+    override_transitioning_ = false;
 }
 
 void PlayManager::init() {
@@ -27,6 +31,11 @@ void PlayManager::update() {
     if (now_playing_.get() == NULL)
         return;
 
+    if (override_transitioning_ && (override_elapsed() >= transition_time_)) {
+        switch_to_next_song();
+        return;
+    }
+
     if (now_playing_->song().time_remaining() > transition_time_)
         return;
 
@@ -40,6 +49,25 @@ void PlayManager::update() {
     }
 }
 
+void PlayManager::play() {
+    if (now_playing_->song().is_playing())
+        return;
+
+    now_playing_->song().play();
+}
+
+void PlayManager::pause() {
+    if (now_playing_->song().is_playing() == false)
+        return;
+
+    now_playing_->song().pause();
+}
+
+void PlayManager::next_song() {
+    begin_override_transition();
+    
+}
+
 void PlayManager::begin_transition() {
     // if the next song request hasn't got back in time, just
     // choose a song at random
@@ -51,12 +79,35 @@ void PlayManager::begin_transition() {
     next_song_->song().play();
 }
 
+void PlayManager::begin_override_transition() {
+    override_transitioning_ = true;
+
+    override_timer_ = SongFactory::instance().get_current_time();
+
+    begin_transition();
+}
+
+int PlayManager::override_elapsed() {
+    boost::posix_time::time_duration diff = 
+        SongFactory::instance().get_current_time() - override_timer_;
+
+    return diff.total_seconds();
+}
+
 void PlayManager::switch_to_next_song() {
     if (next_song_.get() == NULL)
         next_song_ = get_next_song_randomly();
 
+    // clean up now playing
+    now_playing_->song().stop();
+
+    override_transitioning_ = false;
+    transitioning_ = false;
+
     now_playing_ = next_song_;
     next_song_.reset();
+
+    now_playing_->song().play(); // if it wasn't already
 
     get_next_song_randomly(); // this should be non-randomly
 }

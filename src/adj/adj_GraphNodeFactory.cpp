@@ -56,6 +56,8 @@ void GraphNodeFactory::add_to_node(GraphNodePtr p) {
 
     q->song_ = SongFactory::instance().get_random_song();
 
+    q->init();
+
     graph_nodes_.push_back(q);
 
     PlayManager::instance().register_new_graph_node(q);

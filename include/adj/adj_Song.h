@@ -49,6 +49,8 @@ public:
     void init();
 
     void play();
+    void pause();
+    void stop();
     int time_elapsed();
     int time_remaining();
     bool is_playing() { return is_playing_; }
@@ -71,6 +73,8 @@ private:
     boost::posix_time::ptime play_start_;
 
     ci::audio::SourceRef source_;
+    // this is a handle to the playing instance
+    ci::audio::TrackRef track_; 
 };
 
 class SongFactory {
