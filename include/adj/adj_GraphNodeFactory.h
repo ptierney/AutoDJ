@@ -30,6 +30,8 @@ public:
     void add_to_random_node();
     void add_to_node(GraphNodePtr node);
 
+    void delete_node(GraphNodePtr);
+
     std::vector<GraphNodePtr>& nodes() { return graph_nodes_; }
 
 private:

@@ -38,8 +38,8 @@ void Renderer::draw() {
 
     Camera::instance().transform_draw();
 
-    draw_nodes();
     draw_connections();
+    draw_nodes();
 }
 
 void Renderer::draw_nodes() {

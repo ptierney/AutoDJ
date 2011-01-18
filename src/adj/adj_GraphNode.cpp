@@ -1,55 +1,88 @@
 
+#include <exception>
+
 #include "cinder/gl/gl.h"
-#include "cinder/Text.h"
-#include "cinder/Surface.h"
-#include "cinder/gl/Texture.h"
 #include "cinder/Utilities.h"
+#include "cinder/CinderMath.h"
 
 #include "graph/graph_Particle.h"
 
 #include "adj/adj_GraphNode.h"
 #include "adj/adj_Song.h"
+#include "adj/adj_CalloutBox.h"
 
 namespace adj {
 
 GraphNode::GraphNode() {
     is_valid_ = false;
-    size_ = 7.0f;
-    node_color_ = ci::ColorA(1.0f, 1.0f, 1.0f, 0.9f);
-    text_color_ = ci::ColorA(1.0f, 0.0f, 1.0f, 1.0f);
-    text_font_ = "/data/isocpeur.ttf";
-    text_font_i_ = "/data/isocpeui.ttf";
+    circle_size_ = 7.0f;
+    node_color_ = ci::ColorA(0.839f, 0.839f, 0.839f, 1.0f);
+    node_highlight_color_ = ci::ColorA(0.0f, 0.643f, 1.0f, 1.0f);
     scale_ = 1.0f;
-    font_size_ = 64;
+    max_scale_ = 1.0f;
+    min_scale_ = 0.35f;
+    is_current_song_ = false;
+    is_next_song_ = false;
+    is_transitioning_ = false;
+    distance_from_current_ = 0;
 }
 
 void GraphNode::init() {
-    if (song_.get() == NULL) // wtf
-        return;
+    if (song_.get() == NULL)
+        throw(std::runtime_error("Trying to create a graph node without a song"));
 
-    // create a text texture
-    refresh_text();
+    update_distance_from_current();
+
+    callout_box_ = CalloutBoxPtr(new CalloutBox(*this));
+    callout_box_->init();
+}
+
+GraphNode::~GraphNode() {
+    // remove from GraphNodeFactory list
+    // remove / delete particle
+    // remove / delete / stop song
 }
 
 void GraphNode::draw() {
-    ci::gl::color(node_color_);
-
+    
     ci::gl::pushMatrices();
 
         ci::gl::translate(particle_->position());
-        ci::gl::scale(ci::Vec3f::one() * scale_);
 
-        ci::gl::drawSolidCircle(ci::Vec2f::zero(), size_);
+        ci::gl::pushMatrices();
+            
+            if (is_current_song_)
+                draw_current_song();
+            else
+                draw_node();
 
-        ci::gl::scale(ci::Vec3f::one() * 0.08f);
+        ci::gl::popMatrices();
 
-        ci::gl::translate(-text_texture_.getSize() / 2.0f);
-
-        ci::gl::color(ci::Color::white());
-
-        ci::gl::draw(text_texture_, ci::Vec2f::zero());
+        callout_box_->draw();
 
     ci::gl::popMatrices();
+}
+
+void GraphNode::draw_current_song() {
+    ci::gl::scale(ci::Vec3f::one() * max_scale_);
+    ci::gl::color(node_highlight_color_);
+    ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_size_);
+}
+
+void GraphNode::draw_transitioning_out() {
+
+}
+
+void GraphNode::draw_transitioning_in() {
+
+}
+
+void GraphNode::draw_node() {
+    // TODO: cache this value
+    ci::gl::scale(ci::Vec3f::one() * ci::lmap<float>(distance_from_current_,
+        0, 10, max_scale_, min_scale_));
+    ci::gl::color(node_color_);
+    ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_size_);
 }
 
 void GraphNode::add_child(GraphNodePtr child) {
@@ -64,20 +97,37 @@ void GraphNode::add_child(GraphNodePtr child) {
     children_.push_back(child);
 }
 
+void GraphNode::update_distance_from_current() {
+    if (is_current_song_ || parent_.get() == NULL) {
+        distance_from_current_ = 0;
+        return;
+    }
 
-// create a new text texture
-void GraphNode::refresh_text() {
-    ci::TextLayout layout;
-    layout.setFont(ci::Font(text_font_, font_size_));
-    layout.setColor(text_color_);
-    layout.addCenteredLine(song_->name());
-    layout.setFont(ci::Font(text_font_i_, font_size_));
-    layout.addCenteredLine(song_->artist());
-    layout.addCenteredLine(song_->album());
-    // this can be premultiplied whatever that means
-    ci::Surface8u rendered = layout.render(true);
-    // this might want to go in another thread
-    text_texture_ = ci::gl::Texture(rendered);
+    int dist = 1;
+
+    GraphNodePtr node = parent_;
+
+    while (node->is_current_song() == false) {
+        ++dist;
+        node = node->parent();
+    }
+
+    distance_from_current_ = dist;
+}
+
+void GraphNode::set_is_transitioning(bool trans) {
+    is_transitioning_ = trans;
+    callout_box_->update_contents();
+}
+
+void GraphNode::set_is_current_song(bool curr) {
+    is_current_song_ = curr;
+    callout_box_->update_contents();
+}
+
+void GraphNode::set_is_next_song(bool next) {
+    is_next_song_ = next;
+    callout_box_->update_contents();
 }
 
 }

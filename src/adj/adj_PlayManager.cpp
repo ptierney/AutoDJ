@@ -71,12 +71,16 @@ void PlayManager::next_song() {
 void PlayManager::begin_transition() {
     // if the next song request hasn't got back in time, just
     // choose a song at random
-    if (next_song_.get() == NULL)
+    if (next_song_.get() == NULL) {
         next_song_ = get_next_song_randomly();
+        next_song_->set_is_next_song(true);
+    }
 
     transitioning_ = true;
+    next_song_->set_is_transitioning(true);
 
     next_song_->song().play();
+    
 }
 
 void PlayManager::begin_override_transition() {
@@ -95,21 +99,30 @@ int PlayManager::override_elapsed() {
 }
 
 void PlayManager::switch_to_next_song() {
-    if (next_song_.get() == NULL)
+    if (next_song_.get() == NULL) {
         next_song_ = get_next_song_randomly();
+        next_song_->set_is_next_song(true);
+    }
 
     // clean up now playing
     now_playing_->song().stop();
+    now_playing_->set_is_current_song(false);
+    now_playing_->set_is_transitioning(false);
 
     override_transitioning_ = false;
     transitioning_ = false;
+
+    next_song_->set_is_transitioning(false);
+    next_song_->set_is_next_song(false);
+    next_song_->set_is_current_song(true);
 
     now_playing_ = next_song_;
     next_song_.reset();
 
     now_playing_->song().play(); // if it wasn't already
 
-    get_next_song_randomly(); // this should be non-randomly
+    next_song_ = get_next_song_randomly(); // this should be non-randomly
+    next_song_->set_is_next_song(true);
 }
 
 // TODO: use amazing algorithm to figure out next song
@@ -131,6 +144,10 @@ GraphNodePtr PlayManager::get_next_song_randomly() {
 void PlayManager::register_new_graph_node(GraphNodePtr node) {
     if (now_playing_.get() != NULL)
         return;
+
+    node->set_is_current_song(true);
+    node->set_is_next_song(false);
+    node->set_is_transitioning(false);
 
     now_playing_ = node;
     now_playing_->song().play();
