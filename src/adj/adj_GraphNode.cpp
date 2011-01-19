@@ -15,7 +15,7 @@ namespace adj {
 
 GraphNode::GraphNode() {
     is_valid_ = false;
-    circle_size_ = 7.0f;
+    circle_radius_ = 5.0f;
     node_color_ = ci::ColorA(0.839f, 0.839f, 0.839f, 1.0f);
     node_highlight_color_ = ci::ColorA(0.0f, 0.643f, 1.0f, 1.0f);
     scale_ = 1.0f;
@@ -50,6 +50,12 @@ void GraphNode::draw() {
         ci::gl::translate(particle_->position());
 
         ci::gl::pushMatrices();
+
+            callout_box_->draw();
+
+        ci::gl::popMatrices();
+
+        ci::gl::pushMatrices();
             
             if (is_current_song_)
                 draw_current_song();
@@ -58,15 +64,13 @@ void GraphNode::draw() {
 
         ci::gl::popMatrices();
 
-        callout_box_->draw();
-
     ci::gl::popMatrices();
 }
 
 void GraphNode::draw_current_song() {
     ci::gl::scale(ci::Vec3f::one() * max_scale_);
     ci::gl::color(node_highlight_color_);
-    ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_size_);
+    ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
 }
 
 void GraphNode::draw_transitioning_out() {
@@ -82,7 +86,7 @@ void GraphNode::draw_node() {
     ci::gl::scale(ci::Vec3f::one() * ci::lmap<float>(distance_from_current_,
         0, 10, max_scale_, min_scale_));
     ci::gl::color(node_color_);
-    ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_size_);
+    ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
 }
 
 void GraphNode::add_child(GraphNodePtr child) {
@@ -129,5 +133,12 @@ void GraphNode::set_is_next_song(bool next) {
     is_next_song_ = next;
     callout_box_->update_contents();
 }
+
+void GraphNode::update_appearance() {
+
+
+}
+
+
 
 }

@@ -3,13 +3,13 @@
 
 #include "adj/adj_Adj.h"
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/AppNative.h"
 
 namespace adj {
     class Visualizer;
 }
 
-class AdjApp : public ci::app::AppBasic {
+class AdjApp : public ci::app::AppNative {
 public:
     AdjApp();
 

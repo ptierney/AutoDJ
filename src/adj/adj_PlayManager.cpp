@@ -122,7 +122,11 @@ void PlayManager::switch_to_next_song() {
     now_playing_->song().play(); // if it wasn't already
 
     next_song_ = get_next_song_randomly(); // this should be non-randomly
-    next_song_->set_is_next_song(true);
+
+    if (next_song_.get() != NULL)
+        next_song_->set_is_next_song(true);
+    else
+        ci::app::console() << "**WARNING** Unable to get a next song" << std::endl;
 }
 
 // TODO: use amazing algorithm to figure out next song

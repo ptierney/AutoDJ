@@ -56,6 +56,15 @@ public:
     void set_is_current_song(bool current);
     void set_is_next_song(bool next);
 
+    int distance_from_current() { return distance_from_current_; }
+
+    const ci::ColorA& node_color() { return node_color_; }
+    const ci::ColorA& node_highlight_color() { return node_highlight_color_; }
+    
+    float circle_radius() { return circle_radius_; }
+
+    void update_appearance();
+
 private:
     void draw_current_song();
     void draw_transitioning_out();
@@ -85,7 +94,7 @@ private:
 
     bool is_valid_; // has a song that can be played
 
-    float circle_size_;
+    float circle_radius_;
 };
 
 }
