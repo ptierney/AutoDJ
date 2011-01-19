@@ -65,6 +65,8 @@ public:
 
     void update_appearance();
 
+    ParticlePtr particle() { return particle_; }
+
 private:
     void draw_current_song();
     void draw_transitioning_out();

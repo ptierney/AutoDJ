@@ -52,6 +52,29 @@ ParticlePtr GraphPhysics::create_particle(ParticlePtr q) {
 
     setup_new_node(p, q);
 
+
+    return p;
+}
+
+ParticlePtr GraphPhysics::create_box_particle(ParticlePtr parent) {
+    ParticlePtr p = p_system_->make_particle();
+
+    // separate the box from all other boxes
+    for (std::vector<ParticlePtr>::iterator it = boxes_.begin(); it != boxes_.end(); ++it) {
+        make_separation_between(p, *it);
+    }
+
+    boxes_.push_back(p);
+
+    make_separation_between(p, parent);
+    make_edge_between(p, parent);
+
+    ci::Rand rand;
+    rand.randomize();
+
+    p->position() = parent->position() + ci::Vec2f(rand.randFloat(-1.0f, 1.0f),
+        rand.randFloat(-1.0f, 1.0f));
+
     return p;
 }
 
@@ -73,14 +96,18 @@ void GraphPhysics::add_spacers_to_node(ParticlePtr p, ParticlePtr r) {
         ParticlePtr q = *it;
 
         if (p.get() != q.get() && p.get() != r.get())
-            p_system_->make_attraction(*(p.get()), *(q.get()),
-            -spacer_strength_, 20);
+            make_separation_between(p, q);
     }
 }
 
 void GraphPhysics::make_edge_between(ParticlePtr a, ParticlePtr b) {
     p_system_->make_spring(*(a.get()), *(b.get()), edge_strength_,
         edge_strength_, edge_length_);
+}
+
+void GraphPhysics::make_separation_between(ParticlePtr a, ParticlePtr b) {
+    p_system_->make_attraction(*(a.get()), *(b.get()),
+        -spacer_strength_, 20);
 }
 
 GraphPhysics& GraphPhysics::instance() {

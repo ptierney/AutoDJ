@@ -28,6 +28,10 @@ public:
     ParticlePtr create_particle(); // Attatch the node to a random node
     ParticlePtr create_particle(ParticlePtr parent); // create new attatched to parent
 
+    // Particles are attatched by a spring to their parent,
+    // and have separators to all other boxes.
+    ParticlePtr create_box_particle(ParticlePtr parent);
+
     void update();
 
     ParticleSystemPtr particle_system() { return p_system_; }
@@ -39,6 +43,9 @@ private:
     void setup_new_node(ParticlePtr p, ParticlePtr parent);
     void add_spacers_to_node(ParticlePtr p, ParticlePtr r);
     void make_edge_between(ParticlePtr a, ParticlePtr b);
+    void make_separation_between(ParticlePtr a, ParticlePtr b);
+
+    std::vector<ParticlePtr> boxes_;
 
     // shared_ptrs to all sorts of classes
     ParticleSystemPtr p_system_;

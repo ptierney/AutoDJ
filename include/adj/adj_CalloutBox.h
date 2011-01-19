@@ -19,6 +19,8 @@ namespace adj {
 
 class GraphNode;
 
+typedef std::shared_ptr<class graph::Particle> ParticlePtr;
+
 class CalloutBox {
 public:
     CalloutBox(GraphNode& parent);
@@ -36,33 +38,52 @@ private:
     void set_contents_current();
     void set_contents_node();
     void set_contents_just_added();
+    void context_setup_dash();
+    void context_setup_solid();
+    void update_box_position();
+
+    void calculate_surface_size();
+    void create_surface();
+    void create_context();
+
+    void draw_connection();
+    void create_connect_surface();
+    void create_connect_context();
+    void render_connection();
 
     void refresh_text(); // temporary
 
     GraphNode& node_;
     bool visible_;
 
-    std::string text_font_;
-    std::string text_font_i_;
     int font_size_;
     ci::ColorA text_color_;
     ci::gl::Texture text_texture_;
 
     float line_width_;
+    float dash_gap_size_;
 
     ci::Vec2i surface_size_;
     int side_margin_;
     int top_margin_;
     int text_spacing_;
 
+    ci::Vec2f box_position_;
+
     ci::Font medium_font_;
-    ci::Font italic_font_;
-    ci::Font bold_font_;
+    // I can't seem to figure out how to use italic fonts with cairo atm
+    //ci::Font italic_font_;
+    //ci::Font bold_font_;
 
     float scale_;
 
     std::shared_ptr<ci::cairo::SurfaceImage> surface_;
     std::shared_ptr<ci::cairo::Context> context_;
+
+    std::shared_ptr<ci::cairo::SurfaceImage> connect_surface_;
+    std::shared_ptr<ci::cairo::Context> connect_context_;
+
+    ParticlePtr particle_;
 };
 
 }

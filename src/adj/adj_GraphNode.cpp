@@ -48,21 +48,17 @@ void GraphNode::draw() {
     ci::gl::pushMatrices();
 
         ci::gl::translate(particle_->position());
-
-        ci::gl::pushMatrices();
-
-            callout_box_->draw();
-
-        ci::gl::popMatrices();
-
-        ci::gl::pushMatrices();
             
-            if (is_current_song_)
-                draw_current_song();
-            else
-                draw_node();
+        if (is_current_song_)
+            draw_current_song();
+        else
+            draw_node();
 
-        ci::gl::popMatrices();
+    ci::gl::popMatrices();
+
+    ci::gl::pushMatrices();
+
+        callout_box_->draw();
 
     ci::gl::popMatrices();
 }

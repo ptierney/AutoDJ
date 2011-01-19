@@ -11,7 +11,7 @@ AdjApp::AdjApp() {
 }
 
 void AdjApp::prepareSettings(Settings* settings) {
-	settings->setWindowSize(1000, 700);
+	settings->setWindowSize(1024, 768);
 	settings->setFrameRate(60.0f);
 	settings->setResizable(false);
 	settings->setFullScreen(false);
