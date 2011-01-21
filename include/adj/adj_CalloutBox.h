@@ -38,8 +38,8 @@ private:
     void set_contents_current();
     void set_contents_node();
     void set_contents_just_added();
-    void context_setup_dash();
-    void context_setup_solid();
+    void context_setup_dash(std::shared_ptr<ci::cairo::Context>);
+    void context_setup_solid(std::shared_ptr<ci::cairo::Context>);
     void update_box_position();
 
     void calculate_surface_size();
@@ -59,16 +59,24 @@ private:
     int font_size_;
     ci::ColorA text_color_;
     ci::gl::Texture text_texture_;
+    ci::gl::Texture connection_texture_;
 
     float line_width_;
     float dash_gap_size_;
 
-    ci::Vec2i surface_size_;
+    ci::Vec2f surface_size_;
+    ci::Vec2f connection_surface_size_;
     int side_margin_;
     int top_margin_;
     int text_spacing_;
 
+    bool is_left_of_node_;
+    bool is_below_node_;
+    bool is_next_to_node_;
+
     ci::Vec2f box_position_;
+    float box_top_y_;
+    float box_bottom_y_;
 
     ci::Font medium_font_;
     // I can't seem to figure out how to use italic fonts with cairo atm

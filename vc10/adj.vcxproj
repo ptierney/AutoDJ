@@ -14,6 +14,7 @@
     <ClInclude Include="..\include\AdjApp.h" />
     <ClInclude Include="..\include\adj\adj_Adj.h" />
     <ClInclude Include="..\include\adj\adj_CalloutBox.h" />
+    <ClInclude Include="..\include\adj\adj_CalloutConnectionDrawer.h" />
     <ClInclude Include="..\include\adj\adj_Camera.h" />
     <ClInclude Include="..\include\adj\adj_GraphNode.h" />
     <ClInclude Include="..\include\adj\adj_GraphNodeFactory.h" />
@@ -35,6 +36,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp" />
     <ClCompile Include="..\src\adj\adj_CalloutBox.cpp" />
+    <ClCompile Include="..\src\adj\adj_CalloutConnectionDrawer.cpp" />
     <ClCompile Include="..\src\adj\adj_Camera.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphNode.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphNodeFactory.cpp" />

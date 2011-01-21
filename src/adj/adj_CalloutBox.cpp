@@ -10,6 +10,7 @@
 #include "cinder/cairo/Cairo.h"
 #include "cinder/ImageIo.h"
 #include "cinder/app/AppNative.h"
+#include "cinder/CinderMath.h"
 
 #include "graph/graph_Particle.h"
 
@@ -26,6 +27,7 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     text_color_ = ci::ColorA(1.0f, 0.0f, 1.0f, 1.0f);
     font_size_ = 48;
     
+    is_left_of_node_ = false;
     side_margin_ = 20;
     top_margin_ = 20;
     text_spacing_ = 10;
@@ -54,7 +56,7 @@ void CalloutBox::update_contents() {
 }
 
 void CalloutBox::calculate_surface_size() {
-    surface_size_ = ci::Vec2i(640, 300);
+    surface_size_ = ci::Vec2f(640, 300);
 }
 
 void CalloutBox::create_surface() {
@@ -67,18 +69,14 @@ void CalloutBox::create_context() {
         ci::cairo::Context(*(surface_.get())));
 }
 
-void CalloutBox::create_connect_surface() {
 
-}
-
-void CalloutBox::create_connect_context() {
-
-}
 
 void CalloutBox::update_box_position() {
     //box_position_ = ci::Vec2f(-surface_size_.x, -surface_size_.y / 2.0f);
     // make the surface centered on the 
     box_position_ = particle_->position();
+    box_top_y_= box_position_.y - surface_size_.y / 2.0f * scale_;
+    box_bottom_y_ = box_position_.y + surface_size_.y / 2.0f * scale_;
 }
 
 void CalloutBox::draw() {
@@ -92,21 +90,118 @@ void CalloutBox::draw() {
 
     ci::gl::color(ci::Color::white());
 
-    ci::gl::draw(text_texture_, ci::Vec2f::zero());
-
     draw_connection();
-    // render prerendered cairo surface
+
+    // translate correctly
+    if (is_left_of_node_)
+        ci::gl::draw(text_texture_, ci::Vec2f(-surface_size_.x, 
+        -surface_size_.y / 2.0f));
+    else
+        ci::gl::draw(text_texture_, ci::Vec2f(0.0f, -surface_size_.y / 2.0f));
 }
 
 void CalloutBox::draw_connection() {
-    create_connect_surface();
-    create_connect_context();
     render_connection();
 }
 
+void CalloutBox::create_connect_surface() {
+}
+
+void CalloutBox::create_connect_context() {
+}
+
 void CalloutBox::render_connection() {
+    is_next_to_node_ = is_left_of_node_ = is_below_node_ = false;
+
     // build up the lines in cairo
     // render with OpenGL
+    if (particle_->position().x < node_.particle()->position().x)
+        is_left_of_node_ = true;
+
+    if (particle_->position().y > node_.particle()->position().y)
+        is_below_node_ = true;
+
+    if (node_.particle()->position().y > 
+        particle_->position().y - surface_size_.y / 2.0f * scale_ &&
+        node_.particle()->position().y <
+        particle_->position().y + surface_size_.y / 2.0f * scale_)
+        is_next_to_node_ = true;
+
+    float box_top_offset_, box_bottom_offset_, node_top_offset_, node_bottom_offset_;
+    ci::Vec2f node_pos = node_.particle()->position();
+
+    if (is_next_to_node_) {
+        box_top_offset_ = box_bottom_offset_ = 0.0f;
+        node_top_offset_ = node_pos.y - box_top_y_;
+        node_bottom_offset_ = box_bottom_y_ - node_pos.y;
+    } else {
+        if (is_below_node_) {
+            box_top_offset_ = box_top_y_ - node_pos.y;
+            box_bottom_offset_ = 0.0f;
+            node_bottom_offset_ = box_bottom_y_ - node_pos.y;
+            node_top_offset_ = 0.0f;
+        } else { // is on top of node
+            box_top_offset_ = 0.0f;
+            box_bottom_offset_ = node_pos.y - box_bottom_y_;
+            node_top_offset_ = node_pos.y - box_top_y_;
+            node_bottom_offset_ = 0.0f;
+        }
+    }
+
+    // convert to cairo dimensions
+    box_top_offset_ /= scale_;
+    box_bottom_offset_ /= scale_;
+    node_top_offset_ /= scale_;
+    node_bottom_offset_ /= scale_;
+
+    // we can now determine the size of the surface to draw the connection
+
+    float conn_surface_w = ci::math<float>::abs(node_pos.x - box_position_.x) / scale_;
+    float conn_surface_h = (node_top_offset_ + node_bottom_offset_);
+
+    connection_surface_size_ = ci::Vec2f(conn_surface_w, conn_surface_h);
+
+    connect_surface_ = std::shared_ptr<ci::cairo::SurfaceImage>(new 
+        ci::cairo::SurfaceImage(conn_surface_w, conn_surface_h, true));
+
+    connect_context_ = std::shared_ptr<ci::cairo::Context>(new
+        ci::cairo::Context(*(connect_surface_.get())));
+
+    connect_context_->setSourceRgb(node_.node_highlight_color().r, 
+        node_.node_highlight_color().g, node_.node_highlight_color().b);
+
+    context_setup_dash(connect_context_);
+
+    if (is_left_of_node_) {
+        connect_context_->line(ci::Vec2f(0.0f, box_top_offset_),
+            ci::Vec2f(conn_surface_w, node_top_offset_));
+        connect_context_->line(ci::Vec2f(0.0f, conn_surface_h - box_bottom_offset_),
+            ci::Vec2f(conn_surface_w, node_top_offset_));
+    } else { // is right of node
+        connect_context_->line(ci::Vec2f(0.0f, node_top_offset_), 
+            ci::Vec2f(conn_surface_w, box_top_offset_));
+        connect_context_->line(ci::Vec2f(0.0f, node_top_offset_),
+            ci::Vec2f(conn_surface_w, conn_surface_h - box_bottom_offset_));
+    }
+
+    connect_context_->stroke();
+
+    connection_texture_ = ci::gl::Texture(connect_surface_->getSurface());
+
+    if (is_left_of_node_) {
+        if (is_below_node_ && !is_next_to_node_)
+            ci::gl::draw(connection_texture_, ci::Vec2f(0.0f, -conn_surface_h + 
+                surface_size_.y / 2.0f));
+        else // is on top of node
+            ci::gl::draw(connection_texture_, ci::Vec2f(0.0f, -surface_size_.y / 2.0f));
+    } else { // is right of node
+        if (is_below_node_ && !is_next_to_node_)
+            ci::gl::draw(connection_texture_, ci::Vec2f(-conn_surface_w, 
+            -conn_surface_h + surface_size_.y / 2.0f));
+        else // is on top of node
+            ci::gl::draw(connection_texture_, ci::Vec2f(-conn_surface_w, 
+                -surface_size_.y / 2.0f));
+    }
 }
 
 void CalloutBox::show() {
@@ -139,8 +234,8 @@ void CalloutBox::set_contents_node() {
     context_->setSourceRgb(node_.node_highlight_color().r, node_.node_highlight_color().g,
         node_.node_highlight_color().b);
 
-    //context_setup_dash();
-    context_setup_solid();
+    context_setup_dash(context_);
+    //context_setup_solid();
 
     context_->newPath();
     context_->moveTo(line_width_, line_width_);
@@ -181,21 +276,21 @@ void CalloutBox::refresh_text() {
     text_texture_ = ci::gl::Texture(rendered);
 }
 
-void CalloutBox::context_setup_dash() {
+void CalloutBox::context_setup_dash(std::shared_ptr<ci::cairo::Context> ctx) {
     // scale_ division needed to transform from parent coordinates
-    context_->setLineCap(ci::cairo::LINE_CAP_ROUND);
-    context_->setLineWidth(line_width_);
+    ctx->setLineCap(ci::cairo::LINE_CAP_ROUND);
+    ctx->setLineWidth(line_width_);
 
     std::vector<double> dash;
     dash.push_back(0.0); // dash size
     dash.push_back(line_width_ * 2); // gap size
 
-    context_->setDash(dash);
+    ctx->setDash(dash);
 }
 
-void CalloutBox::context_setup_solid() {
-    context_->setLineCap(ci::cairo::LINE_CAP_ROUND);
-    context_->setLineWidth(line_width_);
+void CalloutBox::context_setup_solid(std::shared_ptr<ci::cairo::Context> ctx) {
+    ctx->setLineCap(ci::cairo::LINE_CAP_ROUND);
+    ctx->setLineWidth(line_width_);
 }
 
 }
