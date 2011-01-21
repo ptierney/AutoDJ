@@ -42,15 +42,24 @@ ParticlePtr GraphPhysics::create_particle() {
         q = p_system_->particles_[rand.randInt(p_system_->particles_.size() - 1)];
     } while (p.get() == q.get());
 
-    setup_new_node(p, q);
+    setup_new_node(p, q, edge_length_, edge_strength_);
 
     return p;
 }
 
 ParticlePtr GraphPhysics::create_particle(ParticlePtr q) {
+    return create_particle(q, edge_length_);
+}
+
+ParticlePtr GraphPhysics::create_particle(ParticlePtr q, float length) {
+    return create_particle(q, length, edge_strength_);
+}
+
+ParticlePtr GraphPhysics::create_particle(ParticlePtr q, float length,
+    float strength) {
     ParticlePtr p = p_system_->make_particle();
 
-    setup_new_node(p, q);
+    setup_new_node(p, q, length, strength);
 
 
     return p;
@@ -78,9 +87,10 @@ ParticlePtr GraphPhysics::create_box_particle(ParticlePtr parent) {
     return p;
 }
 
-void GraphPhysics::setup_new_node(ParticlePtr p, ParticlePtr q) {
+void GraphPhysics::setup_new_node(ParticlePtr p, ParticlePtr q,
+    float length, float strength) {
     add_spacers_to_node(p, q);
-    make_edge_between(p, q);
+    make_edge_between(p, q, length, strength);
 
     ci::Rand rand;
     rand.randomize();

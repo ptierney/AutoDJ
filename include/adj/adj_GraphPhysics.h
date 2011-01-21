@@ -27,6 +27,8 @@ public:
     ParticlePtr create_unconnected_particle();
     ParticlePtr create_particle(); // Attatch the node to a random node
     ParticlePtr create_particle(ParticlePtr parent); // create new attatched to parent
+    ParticlePtr create_particle(ParticlePtr parent, float length); // create new attatched to parent
+    ParticlePtr create_particle(ParticlePtr parent, float length, float strength); // create new attatched to parent
 
     // Particles are attatched by a spring to their parent,
     // and have separators to all other boxes.
@@ -36,11 +38,13 @@ public:
 
     ParticleSystemPtr particle_system() { return p_system_; }
 
+    float edge_length() { return edge_length_; }
+
 private:
     GraphPhysics();
     void init();
 
-    void setup_new_node(ParticlePtr p, ParticlePtr parent);
+    void setup_new_node(ParticlePtr p, ParticlePtr parent, float length, float strength);
     void add_spacers_to_node(ParticlePtr p, ParticlePtr r);
     void make_edge_between(ParticlePtr a, ParticlePtr b);
     void make_edge_between(ParticlePtr a, ParticlePtr b, float length,
