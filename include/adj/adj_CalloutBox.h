@@ -50,6 +50,20 @@ private:
     void create_connect_surface();
     void create_connect_context();
     void render_connection();
+    void render_connection_better();
+
+    bool ccw(const ci::Vec2f& a, const ci::Vec2f& b, const ci::Vec2f& c) {
+        return (c.y-a.y)*(b.x-a.x) > (b.y-a.y)*(c.x-a.x);
+    }
+    // segment ab intersects cd
+    bool segments_intersect(const ci::Vec2f& a, const ci::Vec2f& b, 
+        const ci::Vec2f& c, const ci::Vec2f& d) {
+            return (ccw(a, c, d) != ccw(b, c, d)) && 
+                (ccw(a, b, c) != ccw(a, b, d));
+    }
+
+    void add_connection_end(int);
+    std::vector<int> connection_ends_;
 
     void refresh_text(); // temporary
 
@@ -77,6 +91,11 @@ private:
     ci::Vec2f box_position_;
     float box_top_y_;
     float box_bottom_y_;
+    ci::Vec2f box_upper_left_;
+    ci::Vec2f box_upper_right_;
+    ci::Vec2f box_lower_left_;
+    ci::Vec2f box_lower_right_;
+    std::vector<ci::Vec2f> box_coords_;
 
     ci::Font medium_font_;
     // I can't seem to figure out how to use italic fonts with cairo atm

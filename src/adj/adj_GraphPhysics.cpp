@@ -67,7 +67,7 @@ ParticlePtr GraphPhysics::create_box_particle(ParticlePtr parent) {
     boxes_.push_back(p);
 
     make_separation_between(p, parent);
-    make_edge_between(p, parent);
+    make_edge_between(p, parent, edge_length_ * 2.0f, edge_strength_);
 
     ci::Rand rand;
     rand.randomize();
@@ -103,6 +103,12 @@ void GraphPhysics::add_spacers_to_node(ParticlePtr p, ParticlePtr r) {
 void GraphPhysics::make_edge_between(ParticlePtr a, ParticlePtr b) {
     p_system_->make_spring(*(a.get()), *(b.get()), edge_strength_,
         edge_strength_, edge_length_);
+}
+
+void GraphPhysics::make_edge_between(ParticlePtr a, ParticlePtr b, float length,
+    float strength) {
+    p_system_->make_spring(*(a.get()), *(b.get()), strength,
+        strength, length);
 }
 
 void GraphPhysics::make_separation_between(ParticlePtr a, ParticlePtr b) {

@@ -43,6 +43,8 @@ private:
     void setup_new_node(ParticlePtr p, ParticlePtr parent);
     void add_spacers_to_node(ParticlePtr p, ParticlePtr r);
     void make_edge_between(ParticlePtr a, ParticlePtr b);
+    void make_edge_between(ParticlePtr a, ParticlePtr b, float length,
+        float strength);
     void make_separation_between(ParticlePtr a, ParticlePtr b);
 
     std::vector<ParticlePtr> boxes_;
