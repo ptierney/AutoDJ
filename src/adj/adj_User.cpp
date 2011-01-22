@@ -12,6 +12,10 @@ User::User() {
     // nothing here
 }
 
+void UserFactory::testing_setup() {
+
+}
+
 
 UserPtr UserFactory::get_user_from_id(const std::string& id) {
     // if a user has already been created, return it
@@ -25,6 +29,10 @@ UserPtr UserFactory::create_user(const Json::Value&) {
     // store user in map
 
     return UserPtr();
+}
+
+UserPtr UserFactory::create_user(UserId id, std::string name) {
+
 }
 
 void UserFactory::update_user_details(const Json::Value&) {
@@ -45,6 +53,7 @@ UserFactory* UserFactory::instance_ = NULL;
 
 UserFactory::UserFactory() {
     default_name_ = "AutoDJ User";
+    image_url_ = "http://ptierney.com/~patrick/";
 }
 
 void UserFactory::init() {

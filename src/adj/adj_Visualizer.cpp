@@ -11,6 +11,7 @@
 #include "adj/adj_GraphNodeFactory.h"
 #include "adj/adj_Song.h"
 #include "adj/adj_PlayManager.h"
+#include "adj/adj_VoteManager.h"
 
 namespace adj {
 
@@ -49,6 +50,7 @@ void Visualizer::update() {
     GraphPhysics::instance().update();
     Camera::instance().update(); // updates centroid
     PlayManager::instance().update();
+    VoteManager::instance().update();
 }
 
 void Visualizer::draw() {

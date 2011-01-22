@@ -12,12 +12,14 @@
 
 namespace adj {
 
+typedef int UserId;
+
 class User {
 public:
     User();
 
     std::string name_;
-    std::string id_;
+    UserId id_;
     
 private:
     ci::Surface photo_;
@@ -36,9 +38,13 @@ Sample User info
 
 class UserFactory {
 public:
+    // a dummy method to load from a fake database for testing
+    void testing_setup();
+
     // takes a facebook user id and returns the appropriate user object
-    UserPtr get_user_from_id(const std::string&);
+    UserPtr get_user_from_id(const UserId&);
     UserPtr create_user(const Json::Value&);
+    UserPtr create_user(UserId id, std::string name);
     // if more information comes in on the network, add details to objects
     void update_user_details(const Json::Value&);
 
@@ -57,6 +63,8 @@ private:
 
     std::string default_name_;
     ci::Surface default_photo_;
+
+    std::string image_url_;
 };
 
 }

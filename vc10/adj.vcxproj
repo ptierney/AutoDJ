@@ -24,6 +24,7 @@
     <ClInclude Include="..\include\adj\adj_Song.h" />
     <ClInclude Include="..\include\adj\adj_User.h" />
     <ClInclude Include="..\include\adj\adj_Visualizer.h" />
+    <ClInclude Include="..\include\adj\adj_VoteManager.h" />
     <ClInclude Include="..\include\graph\graph_Attraction.h" />
     <ClInclude Include="..\include\graph\graph_Force.h" />
     <ClInclude Include="..\include\graph\graph_Integrator.h" />
@@ -46,6 +47,7 @@
     <ClCompile Include="..\src\adj\adj_Song.cpp" />
     <ClCompile Include="..\src\adj\adj_User.cpp" />
     <ClCompile Include="..\src\adj\adj_Visualizer.cpp" />
+    <ClCompile Include="..\src\adj\adj_VoteManager.cpp" />
     <ClCompile Include="..\src\graph\graph_Attraction.cpp" />
     <ClCompile Include="..\src\graph\graph_Particle.cpp" />
     <ClCompile Include="..\src\graph\graph_ParticleSystem.cpp" />

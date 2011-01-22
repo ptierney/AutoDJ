@@ -80,8 +80,8 @@ void CalloutBox::update_box_position() {
     // make the surface centered on the 
     box_position_ = particle_->position();
 
-    box_top_y_= box_position_.y - surface_size_.y / 2.0f * scale_;
-    box_bottom_y_ = box_position_.y + surface_size_.y / 2.0f * scale_;
+    //box_top_y_= box_position_.y - surface_size_.y / 2.0f * scale_;
+    //box_bottom_y_ = box_position_.y + surface_size_.y / 2.0f * scale_;
 
     /*
     if (particle_->position().x < node_.particle()->position().x)
@@ -148,7 +148,7 @@ void CalloutBox::draw() {
             -surface_size_.y / 2.0f));
     else
         ci::gl::draw(text_texture_, ci::Vec2f(0.0f, -surface_size_.y / 2.0f));
-        */
+    */
 }
 
 void CalloutBox::draw_connection() {
