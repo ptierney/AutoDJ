@@ -123,6 +123,7 @@ void VoteManager::parse_vote(Json::Value& val) {
     vote->id = get_id_from_vote(val);
     vote->song_id = val["vote"].asInt();
     vote->user = UserFactory::instance().get_user_from_value(val["user"]);
+    vote->user->register_vote_for_song(vote->song_id);
 
     // Inform graph of new vote
     GraphNodeFactory::instance().update_graph_from_vote(vote);

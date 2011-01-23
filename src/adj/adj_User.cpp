@@ -11,11 +11,17 @@
 #include "cinder/Url.h"
 
 #include "adj/adj_User.h"
+#include "adj/adj_GraphNodeFactory.h"
+#include "adj/adj_GraphNode.h"
 
 namespace adj {
 
 User::User() {
     // nothing here
+}
+
+void User::register_vote_for_song(SongId id) {
+    voted_songs_.push_back(id);
 }
 
 ProfileQuery::ProfileQuery(const std::vector<UserId>& ids, std::string base)
@@ -140,6 +146,8 @@ void UserFactory::parse_query_replies() {
         // Note: creating a gl texture MUST be done in the main thread
         user->photo_texture_ = ci::gl::Texture(user->photo_);
 
+        update_nodes_after_user_change(user);
+
         std::vector<UserId>::iterator pending_it = 
             std::find(pending_queries_.begin(), pending_queries_.end(),
             reply->id);
@@ -151,6 +159,15 @@ void UserFactory::parse_query_replies() {
     }    
 }
 
+void UserFactory::update_nodes_after_user_change(UserPtr user) {
+    std::map<SongId, GraphNodePtr>& song_map = GraphNodeFactory::instance().song_map();
+
+    for (std::deque<SongId>::iterator it = user->voted_songs().begin();
+        it != user->voted_songs().end(); ++it) {
+
+        song_map[*it]->update_appearance();
+    }
+}
 
 UserFactory& UserFactory::instance() {
     if (instance_ == NULL) {

@@ -46,7 +46,7 @@ public:
     void delete_node(GraphNodePtr);
 
     std::vector<GraphNodePtr>& nodes() { return graph_nodes_; }
-    const std::map<SongId, GraphNodePtr>& song_map() { return song_map_; }
+    std::map<SongId, GraphNodePtr>& song_map() { return song_map_; }
 
     void add_pair_request(PairRequest);
 

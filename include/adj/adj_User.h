@@ -1,6 +1,8 @@
 
 #pragma once
 
+// this class stores facebook users, ie the people who actually vote on songs
+
 #include "adj/adj_Adj.h"
 #include <map>
 #include <deque>
@@ -10,11 +12,11 @@
 
 #include "json/value.h"
 
-// this class stores facebook users, ie the people who actually vote on songs
-
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/Surface.h"
+
+#include "adj/adj_Song.h"
 
 /*
 Sample Vote:
@@ -33,9 +35,6 @@ namespace adj {
 
 typedef int UserId;
 
-// not struct b/c I might want to fold creation into it specifically for 
-// multithreaded loading of photo
-
 class User {
 public:
     User();
@@ -44,6 +43,13 @@ public:
     UserId id_;
     ci::Surface photo_;
     ci::gl::Texture photo_texture_;
+
+    std::deque<SongId>& voted_songs() { return voted_songs_; }
+
+    void register_vote_for_song(SongId id);
+
+private:
+    std::deque<SongId> voted_songs_;
 };
 
 typedef std::shared_ptr<User> UserPtr;
@@ -91,6 +97,8 @@ public:
     void register_query_reply(QueryReplyPtr);
 
     UserId get_id_from_value(Json::Value& val) { return val["id"].asInt(); }
+
+    void update_nodes_after_user_change(UserPtr);
 
 private:
     UserFactory();
