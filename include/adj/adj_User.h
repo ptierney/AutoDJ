@@ -3,6 +3,10 @@
 
 #include "adj/adj_Adj.h"
 #include <map>
+#include <deque>
+
+#include "boost/thread.hpp"
+#include "boost/thread/mutex.hpp"
 
 #include "json/value.h"
 
@@ -23,7 +27,6 @@ Sample Vote:
     },
     "vote" : 1            <-- song id
 }
-
 */
 
 namespace adj {
@@ -45,8 +48,31 @@ public:
 
 typedef std::shared_ptr<User> UserPtr;
 
+class ProfileQuery {
+public:
+    ProfileQuery(const std::vector<UserId>&, std::string url_base);
+
+    void operator()();
+
+private:
+    void download_profile(UserId);
+
+    std::vector<UserId> query_list_;
+    std::string url_base_;
+};
+
+struct QueryReply {
+    UserId id;
+    ci::Surface photo;
+};
+
+typedef std::shared_ptr<QueryReply> QueryReplyPtr;
+typedef std::shared_ptr<boost::thread> ThreadPtr;
+
 class UserFactory {
 public:
+    void update();
+
     // takes a facebook user id and returns the appropriate user object
     // if it doesn't exist, returns null pointer
     UserPtr get_user_from_id(const UserId&);
@@ -62,13 +88,16 @@ public:
     const std::string& default_name() { return default_name_; }
     const ci::Surface& default_photo() { return default_photo_; }
 
-    UserId get_id_from_value(Json::Value& val) {
-        return val["id"].asInt();
-    }
+    void register_query_reply(QueryReplyPtr);
+
+    UserId get_id_from_value(Json::Value& val) { return val["id"].asInt(); }
 
 private:
     UserFactory();
     void init();
+    void parse_query_replies();
+    void query_server_for_profile();
+    void prune_threads();
 
     std::map<UserId, UserPtr> user_map_;
 
@@ -78,6 +107,15 @@ private:
     std::string image_url_base_;
 
     static UserFactory* instance_;
+
+    std::vector<UserId> pending_queries_;
+
+    int max_threads_;
+
+    std::deque<ThreadPtr> threads_;
+
+    std::deque<QueryReplyPtr> query_replies_;
+    boost::mutex query_reply_mutex_;
 };
 
 }
