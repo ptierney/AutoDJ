@@ -1,4 +1,9 @@
 
+#include "boost/uuid/uuid.hpp"
+#include "boost/uuid/uuid_io.hpp"
+#include "boost/uuid/uuid_generators.hpp"
+#include "boost/lexical_cast.hpp"
+
 #include "cinder/Vector.h"
 
 #include "graph/graph_Particle.h"
@@ -10,6 +15,13 @@ Particle::Particle(float m) {
 
     mass_ = m;
     fixed_ = false;
+
+    id_ = get_random_id();
+}
+
+ParticleId Particle::get_random_id() {
+    boost::uuids::random_generator gen;
+    return boost::lexical_cast<std::string>(gen());
 }
 
 float Particle::distance_to(const Particle& p) {

@@ -71,6 +71,9 @@ public:
 
     void register_vote(VotePtr);
 
+    void show();
+    void hide();
+
 private:
     void draw_current_song();
     void draw_transitioning_out();
@@ -99,6 +102,7 @@ private:
     ci::ColorA node_highlight_color_;
 
     bool is_valid_; // has a song that can be played
+    bool visible_;
 
     float circle_radius_;
 };

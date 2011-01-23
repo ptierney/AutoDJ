@@ -1,9 +1,13 @@
 
 #pragma once
 
+#include <string>
+
 #include "cinder/Vector.h"
 
 namespace graph {
+
+typedef std::string ParticleId;
 
 class Particle {
 public:
@@ -33,6 +37,12 @@ public:
 
     void reset();
 
+    const ParticleId& id() const { return id_; }
+
+    bool operator==(const Particle& other) const {
+        return other.id() == id_;
+    }
+
 protected:
     ci::Vec2f position_;
     ci::Vec2f velocity_;
@@ -44,7 +54,8 @@ protected:
     bool fixed_;
 
 private:
-
+    ParticleId id_;
+    ParticleId get_random_id();
 
 };
 

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <deque>
+#include <utility>
 
 // this class allows you to look up similarities between songs
 
@@ -9,7 +10,6 @@
 #include "boost/thread/mutex.hpp"
 
 #include "adj/adj_Song.h"
-
 
 namespace adj {
 
@@ -20,12 +20,12 @@ typedef std::shared_ptr<EdgeList> EdgeListPtr;
 
 typedef std::shared_ptr<boost::thread> ThreadPtr;
 
+typedef std::pair<SongId, SongId> PairRequest;
+
 class GraphOracleQuery {
 public:
     virtual void operator()() = 0;
 };
-
-typedef std::shared_ptr<GraphOracleQuery> GraphOracleQueryPtr;
 
 class SingleGraphOracleQuery : public GraphOracleQuery {
 public:

@@ -28,16 +28,13 @@ GraphNode::GraphNode() {
     is_next_song_ = false;
     is_transitioning_ = false;
     distance_from_current_ = 0;
+    visible_ = false;
 }
 
 void GraphNode::init() {
+    // Graph nodes must have a song at the moment
     if (song_.get() == NULL)
         throw(std::runtime_error("Trying to create a graph node without a song"));
-
-    update_distance_from_current();
-
-    callout_box_ = CalloutBoxPtr(new CalloutBox(*this));
-    callout_box_->init();
 }
 
 GraphNode::~GraphNode() {
@@ -46,7 +43,38 @@ GraphNode::~GraphNode() {
     // remove / delete / stop song
 }
 
+void GraphNode::show() {
+    if (visible_)
+        return;
+
+    // if there's no valid song, remain hidden
+    if (song_.get() == NULL)
+        return;
+
+    // if it's not connected to the graph, remain hidden
+    if (particle_.get() == NULL)
+        return;
+
+    if (callout_box_.get() == NULL) {
+        callout_box_ = CalloutBoxPtr(new CalloutBox(*this));
+        callout_box_->init();
+    }
+
+    update_appearance();
+
+    visible_ = true;
+}
+
+void GraphNode::hide() {
+    if (!visible_)
+        return;
+
+    visible_ = false;
+}
+
 void GraphNode::draw() {
+    if (!visible_)
+        return;
     
     ci::gl::pushMatrices();
 
@@ -136,6 +164,7 @@ void GraphNode::set_is_next_song(bool next) {
 void GraphNode::update_appearance() {
     // maybe change size
     // for sure update the callout box to include any new votes
+    update_distance_from_current();
 }
 
 void GraphNode::register_vote(VotePtr vote) {

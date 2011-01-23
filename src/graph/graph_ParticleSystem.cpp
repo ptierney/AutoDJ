@@ -52,6 +52,17 @@ std::shared_ptr<Attraction> ParticleSystem::make_attraction(Particle& a,
     return m;
 }
 
+void ParticleSystem::remove_attraction(Particle& a, Particle& b) {
+    for (std::vector<std::shared_ptr<Attraction> >::iterator it = 
+        attractions_.begin(); it != attractions_.end(); ++it) {
+
+        if ((*it)->get_one_end() == (*it)->get_the_other_end()) {
+            attractions_.erase(it);
+            break; // we've invalidated the iterator
+        }
+    }
+}
+
 void ParticleSystem::apply_forces() {
     if (gravity_ != ci::Vec2f::zero()) {
         for (std::vector<std::shared_ptr<Particle> >::iterator it = 

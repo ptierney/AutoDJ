@@ -73,6 +73,11 @@ int Song::time_remaining() {
     return duration_ - time_elapsed();
 }
 
+SongFactory::SongFactory() {
+    base_song_directory_path_ = "/data/songs/";
+    song_database_file_ = "/data/songs.txt";
+}
+
 void SongFactory::parse_song_database_file() {
     Json::Reader reader;
 
@@ -143,7 +148,7 @@ SongPtr SongFactory::get_random_song() {
     ci::Rand rand;
     rand.randomize();
 
-    int index = rand.randInt(map_size - 1);
+    int index = rand.randInt(map_size);
     int i = 0;
 
     for (std::map<SongId, SongPtr>::const_iterator it = song_map_.begin();
@@ -158,6 +163,10 @@ SongPtr SongFactory::get_random_song() {
     ci::app::console() << "**WARNING** Could not find random song." << std::endl;
 
     return song_map_.begin()->second;
+}
+
+SongId SongFactory::get_random_song_id() {
+    return get_random_song()->id();
 }
 
 void Song::register_vote(VotePtr vote) {
@@ -181,9 +190,6 @@ void SongFactory::cleanup() {
     delete instance_;
 }
 
-SongFactory::SongFactory() {
-    base_song_directory_path_ = "/data/songs/";
-    song_database_file_ = "/data/songs.txt";
-}
+
 
 }

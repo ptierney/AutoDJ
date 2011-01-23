@@ -99,6 +99,7 @@ public:
     void load_song_database();
 
     SongPtr get_random_song();
+    SongId get_random_song_id();
 
     // input a json
     SongPtr create_song(SongId, Json::Value& song);

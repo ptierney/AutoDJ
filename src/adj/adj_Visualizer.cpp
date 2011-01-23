@@ -43,7 +43,7 @@ void Visualizer::setup() {
         exit;
     }
 
-    GraphNodeFactory::instance().add_to_random_node();
+    //GraphNodeFactory::instance().add_to_random_node();
 }
 
 void Visualizer::update() {
@@ -65,8 +65,9 @@ void Visualizer::shutdown() {
     Renderer::cleanup();
 }
 
+// adding nodes should be done through votes
 void Visualizer::add_node() {
-    GraphNodeFactory::instance().add_to_random_node();
+    //GraphNodeFactory::instance().add_to_random_node();
 }
 
 bool Visualizer::mouse_drag(ci::app::MouseEvent) {

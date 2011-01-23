@@ -14,7 +14,7 @@ SingleGraphOracleQuery::SingleGraphOracleQuery(SongId id)
     // nothing here
 }
 
-// THIS IS RUN IN A SEPARATE THREAD
+// THIS IS RUNS IN A SEPARATE THREAD
 void SingleGraphOracleQuery::operator()() {
 
 }
@@ -24,7 +24,7 @@ MultipleGraphOracleQuery::MultipleGraphOracleQuery(
     // nothing here
 }
 
-// THIS IS RUN IN A SEPARATE THREAD
+// THIS IS RUNS IN A SEPARATE THREAD
 void MultipleGraphOracleQuery::operator()() {
 
 }
@@ -42,6 +42,21 @@ void GraphOracle::init() {
 }
 
 void GraphOracle::query_best_connection(SongId id) {
+    // THIS IS DUMMY CODE TO BE REPLACED
+
+    SongId other_id = SongFactory::instance().get_random_song_id();
+
+    while (other_id == id || (GraphNodeFactory::instance().song_map().find(
+        other_id) == GraphNodeFactory::instance().song_map().end())) {
+        other_id = SongFactory::instance().get_random_song_id();
+    }
+
+    GraphNodeFactory::instance().add_pair_request(PairRequest(id, other_id));
+
+    return;
+    
+    // BEGIN ACTUAL CODE!!!
+
    SingleGraphOracleQuery query(id);
 
    prune_threads();

@@ -6,6 +6,7 @@
 #include "graph/graph_Particle.h"
 
 #include "adj/adj_GraphPhysics.h"
+#include "adj/adj_GraphNode.h"
 
 namespace adj {
 
@@ -31,7 +32,7 @@ ParticlePtr GraphPhysics::create_unconnected_particle() {
     return p_system_->make_particle();
 }
 
-ParticlePtr GraphPhysics::create_particle() {
+ParticlePtr GraphPhysics::create_particle_connected_randomly() {
     ci::Rand rand;
     rand.randomize();
 
@@ -47,6 +48,9 @@ ParticlePtr GraphPhysics::create_particle() {
     return p;
 }
 
+//ParticlePtr GraphPhysics::create_particle() {
+//}
+
 ParticlePtr GraphPhysics::create_particle(ParticlePtr q) {
     return create_particle(q, edge_length_);
 }
@@ -60,7 +64,6 @@ ParticlePtr GraphPhysics::create_particle(ParticlePtr q, float length,
     ParticlePtr p = p_system_->make_particle();
 
     setup_new_node(p, q, length, strength);
-
 
     return p;
 }
@@ -125,6 +128,24 @@ void GraphPhysics::make_separation_between(ParticlePtr a, ParticlePtr b) {
     p_system_->make_attraction(*(a.get()), *(b.get()),
         -spacer_strength_, 20);
 }
+
+void GraphPhysics::link_nodes(GraphNodePtr a, GraphNodePtr b) {
+    link_nodes(a, b, edge_length_, edge_strength_);
+}
+
+void GraphPhysics::link_nodes(GraphNodePtr node_a, GraphNodePtr node_b, float length, float strength) {
+    ParticlePtr a_ptr = node_a->particle();
+    ParticlePtr b_ptr = node_b->particle();
+
+    graph::Particle& a = *(a_ptr.get());
+    graph::Particle& b = *(b_ptr.get());
+
+    p_system_->make_spring(a, b, strength, strength, length);
+
+    // make sure there isn't a residual attraction
+    p_system_->remove_attraction(a, b);
+}
+
 
 GraphPhysics& GraphPhysics::instance() {
     if (instance_ == NULL) {

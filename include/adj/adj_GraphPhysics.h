@@ -14,6 +14,7 @@ namespace adj {
 
 typedef std::shared_ptr<graph::Particle> ParticlePtr;
 typedef std::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
+typedef std::shared_ptr<class GraphNode> GraphNodePtr;
 
 class GraphPhysics {
 public:
@@ -25,10 +26,14 @@ public:
     // connected by a spring; there's no sense of directionality (that's set 
     // up in the GraphNode object.
     ParticlePtr create_unconnected_particle();
-    ParticlePtr create_particle(); // Attatch the node to a random node
+    ParticlePtr create_particle_connected_randomly(); 
+    //ParticlePtr create_particle(); // 
     ParticlePtr create_particle(ParticlePtr parent); // create new attatched to parent
     ParticlePtr create_particle(ParticlePtr parent, float length); // create new attatched to parent
     ParticlePtr create_particle(ParticlePtr parent, float length, float strength); // create new attatched to parent
+
+    void link_nodes(GraphNodePtr a, GraphNodePtr b);
+    void link_nodes(GraphNodePtr a, GraphNodePtr b, float length, float strength);
 
     // Particles are attatched by a spring to their parent,
     // and have separators to all other boxes.

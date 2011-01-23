@@ -29,7 +29,7 @@ public:
         float ks, float d, float r);
     std::shared_ptr<Attraction> make_attraction(Particle& a, Particle& b,
         float k, float min_distance);
-
+    void remove_attraction(Particle& a, Particle& b);
 
     void clear();
 
