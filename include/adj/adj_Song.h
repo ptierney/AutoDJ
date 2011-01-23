@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <deque>
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 
@@ -20,6 +21,8 @@ class Song;
 typedef std::shared_ptr<Song> SongPtr;
 
 typedef int SongId;
+
+typedef std::shared_ptr<struct Vote> VotePtr;
 
 /* NOTE: these are probably not needed
 
@@ -61,6 +64,13 @@ public:
     std::string album() { return album_; }
     int duration() { return duration_; }
 
+    SongId id() { return id_; }
+
+    int num_votes() { return votes_.size(); }
+    const std::deque<VotePtr>& votes();
+
+    void register_vote(VotePtr);
+
 private:
     SongId id_;
     std::string name_;
@@ -75,6 +85,8 @@ private:
     ci::audio::SourceRef source_;
     // this is a handle to the playing instance
     ci::audio::TrackRef track_; 
+
+    std::deque<VotePtr> votes_;
 };
 
 class SongFactory {

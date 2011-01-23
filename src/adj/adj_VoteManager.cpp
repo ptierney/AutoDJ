@@ -9,6 +9,8 @@
 #include "cinder/Url.h"
 
 #include "adj/adj_VoteManager.h"
+#include "adj/adj_User.h"
+#include "adj/adj_GraphNodeFactory.h"
 
 namespace adj {
 
@@ -34,9 +36,10 @@ bool VoteManager::enough_time_elapsed() {
 }
 
 void VoteManager::query_vote_server() {
+    last_query_time_ = boost::posix_time::second_clock::universal_time();
+
     std::string root;
-    ci::IStreamUrlRef urlRef = ci::IStreamUrl::createRef(
-        vote_server_);
+    ci::IStreamUrlRef urlRef = ci::IStreamUrl::createRef(vote_server_);
 
     ci::Buffer buf = loadStreamBuffer(urlRef);
     unsigned char* j = (unsigned char*) buf.getData();
@@ -70,7 +73,13 @@ VoteId VoteManager::get_id_from_vote(Json::Value& val) {
 }
 
 void VoteManager::register_new_vote(Json::Value& val) {
+    VotePtr vote(new Vote());
+    vote->id = get_id_from_vote(val);
+    vote->song_id = val["vote"].asInt();
+    vote->user = UserFactory::instance().get_user_from_value(val["user"]);
 
+    // Inform graph of new vote
+    GraphNodeFactory::instance().update_graph_from_vote(vote);
 }
 
 VoteManager* VoteManager::instance_ = NULL;

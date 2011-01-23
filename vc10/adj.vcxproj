@@ -18,6 +18,7 @@
     <ClInclude Include="..\include\adj\adj_Camera.h" />
     <ClInclude Include="..\include\adj\adj_GraphNode.h" />
     <ClInclude Include="..\include\adj\adj_GraphNodeFactory.h" />
+    <ClInclude Include="..\include\adj\adj_GraphOracle.h" />
     <ClInclude Include="..\include\adj\adj_GraphPhysics.h" />
     <ClInclude Include="..\include\adj\adj_PlayManager.h" />
     <ClInclude Include="..\include\adj\adj_Renderer.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="..\src\adj\adj_Camera.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphNode.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphNodeFactory.cpp" />
+    <ClCompile Include="..\src\adj\adj_GraphOracle.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphPhysics.cpp" />
     <ClCompile Include="..\src\adj\adj_PlayManager.cpp" />
     <ClCompile Include="..\src\adj\adj_Renderer.cpp" />

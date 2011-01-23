@@ -96,6 +96,9 @@
     <ClInclude Include="..\include\adj\adj_VoteManager.h">
       <Filter>Header Files\adj</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\adj\adj_GraphOracle.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -159,6 +162,9 @@
       <Filter>Source Files\adj</Filter>
     </ClCompile>
     <ClCompile Include="..\src\adj\adj_VoteManager.cpp">
+      <Filter>Source Files\adj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\adj_GraphOracle.cpp">
       <Filter>Source Files\adj</Filter>
     </ClCompile>
   </ItemGroup>

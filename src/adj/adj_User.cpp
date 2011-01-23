@@ -1,5 +1,5 @@
 
-#include <algorithm>
+#include "boost/lexical_cast.hpp"
 
 #include "cinder/ImageIo.h"
 #include "cinder/Surface.h"
@@ -17,26 +17,49 @@ void UserFactory::testing_setup() {
 }
 
 
-UserPtr UserFactory::get_user_from_id(const std::string& id) {
+UserPtr UserFactory::get_user_from_id(const UserId& id) {
     // if a user has already been created, return it
-    // if not, create a new user, and return that
-    return UserPtr();
+    // if not, return null
+
+    return user_map_[id]; // should construct new null ptr
 }
 
-UserPtr UserFactory::create_user(const Json::Value&) {
-    // parse through json
-    // create user
-    // store user in map
+UserPtr UserFactory::get_user_from_value(Json::Value& val) {
+    UserId id = get_id_from_value(val);
 
-    return UserPtr();
+    if (user_map_[id].get() != NULL)
+        return user_map_[id];
+
+    UserPtr new_user = create_user(val);
+
+    user_map_[id] = create_user(val);
+
+    return user_map_[id];
 }
 
-UserPtr UserFactory::create_user(UserId id, std::string name) {
+UserPtr UserFactory::create_user(Json::Value& val) {
+    UserPtr user(new User());
+    user->id_ = get_id_from_value(val);
+    user->name_ = val["name"].asString();
 
-}
+    if (user->name_.empty())
+        user->name_ = default_name_;
 
-void UserFactory::update_user_details(const Json::Value&) {
+    std::string image_name = image_url_base_ + boost::lexical_cast<std::string>(
+        user->id_) + ".jpg";
 
+    // create user image
+    try {
+        // TODO: check that this works
+        user->photo_ = ci::loadImage(image_name);
+    } catch (...) {
+        // set image to default image
+        user->photo_ = default_photo_;
+    }
+
+    user->photo_texture_ = ci::gl::Texture(user->photo_);
+
+    return user;
 }
 
 
@@ -53,7 +76,7 @@ UserFactory* UserFactory::instance_ = NULL;
 
 UserFactory::UserFactory() {
     default_name_ = "AutoDJ User";
-    image_url_ = "http://ptierney.com/~patrick/";
+    image_url_base_ = "http://ptierney.com/~patrick/user_photos/";
 }
 
 void UserFactory::init() {

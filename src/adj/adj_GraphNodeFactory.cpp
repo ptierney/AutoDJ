@@ -1,5 +1,5 @@
 
-#include "json/value.h"
+#include <map>
 
 #include "cinder/Rand.h"
 #include "cinder/app/App.h"
@@ -9,6 +9,7 @@
 #include "adj/adj_GraphPhysics.h"
 #include "adj/adj_PlayManager.h"
 #include "adj/adj_Song.h"
+#include "adj/adj_VoteManager.h"
 
 namespace adj {
 
@@ -18,10 +19,6 @@ GraphNodeFactory::GraphNodeFactory() {
 
 void GraphNodeFactory::init() {
     // nothnig here
-}
-
-void GraphNodeFactory::add_node_from_song_request(const Json::Value&) {
-
 }
 
 void GraphNodeFactory::add_empty_node() {
@@ -59,9 +56,29 @@ void GraphNodeFactory::add_to_node(GraphNodePtr p) {
     q->init();
 
     graph_nodes_.push_back(q);
+    song_map_[q->song().id()] = q;
 
     PlayManager::instance().register_new_graph_node(q);
 }
+
+void GraphNodeFactory::update_graph_from_vote(VotePtr vote) {
+    SongId song_id = vote->song_id;
+
+    // search through nodes for song id 
+    song_map_it_ = song_map_.find(song_id);
+    if (song_map_it_ != song_map_.end()) {
+        song_map_it_->second->register_vote(vote);
+        return;
+    }
+
+    // need to create a new node
+    create_new_node_from_vote(vote);
+}
+
+void GraphNodeFactory::create_new_node_from_vote(VotePtr vote) {
+    SongId connecting_song = 
+}
+
 
 GraphNodeFactory* GraphNodeFactory::instance_ = NULL;
 

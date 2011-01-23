@@ -7,9 +7,20 @@
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+#include "adj/adj_Song.h"
+
 namespace adj {
 
 typedef std::string VoteId;
+typedef std::shared_ptr<class User> UserPtr;
+
+struct Vote {
+    VoteId id;
+    SongId song_id;
+    UserPtr user;
+};
+
+typedef std::shared_ptr<Vote> VotePtr;
 
 class VoteManager {
 public:

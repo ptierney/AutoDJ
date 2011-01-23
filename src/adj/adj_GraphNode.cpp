@@ -1,4 +1,6 @@
 
+#include <assert.h>
+
 #include <exception>
 
 #include "cinder/gl/gl.h"
@@ -10,6 +12,7 @@
 #include "adj/adj_GraphNode.h"
 #include "adj/adj_Song.h"
 #include "adj/adj_CalloutBox.h"
+#include "adj/adj_VoteManager.h"
 
 namespace adj {
 
@@ -131,10 +134,17 @@ void GraphNode::set_is_next_song(bool next) {
 }
 
 void GraphNode::update_appearance() {
-
-
+    // maybe change size
+    // for sure update the callout box to include any new votes
 }
 
+void GraphNode::register_vote(VotePtr vote) {
+    assert(vote->song_id == song_->id());
+
+    song_->register_vote(vote);
+
+    update_appearance();
+}
 
 
 }

@@ -1,6 +1,7 @@
 
 #include <fstream>
 #include <exception>
+#include <deque>
 
 #include "boost/uuid/uuid.hpp"
 #include "boost/uuid/uuid_io.hpp"
@@ -157,6 +158,10 @@ SongPtr SongFactory::get_random_song() {
     ci::app::console() << "**WARNING** Could not find random song." << std::endl;
 
     return song_map_.begin()->second;
+}
+
+void Song::register_vote(VotePtr vote) {
+    votes_.push_back(vote);
 }
 
 // TODO: should be nullptr

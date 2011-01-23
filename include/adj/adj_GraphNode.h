@@ -27,6 +27,8 @@ typedef std::shared_ptr<GraphNode> GraphNodePtr;
 class CalloutBox;
 typedef std::shared_ptr<CalloutBox> CalloutBoxPtr;
 
+typedef std::shared_ptr<struct Vote> VotePtr;
+
 class GraphNode {
 public:
     GraphNode();
@@ -66,6 +68,8 @@ public:
     void update_appearance();
 
     ParticlePtr particle() { return particle_; }
+
+    void register_vote(VotePtr);
 
 private:
     void draw_current_song();

@@ -8,11 +8,30 @@
 
 // this class stores facebook users, ie the people who actually vote on songs
 
+#include "cinder/gl/gl.h"
+#include "cinder/gl/Texture.h"
 #include "cinder/Surface.h"
+
+/*
+Sample Vote:
+
+{
+    "id" : "123123123",   <-- unique id for vote
+    "user" : {
+        "id" : 7100832,   <-- facebook id
+        "name" : "Patrick Tierney"
+    },
+    "vote" : 1            <-- song id
+}
+
+*/
 
 namespace adj {
 
 typedef int UserId;
+
+// not struct b/c I might want to fold creation into it specifically for 
+// multithreaded loading of photo
 
 class User {
 public:
@@ -20,21 +39,11 @@ public:
 
     std::string name_;
     UserId id_;
-    
-private:
     ci::Surface photo_;
+    ci::gl::Texture photo_texture_;
 };
 
 typedef std::shared_ptr<User> UserPtr;
-
-/*
-Sample User info
-{
-"id" : "1234",
-"name" : "John Smith"
-}
-
-*/
 
 class UserFactory {
 public:
@@ -42,29 +51,36 @@ public:
     void testing_setup();
 
     // takes a facebook user id and returns the appropriate user object
+    // if it doesn't exist, returns null pointer
     UserPtr get_user_from_id(const UserId&);
-    UserPtr create_user(const Json::Value&);
-    UserPtr create_user(UserId id, std::string name);
-    // if more information comes in on the network, add details to objects
-    void update_user_details(const Json::Value&);
+
+    // takes a user value from a vote, and returns a user object
+    // constructs a user object if 
+    UserPtr get_user_from_value(Json::Value&); // <-- use this
+
+    UserPtr create_user(Json::Value&);
 
     static UserFactory& instance();
 
     const std::string& default_name() { return default_name_; }
     const ci::Surface& default_photo() { return default_photo_; }
 
+    UserId get_id_from_value(Json::Value& val) {
+        return val["id"].asInt();
+    }
+
 private:
     UserFactory();
     void init();
 
-    static UserFactory* instance_;
-
-    std::map<std::string, UserPtr> user_map_;
+    std::map<UserId, UserPtr> user_map_;
 
     std::string default_name_;
     ci::Surface default_photo_;
 
-    std::string image_url_;
+    std::string image_url_base_;
+
+    static UserFactory* instance_;
 };
 
 }
