@@ -6,6 +6,7 @@
 #include "json/reader.h"
 #include "json/value.h"
 
+#include "cinder/app/App.h"
 #include "cinder/Url.h"
 
 #include "adj/adj_VoteManager.h"
@@ -40,7 +41,7 @@ void VoteServerQuery::query_vote_server() {
 
     reader.parse(root, votes);
 
-    parse_votes(votes);
+    parse_votes(votes["votes"]);
 }
 
 void VoteServerQuery::parse_votes(Json::Value& val) {
@@ -87,6 +88,8 @@ void VoteManager::query_vote_server() {
 
     if (query_thread_.get() != NULL)
         query_thread_->join();
+
+    ci::app::console() << "Querying vote server." << std::endl;
 
     thread_finished_ = false;
 

@@ -12,10 +12,14 @@ User::User() {
     // nothing here
 }
 
-void UserFactory::testing_setup() {
-
+UserFactory::UserFactory() {
+    default_name_ = "AutoDJ User";
+    image_url_base_ = "http://ptierney.com/~patrick/user_photos/";
 }
 
+void UserFactory::init() {
+    default_photo_ = ci::loadImage("/data/user_photos/2522920.jpg");
+}
 
 UserPtr UserFactory::get_user_from_id(const UserId& id) {
     // if a user has already been created, return it
@@ -27,10 +31,8 @@ UserPtr UserFactory::get_user_from_id(const UserId& id) {
 UserPtr UserFactory::get_user_from_value(Json::Value& val) {
     UserId id = get_id_from_value(val);
 
-    if (user_map_[id].get() != NULL)
+    if (user_map_.find(id) != user_map_.end())
         return user_map_[id];
-
-    UserPtr new_user = create_user(val);
 
     user_map_[id] = create_user(val);
 
@@ -48,14 +50,20 @@ UserPtr UserFactory::create_user(Json::Value& val) {
     std::string image_name = image_url_base_ + boost::lexical_cast<std::string>(
         user->id_) + ".jpg";
 
+    // TODO: Spawn a worker thread, get the image off the network,
+    // and replace the default photo with the new photo
+    /*
     // create user image
     try {
         // TODO: check that this works
         user->photo_ = ci::loadImage(image_name);
     } catch (...) {
         // set image to default image
-        user->photo_ = default_photo_;
+        
     }
+    */
+
+    user->photo_ = default_photo_;
 
     user->photo_texture_ = ci::gl::Texture(user->photo_);
 
@@ -74,14 +82,7 @@ UserFactory& UserFactory::instance() {
 
 UserFactory* UserFactory::instance_ = NULL;
 
-UserFactory::UserFactory() {
-    default_name_ = "AutoDJ User";
-    image_url_base_ = "http://ptierney.com/~patrick/user_photos/";
-}
 
-void UserFactory::init() {
-    default_photo_ = ci::loadImage("/data/user_photos/2522920.jpg");
-}
 
 
 

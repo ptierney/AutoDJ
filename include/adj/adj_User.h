@@ -47,9 +47,6 @@ typedef std::shared_ptr<User> UserPtr;
 
 class UserFactory {
 public:
-    // a dummy method to load from a fake database for testing
-    void testing_setup();
-
     // takes a facebook user id and returns the appropriate user object
     // if it doesn't exist, returns null pointer
     UserPtr get_user_from_id(const UserId&);

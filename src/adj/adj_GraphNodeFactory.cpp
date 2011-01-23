@@ -106,6 +106,9 @@ void GraphNodeFactory::create_new_node_from_vote(VotePtr vote) {
     // create a new node
     GraphNodePtr new_node = create_new_node(vote->song_id);
 
+    ci::app::console() << "Creating new node for song: " << 
+        new_node->song().name() << std::endl;
+
     // if it's the first, show it, return
     if (graph_nodes_.size() == 1) {
         add_node_to_physics(new_node);
