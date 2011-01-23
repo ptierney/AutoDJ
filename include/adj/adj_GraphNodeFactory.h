@@ -50,6 +50,8 @@ public:
 
     void add_pair_request(PairRequest);
 
+    void update();
+
 private:
     GraphNodeFactory();
     void init();

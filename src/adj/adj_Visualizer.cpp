@@ -51,6 +51,7 @@ void Visualizer::update() {
     Camera::instance().update(); // updates centroid
     PlayManager::instance().update();
     VoteManager::instance().update();
+    GraphNodeFactory::instance().update();
 }
 
 void Visualizer::draw() {

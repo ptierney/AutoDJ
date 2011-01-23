@@ -27,6 +27,10 @@ void GraphNodeFactory::init() {
     // nothnig here
 }
 
+void GraphNodeFactory::update() {
+    check_pair_requests();
+}
+
 void GraphNodeFactory::add_empty_node() {
     add_new_to_node(GraphNodePtr());
 }
@@ -62,6 +66,8 @@ GraphNodePtr GraphNodeFactory::create_new_node(SongId id) {
 
     graph_nodes_.push_back(q);
     song_map_[q->song().id()] = q;
+
+    PlayManager::instance().register_new_graph_node(q);
 
     return q;
 }

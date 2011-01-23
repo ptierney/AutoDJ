@@ -145,6 +145,8 @@ GraphNodePtr PlayManager::get_next_song_randomly() {
         now_playing_->children().size() - 1)];
 }
 
+// NOTE: this method should nat assume that the node's particle
+// is set up correctly, only the song
 void PlayManager::register_new_graph_node(GraphNodePtr node) {
     if (now_playing_.get() != NULL)
         return;

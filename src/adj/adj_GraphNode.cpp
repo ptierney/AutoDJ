@@ -148,22 +148,24 @@ void GraphNode::update_distance_from_current() {
 
 void GraphNode::set_is_transitioning(bool trans) {
     is_transitioning_ = trans;
-    callout_box_->update_contents();
+    update_appearance();
 }
 
 void GraphNode::set_is_current_song(bool curr) {
     is_current_song_ = curr;
-    callout_box_->update_contents();
+    update_appearance();
 }
 
 void GraphNode::set_is_next_song(bool next) {
     is_next_song_ = next;
-    callout_box_->update_contents();
+    update_appearance();
 }
 
 void GraphNode::update_appearance() {
-    // maybe change size
-    // for sure update the callout box to include any new votes
+    if (!visible_)
+        return;
+
+    callout_box_->update_contents();
     update_distance_from_current();
 }
 

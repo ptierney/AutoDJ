@@ -82,10 +82,4 @@ UserFactory& UserFactory::instance() {
 
 UserFactory* UserFactory::instance_ = NULL;
 
-
-
-
-
-
-
 }
