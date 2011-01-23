@@ -62,7 +62,7 @@ VoteManager::VoteManager() {
 }
 
 void VoteManager::init() {
-    last_query_time_ = boost::posix_time::second_clock::universal_time();
+    update_last_query_time();
 }
 
 void VoteManager::update() {
@@ -79,8 +79,12 @@ bool VoteManager::enough_time_elapsed() {
     return diff.total_seconds() > query_time_;
 }
 
-void VoteManager::query_vote_server() {
+void VoteManager::update_last_query_time() {
     last_query_time_ = boost::posix_time::second_clock::universal_time();
+}
+
+void VoteManager::query_vote_server() {
+    update_last_query_time();
 
     // wait another query_time in length
     if (!thread_finished_)

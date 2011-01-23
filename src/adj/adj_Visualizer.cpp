@@ -12,6 +12,7 @@
 #include "adj/adj_Song.h"
 #include "adj/adj_PlayManager.h"
 #include "adj/adj_VoteManager.h"
+#include "adj/adj_User.h"
 
 namespace adj {
 
@@ -42,8 +43,6 @@ void Visualizer::setup() {
         ci::app::console() << "Could not find database file, exiting." << std::endl;
         exit;
     }
-
-    //GraphNodeFactory::instance().add_to_random_node();
 }
 
 void Visualizer::update() {
@@ -52,6 +51,7 @@ void Visualizer::update() {
     PlayManager::instance().update();
     VoteManager::instance().update();
     GraphNodeFactory::instance().update();
+    UserFactory::instance().update();
 }
 
 void Visualizer::draw() {

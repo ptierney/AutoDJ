@@ -106,6 +106,8 @@ private:
     void parse_query_replies();
     void query_server_for_profile();
     void prune_threads();
+    bool enough_time_elapsed();
+    void update_last_query_time();
 
     std::map<UserId, UserPtr> user_map_;
 
@@ -119,6 +121,8 @@ private:
     std::vector<UserId> pending_queries_;
 
     int max_threads_;
+    int query_rate_; // in seconds
+    boost::posix_time::ptime last_query_time_;
 
     std::deque<ThreadPtr> threads_;
 

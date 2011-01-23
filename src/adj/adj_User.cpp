@@ -59,14 +59,30 @@ UserFactory::UserFactory() {
     default_name_ = "AutoDJ User";
     image_url_base_ = "http://ptierney.com/~patrick/user_photos/";
     max_threads_ = 5;
+    query_rate_ = 3; // spawn threads at least query_rate_ seconds apart
 }
 
 void UserFactory::init() {
     default_photo_ = ci::loadImage("/data/user_photos/2522920.jpg");
+    update_last_query_time();
 }
 
 void UserFactory::update() {
+    if (enough_time_elapsed())
+        query_server_for_profile();
+
     parse_query_replies();
+}
+
+bool UserFactory::enough_time_elapsed() {
+    boost::posix_time::time_duration diff = 
+        boost::posix_time::second_clock::universal_time() - last_query_time_;
+
+    return diff.total_seconds() > query_rate_;
+}
+
+void UserFactory::update_last_query_time() {
+    last_query_time_ = boost::posix_time::second_clock::universal_time();
 }
 
 UserPtr UserFactory::get_user_from_id(const UserId& id) {
@@ -96,7 +112,6 @@ UserPtr UserFactory::create_user(Json::Value& val) {
         user->name_ = default_name_;
 
     pending_queries_.push_back(user->id_);
-    query_server_for_profile();
 
     user->photo_ = default_photo_;
 
@@ -106,6 +121,8 @@ UserPtr UserFactory::create_user(Json::Value& val) {
 }
 
 void UserFactory::query_server_for_profile() {
+    update_last_query_time();
+
     if (pending_queries_.empty())
         return;
 
@@ -126,6 +143,8 @@ void UserFactory::prune_threads() {
 
 void UserFactory::register_query_reply(QueryReplyPtr reply) {
     boost::mutex::scoped_lock lock(query_reply_mutex_);
+
+    ci::app::console() << "loaded image for: " << reply->id << std::endl;
 
     query_replies_.push_back(reply);
 }
