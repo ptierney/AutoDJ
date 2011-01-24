@@ -42,7 +42,9 @@ public:
     std::string name_;
     UserId id_;
     ci::Surface photo_;
+    ci::Surface resized_photo_;
     ci::gl::Texture photo_texture_;
+    ci::gl::Texture resized_photo_texture_;
 
     std::deque<SongId>& voted_songs() { return voted_songs_; }
 
@@ -70,6 +72,7 @@ private:
 struct QueryReply {
     UserId id;
     ci::Surface photo;
+    ci::Surface resized_photo;
 };
 
 typedef std::shared_ptr<QueryReply> QueryReplyPtr;
@@ -100,6 +103,8 @@ public:
 
     void update_nodes_after_user_change(UserPtr);
 
+    static void resize_photo(ci::Surface& original, ci::Surface& resized);
+
 private:
     UserFactory();
     void init();
@@ -113,6 +118,7 @@ private:
 
     std::string default_name_;
     ci::Surface default_photo_;
+    ci::Surface default_photo_resized_;
 
     std::string image_url_base_;
 

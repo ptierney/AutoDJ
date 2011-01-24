@@ -34,6 +34,10 @@ public:
     void show();
     void hide();
 
+    // in pixels
+    static const int kMaxImageWidth;
+    static const int kMaxImageHeight;
+
 private:
     void set_contents_current();
     void set_contents_node();
@@ -41,6 +45,7 @@ private:
     void context_setup_dash(std::shared_ptr<ci::cairo::Context>);
     void context_setup_solid(std::shared_ptr<ci::cairo::Context>);
     void update_box_position();
+    void resize_user_photos();
 
     void calculate_surface_size();
     void create_surface();
@@ -106,6 +111,8 @@ private:
 
     std::shared_ptr<ci::cairo::SurfaceImage> connect_surface_;
     std::shared_ptr<ci::cairo::Context> connect_context_;
+
+    std::deque<ci::Surface> resized_user_photos_;
 
     ParticlePtr particle_;
 };

@@ -9,10 +9,12 @@
 #include "cinder/ImageIo.h"
 #include "cinder/Surface.h"
 #include "cinder/Url.h"
+#include "cinder/ip/Resize.h"
 
 #include "adj/adj_User.h"
 #include "adj/adj_GraphNodeFactory.h"
 #include "adj/adj_GraphNode.h"
+#include "adj/adj_CalloutBox.h"
 
 namespace adj {
 
@@ -50,9 +52,29 @@ void ProfileQuery::download_profile(UserId id) {
         return;
     }
 
+    UserFactory::resize_photo(reply->photo, reply->resized_photo);
+
     reply->id = id;
 
     UserFactory::instance().register_query_reply(reply);
+}
+
+void UserFactory::resize_photo(ci::Surface& original, ci::Surface& resized) {
+    int photo_width = original.getWidth();
+    int photo_height = original.getHeight();
+
+    if (photo_width > photo_height) {
+        // reduce the width
+        resized = ci::ip::resizeCopy(original,
+            ci::Area(0, 0, photo_width, photo_height), ci::Vec2i(
+            CalloutBox::kMaxImageWidth, CalloutBox::kMaxImageWidth / 
+            photo_width * photo_height));
+    } else { // reduce the height
+        resized = ci::ip::resizeCopy(original,
+            ci::Area(0, 0, photo_width, photo_height), ci::Vec2i(
+            CalloutBox::kMaxImageHeight / photo_height * photo_width,
+            CalloutBox::kMaxImageHeight));
+    }
 }
 
 UserFactory::UserFactory() {
@@ -64,6 +86,7 @@ UserFactory::UserFactory() {
 
 void UserFactory::init() {
     default_photo_ = ci::loadImage("/data/user_photos/2522920.jpg");
+    resize_photo(default_photo_, default_photo_resized_);
     update_last_query_time();
 }
 

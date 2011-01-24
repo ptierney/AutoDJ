@@ -22,6 +22,9 @@
 
 namespace adj {
 
+const int CalloutBox::kMaxImageWidth = 120;
+const int CalloutBox::kMaxImageHeight = 150;
+
 CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     visible_ = true;
     text_color_ = ci::ColorA(1.0f, 0.0f, 1.0f, 1.0f);
@@ -209,17 +212,30 @@ void CalloutBox::set_contents_current() {
 
 void CalloutBox::set_contents_node() {
 
+    ci::Vec2f text_pos(side_margin_, top_margin_ + font_size_);
+    ci::Vec2f font_height_offset(0.0f, font_size_ + text_spacing_);
+    float image_width = 
+
     context_->setFont(medium_font_);
     context_->setFontSize(static_cast<double>(font_size_));
     context_->setSourceRgb(1.0f, 1.0f, 1.0f);
-    context_->moveTo(side_margin_, top_margin_ + font_size_);
+    context_->moveTo(text_pos);
     context_->showText(boost::lexical_cast<std::string>(node_.distance_from_current()));
-    context_->moveTo(side_margin_, top_margin_ + font_size_ + 
-        (font_size_ + text_spacing_));
+
+    text_pos += font_height_offset;
+
+    context_->moveTo(text_pos);
     context_->setFont(medium_font_);    context_->showText(node_.song().name());
-    context_->moveTo(side_margin_, top_margin_ + font_size_ + 
-        2 * (font_size_ + text_spacing_));
+
+    text_pos += font_height_offset;
+
+    context_->moveTo(text_pos);
     context_->showText(node_.song().artist());
+
+    text_pos
+
+
+    // draw boarder
 
     context_->setSourceRgb(node_.node_highlight_color().r, node_.node_highlight_color().g,
         node_.node_highlight_color().b);
@@ -272,6 +288,12 @@ void CalloutBox::context_setup_dash(std::shared_ptr<ci::cairo::Context> ctx) {
 void CalloutBox::context_setup_solid(std::shared_ptr<ci::cairo::Context> ctx) {
     ctx->setLineCap(ci::cairo::LINE_CAP_ROUND);
     ctx->setLineWidth(line_width_);
+}
+
+void CalloutBox::resize_user_photos() {
+    resized_user_photos_
+
+    node_.song().users()
 }
 
 }
