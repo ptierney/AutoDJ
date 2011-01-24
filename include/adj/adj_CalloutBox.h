@@ -45,7 +45,7 @@ private:
     void context_setup_dash(std::shared_ptr<ci::cairo::Context>);
     void context_setup_solid(std::shared_ptr<ci::cairo::Context>);
     void update_box_position();
-    void resize_user_photos();
+    void get_user_photos();
 
     void calculate_surface_size();
     void create_surface();
@@ -80,11 +80,12 @@ private:
     float line_width_;
     float dash_gap_size_;
 
-    ci::Vec2f surface_size_;
-    ci::Vec2f connection_surface_size_;
+    ci::Vec2i surface_size_;
+    ci::Vec2i connection_surface_size_;
     int side_margin_;
     int top_margin_;
     int text_spacing_;
+    int photo_spacing_;
 
     bool is_left_of_node_;
     bool is_below_node_;
@@ -112,7 +113,8 @@ private:
     std::shared_ptr<ci::cairo::SurfaceImage> connect_surface_;
     std::shared_ptr<ci::cairo::Context> connect_context_;
 
-    std::deque<ci::Surface> resized_user_photos_;
+    std::deque<ci::gl::Texture> resized_user_photos_;
+    std::deque<ci::Vec2f> photo_coords_;
 
     ParticlePtr particle_;
 };

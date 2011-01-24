@@ -1,4 +1,6 @@
 
+#include <assert.h>
+
 #include <algorithm>
 
 #include "boost/lexical_cast.hpp"
@@ -63,16 +65,16 @@ void UserFactory::resize_photo(ci::Surface& original, ci::Surface& resized) {
     int photo_width = original.getWidth();
     int photo_height = original.getHeight();
 
-    if (photo_width > photo_height) {
-        // reduce the width
+    if (photo_width > photo_height) { // reduce the width
         resized = ci::ip::resizeCopy(original,
             ci::Area(0, 0, photo_width, photo_height), ci::Vec2i(
-            CalloutBox::kMaxImageWidth, CalloutBox::kMaxImageWidth / 
-            photo_width * photo_height));
+            CalloutBox::kMaxImageWidth, static_cast<float>(CalloutBox::kMaxImageWidth) / 
+            static_cast<float>(photo_width) * static_cast<float>(photo_height)));
     } else { // reduce the height
         resized = ci::ip::resizeCopy(original,
             ci::Area(0, 0, photo_width, photo_height), ci::Vec2i(
-            CalloutBox::kMaxImageHeight / photo_height * photo_width,
+            static_cast<float>(CalloutBox::kMaxImageHeight) / 
+            static_cast<float>(photo_height) * static_cast<float>(photo_width),
             CalloutBox::kMaxImageHeight));
     }
 }
@@ -123,6 +125,8 @@ UserPtr UserFactory::get_user_from_value(Json::Value& val) {
 
     user_map_[id] = create_user(val);
 
+    assert(user_map_[id]->id_ == id);
+
     return user_map_[id];
 }
 
@@ -137,8 +141,10 @@ UserPtr UserFactory::create_user(Json::Value& val) {
     pending_queries_.push_back(user->id_);
 
     user->photo_ = default_photo_;
+    user->photo_resized_ = default_photo_resized_;
 
     user->photo_texture_ = ci::gl::Texture(user->photo_);
+    user->photo_texture_resized_ = ci::gl::Texture(user->photo_resized_);
 
     return user;
 }
@@ -182,20 +188,26 @@ void UserFactory::parse_query_replies() {
         it != query_replies_.end(); ++it) {
 
         QueryReplyPtr reply = *it;
-        UserPtr user = user_map_[reply->id];
-
-        user->photo_ = reply->photo;
-        // Note: creating a gl texture MUST be done in the main thread
-        user->photo_texture_ = ci::gl::Texture(user->photo_);
-
-        update_nodes_after_user_change(user);
 
         std::vector<UserId>::iterator pending_it = 
             std::find(pending_queries_.begin(), pending_queries_.end(),
             reply->id);
 
+        // must have already been answered
         if (pending_it == pending_queries_.end())
-            continue; // wtf?
+            continue;
+
+        UserPtr user = user_map_[reply->id];
+
+        assert(user->id_ == reply->id);
+
+        user->photo_ = reply->photo;
+        user->photo_resized_ = reply->resized_photo;
+        // Note: creating a gl texture MUST be done in the main thread
+        user->photo_texture_ = ci::gl::Texture(user->photo_);
+        user->photo_texture_resized_ = ci::gl::Texture(user->photo_resized_);
+
+        update_nodes_after_user_change(user);
 
         pending_queries_.erase(pending_it);
     }    

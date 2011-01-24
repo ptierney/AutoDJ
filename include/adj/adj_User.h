@@ -42,9 +42,9 @@ public:
     std::string name_;
     UserId id_;
     ci::Surface photo_;
-    ci::Surface resized_photo_;
+    ci::Surface photo_resized_;
     ci::gl::Texture photo_texture_;
-    ci::gl::Texture resized_photo_texture_;
+    ci::gl::Texture photo_texture_resized_;
 
     std::deque<SongId>& voted_songs() { return voted_songs_; }
 

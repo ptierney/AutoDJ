@@ -48,8 +48,9 @@ public:
     SongId id() { return id_; }
 
     int num_votes() { return votes_.size(); }
-    const std::deque<VotePtr>& votes();
-    std::deque<UserPtr>& users(); // the users who have voted for this song
+    const std::deque<VotePtr>& votes() { return votes_; }
+    // the users who have voted for this song
+    std::deque<UserPtr>& users() { return users_; }
 
     void register_vote(VotePtr);
 

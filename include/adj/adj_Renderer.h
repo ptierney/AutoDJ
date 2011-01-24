@@ -21,6 +21,8 @@ public:
     void setup();
     void draw();
 
+    const ci::Color& background_color() { return background_color_; } 
+
 private:
     Renderer();
     void init();

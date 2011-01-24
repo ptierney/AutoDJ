@@ -111,6 +111,7 @@ void GraphNodeFactory::update_graph_from_vote(VotePtr vote) {
 void GraphNodeFactory::create_new_node_from_vote(VotePtr vote) {
     // create a new node
     GraphNodePtr new_node = create_new_node(vote->song_id);
+    new_node->register_vote(vote);
 
     ci::app::console() << "Creating new node for song: " << 
         new_node->song().name() << std::endl;

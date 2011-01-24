@@ -1,4 +1,6 @@
 
+#include <assert.h>
+
 #include "boost/lexical_cast.hpp"
 
 #include "cinder/gl/gl.h"
@@ -19,6 +21,8 @@
 #include "adj/adj_Song.h"
 #include "Resources.h"
 #include "adj/adj_GraphPhysics.h"
+#include "adj/adj_User.h"
+#include "adj/adj_Renderer.h"
 
 namespace adj {
 
@@ -31,9 +35,10 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     font_size_ = 48;
     
     is_left_of_node_ = false;
-    side_margin_ = 20;
-    top_margin_ = 20;
+    side_margin_ = 40;
+    top_margin_ = 30;
     text_spacing_ = 10;
+    photo_spacing_ = 20;
 
     line_width_ = 8.0f;
     dash_gap_size_ = 2 * line_width_; // remember this accounts for circle size
@@ -44,7 +49,8 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
 void CalloutBox::init() {
     box_coords_.resize(4);
 
-    medium_font_ = ci::Font(ci::app::loadResource(RES_MEDIUM_FONT), font_size_);
+    medium_font_ = ci::Font(ci::app::loadResource(RES_MEDIUM_FONT), 
+        static_cast<float>(font_size_));
 
     //particle_ = GraphPhysics::instance().create_box_particle(node_.particle());
     particle_ = GraphPhysics::instance().create_particle(node_.particle(),
@@ -54,6 +60,7 @@ void CalloutBox::init() {
 }
 
 void CalloutBox::update_contents() {
+    get_user_photos();
     calculate_surface_size();
     create_surface();
     create_context();
@@ -63,7 +70,18 @@ void CalloutBox::update_contents() {
 }
 
 void CalloutBox::calculate_surface_size() {
-    surface_size_ = ci::Vec2f(640, 300);
+    int width = 600; // TODO: make this real
+    int num_photos = resized_user_photos_.size();
+    int height = top_margin_ * 2 + font_size_ * 3 + 
+        text_spacing_ * 2 + num_photos * photo_spacing_;
+
+    for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin();
+        it != resized_user_photos_.end(); ++it) {
+        
+        height += it->getHeight();
+    }
+
+    surface_size_ = ci::Vec2i(width, height);
 }
 
 void CalloutBox::create_surface() {
@@ -108,8 +126,17 @@ void CalloutBox::draw() {
 
     draw_connection();
 
-    ci::gl::draw(text_texture_, ci::Vec2f(-surface_size_.x, 
-        -surface_size_.y) * 0.5f);
+    ci::Vec2f origin = ci::Vec2f(-surface_size_.x, -surface_size_.y) * 0.5f;
+    ci::gl::draw(text_texture_, origin);
+
+    std::deque<ci::Vec2f>::iterator pos_it = photo_coords_.begin();
+    for (std::deque<ci::gl::Texture>::iterator text_it = resized_user_photos_.begin();
+        text_it != resized_user_photos_.end(); ++text_it) {
+
+        ci::gl::draw(*text_it, origin + *pos_it - text_it->getSize() * 0.5f);
+
+        ++pos_it;
+    }
 }
 
 void CalloutBox::draw_connection() {
@@ -214,26 +241,60 @@ void CalloutBox::set_contents_node() {
 
     ci::Vec2f text_pos(side_margin_, top_margin_ + font_size_);
     ci::Vec2f font_height_offset(0.0f, font_size_ + text_spacing_);
-    float image_width = 
 
+    // draw background
+    context_->setSourceRgb(Renderer::instance().background_color().r,
+        Renderer::instance().background_color().g, 
+        Renderer::instance().background_color().b);
+    context_->rectangle(0.0, 0.0, surface_size_.x, surface_size_.y);
+    context_->fill();
+
+    // draw text
     context_->setFont(medium_font_);
     context_->setFontSize(static_cast<double>(font_size_));
     context_->setSourceRgb(1.0f, 1.0f, 1.0f);
+
     context_->moveTo(text_pos);
     context_->showText(boost::lexical_cast<std::string>(node_.distance_from_current()));
 
     text_pos += font_height_offset;
 
     context_->moveTo(text_pos);
-    context_->setFont(medium_font_);    context_->showText(node_.song().name());
+    context_->showText(node_.song().name());
 
     text_pos += font_height_offset;
 
     context_->moveTo(text_pos);
     context_->showText(node_.song().artist());
 
-    text_pos
+    text_pos += ci::Vec2f(0.0f, photo_spacing_);
+    ci::Vec2f photo_pos = text_pos + ci::Vec2f(kMaxImageWidth / 2.0f, 0.0f);
 
+    text_pos += ci::Vec2f(kMaxImageWidth + photo_spacing_ * 2, font_size_ / 2.0f);
+
+    photo_coords_.clear();
+
+    std::deque<ci::gl::Texture>::iterator texture_it = resized_user_photos_.begin();
+    for (std::deque<UserPtr>::iterator user_it = node_.song().users().begin();
+        user_it != node_.song().users().end(); ++user_it) {
+        ci::Vec2f offset = ci::Vec2f(0.0f, texture_it->getHeight() / 2.0f);
+
+        photo_pos += offset;
+        text_pos += offset;
+
+        photo_coords_.push_back(photo_pos);
+
+        context_->moveTo(text_pos);
+        context_->showText((*user_it)->name_);
+
+        offset += ci::Vec2f(0.0f, photo_spacing_);
+
+        text_pos += offset;
+        photo_pos += offset;
+
+        if (texture_it != resized_user_photos_.end())
+            ++texture_it;
+    }
 
     // draw boarder
 
@@ -290,10 +351,20 @@ void CalloutBox::context_setup_solid(std::shared_ptr<ci::cairo::Context> ctx) {
     ctx->setLineWidth(line_width_);
 }
 
-void CalloutBox::resize_user_photos() {
-    resized_user_photos_
+void CalloutBox::get_user_photos() {
+    resized_user_photos_.clear();
 
-    node_.song().users()
+    for (std::deque<UserPtr>::iterator it = node_.song().users().begin();
+        it != node_.song().users().end(); ++it) {
+        // photo should be either be default photo or actual photo, not empty
+        assert((*it)->photo_texture_resized_.getHeight() > 0 &&
+            (*it)->photo_texture_resized_.getWidth() > 0);
+
+        resized_user_photos_.push_back((*it)->photo_texture_resized_);
+    }
+
+    // every song is placed due to a vote, ever vote should have a user
+    assert(!resized_user_photos_.empty());
 }
 
 }
