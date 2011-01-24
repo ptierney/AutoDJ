@@ -39,9 +39,7 @@ public:
     static const int kMaxImageHeight;
 
 private:
-    void set_contents_current();
-    void set_contents_node();
-    void set_contents_just_added();
+    void set_contents();
     void context_setup_dash(std::shared_ptr<ci::cairo::Context>);
     void context_setup_solid(std::shared_ptr<ci::cairo::Context>);
     void update_box_position();

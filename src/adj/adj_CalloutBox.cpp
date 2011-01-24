@@ -68,7 +68,7 @@ void CalloutBox::update_contents() {
     create_context();
     update_box_position();
 
-    set_contents_node();
+    set_contents();
 }
 
 void CalloutBox::calculate_surface_size() {
@@ -235,12 +235,7 @@ void CalloutBox::hide() {
     visible_ = false;
 }
 
-void CalloutBox::set_contents_current() {
-    // TODO: make
-}
-
-void CalloutBox::set_contents_node() {
-
+void CalloutBox::set_contents() {
     ci::Vec2f text_pos(side_margin_, top_margin_ + font_size_);
     ci::Vec2f font_height_offset(0.0f, font_size_ + text_spacing_);
 
@@ -303,8 +298,10 @@ void CalloutBox::set_contents_node() {
     context_->setSourceRgb(node_.node_highlight_color().r, node_.node_highlight_color().g,
         node_.node_highlight_color().b);
 
-    context_setup_dash(context_);
-    //context_setup_solid();
+    if (node_.is_current_song())
+        context_setup_solid(context_);
+    else
+        context_setup_dash(context_);
 
     context_->newPath();
     context_->moveTo(line_width_, line_width_);
@@ -315,10 +312,6 @@ void CalloutBox::set_contents_node() {
     context_->stroke();
     
     text_texture_ = ci::gl::Texture(surface_->getSurface());
-}
-
-void CalloutBox::set_contents_just_added() {
-    // TODO: make
 }
 
 // create a new text texture
