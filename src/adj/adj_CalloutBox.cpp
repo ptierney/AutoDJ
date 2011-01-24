@@ -44,6 +44,8 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     dash_gap_size_ = 2 * line_width_; // remember this accounts for circle size
 
     scale_ = 0.08f;
+
+    alpha_ = 1.0f;
 }
 
 void CalloutBox::init() {
@@ -122,8 +124,8 @@ void CalloutBox::draw() {
     ci::gl::translate(box_position_);
     ci::gl::scale(ci::Vec3f::one() * scale_);
 
-    ci::gl::color(ci::Color::white());
-
+    //ci::gl::color(ci::Color::white());
+    ci::gl::color(ci::ColorA(1.0f, 1.0f, 1.0f, alpha_));
     draw_connection();
 
     ci::Vec2f origin = ci::Vec2f(-surface_size_.x, -surface_size_.y) * 0.5f;

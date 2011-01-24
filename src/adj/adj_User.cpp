@@ -17,6 +17,7 @@
 #include "adj/adj_GraphNodeFactory.h"
 #include "adj/adj_GraphNode.h"
 #include "adj/adj_CalloutBox.h"
+#include "Resources.h"
 
 namespace adj {
 
@@ -87,7 +88,7 @@ UserFactory::UserFactory() {
 }
 
 void UserFactory::init() {
-    default_photo_ = ci::loadImage("/data/user_photos/2522920.jpg");
+    default_photo_ = ci::loadImage(ci::app::loadResource(RES_DEFAULT_PROFILE));
     resize_photo(default_photo_, default_photo_resized_);
     update_last_query_time();
 }

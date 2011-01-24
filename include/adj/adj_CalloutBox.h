@@ -76,6 +76,7 @@ private:
     ci::ColorA text_color_;
     ci::gl::Texture text_texture_;
     ci::gl::Texture connection_texture_;
+    float alpha_;
 
     float line_width_;
     float dash_gap_size_;
