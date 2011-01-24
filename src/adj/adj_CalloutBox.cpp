@@ -73,42 +73,9 @@ void CalloutBox::create_context() {
         ci::cairo::Context(*(surface_.get())));
 }
 
-
-
 void CalloutBox::update_box_position() {
-    //box_position_ = ci::Vec2f(-surface_size_.x, -surface_size_.y / 2.0f);
-    // make the surface centered on the 
+    // make the surface centered on the particle
     box_position_ = particle_->position();
-
-    //box_top_y_= box_position_.y - surface_size_.y / 2.0f * scale_;
-    //box_bottom_y_ = box_position_.y + surface_size_.y / 2.0f * scale_;
-
-    /*
-    if (particle_->position().x < node_.particle()->position().x)
-        is_left_of_node_ = true;
-    else
-        is_left_of_node_ = false;
-
-    if (is_left_of_node_) {
-        box_upper_left_ = box_position_ + ci::Vec2f(-surface_size_.x,
-            -surface_size_.y * 0.5f) * scale_;
-        box_upper_right_ = box_position_ + ci::Vec2f(0.0f,
-            -surface_size_.y * 0.5f)  * scale_;
-        box_lower_left_ = box_position_ + ci::Vec2f(-surface_size_.x,
-            surface_size_.y * 0.5f) * scale_;
-        box_lower_right_ = box_position_ + ci::Vec2f(0.0f,
-            surface_size_.y * 0.5f) * scale_;
-    } else {
-        box_upper_left_ = box_position_ + ci::Vec2f(0.0f,
-            -surface_size_.y * 0.5f) * scale_;
-        box_upper_right_ = box_position_ + ci::Vec2f(surface_size_.x,
-            -surface_size_.y * 0.5f)  * scale_;
-        box_lower_left_ = box_position_ + ci::Vec2f(0.0f,
-            surface_size_.y * 0.5f) * scale_;
-        box_lower_right_ = box_position_ + ci::Vec2f(surface_size_.x,
-            surface_size_.y * 0.5f) * scale_;
-    }
-    */
 
     box_upper_left_ = box_position_ + ci::Vec2f(-surface_size_.x,
         -surface_size_.y) * 0.5f * scale_;
@@ -267,15 +234,6 @@ void CalloutBox::set_contents_node() {
     context_->lineTo(line_width_, surface_size_.y - line_width_);
     context_->closePath();
     context_->stroke();
-
-    /*
-    context_->line(ci::Vec2f(surface_size_.x / 2, 0 + line_width_), 
-        ci::Vec2f(surface_size_.x, surface_size_.y / 2));
-    context_->line(ci::Vec2f(surface_size_.x / 2, surface_size_.y - line_width_), 
-        ci::Vec2f(surface_size_.x, surface_size_.y / 2));
-
-    context_->stroke();
-    */
     
     text_texture_ = ci::gl::Texture(surface_->getSurface());
 }
