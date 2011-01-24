@@ -23,26 +23,7 @@ typedef std::shared_ptr<Song> SongPtr;
 typedef int SongId;
 
 typedef std::shared_ptr<struct Vote> VotePtr;
-
-/* NOTE: these are probably not needed
-
-struct Artist;
-struct Album;
-typedef std::shared_ptr<Artist> ArtistPtr;
-typedef std::shared_ptr<Album> AlbumPtr;
-
-struct Album {
-    std::string name;
-    ArtistPtr artist;
-    std::vector<SongPtr> songs;
-};
-
-struct Artist {
-    std::string name;
-    std::vector<AlbumPtr> albums;
-    std::vector<SongPtr> songs;
-};
-*/
+typedef std::shared_ptr<class User> UserPtr;
     
 class Song {
 public:
@@ -68,6 +49,7 @@ public:
 
     int num_votes() { return votes_.size(); }
     const std::deque<VotePtr>& votes();
+    std::deque<UserPtr>& users(); // the users who have voted for this song
 
     void register_vote(VotePtr);
 
@@ -87,6 +69,7 @@ private:
     ci::audio::TrackRef track_; 
 
     std::deque<VotePtr> votes_;
+    std::deque<UserPtr> users_;
 };
 
 class SongFactory {

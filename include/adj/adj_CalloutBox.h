@@ -47,10 +47,7 @@ private:
     void create_context();
 
     void draw_connection();
-    void create_connect_surface();
-    void create_connect_context();
     void render_connection();
-    void render_connection_better();
 
     bool ccw(const ci::Vec2f& a, const ci::Vec2f& b, const ci::Vec2f& c) {
         return (c.y-a.y)*(b.x-a.x) > (b.y-a.y)*(c.x-a.x);

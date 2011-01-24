@@ -140,28 +140,13 @@ void CalloutBox::draw() {
 
     ci::gl::draw(text_texture_, ci::Vec2f(-surface_size_.x, 
         -surface_size_.y) * 0.5f);
-
-    /*
-    // translate correctly
-    if (is_left_of_node_)
-        ci::gl::draw(text_texture_, ci::Vec2f(-surface_size_.x, 
-            -surface_size_.y / 2.0f));
-    else
-        ci::gl::draw(text_texture_, ci::Vec2f(0.0f, -surface_size_.y / 2.0f));
-    */
 }
 
 void CalloutBox::draw_connection() {
-    render_connection_better();
+    render_connection();
 }
 
-void CalloutBox::create_connect_surface() {
-}
-
-void CalloutBox::create_connect_context() {
-}
-
-void CalloutBox::render_connection_better() {
+void CalloutBox::render_connection() {
     connection_ends_.clear();
 
     ci::Vec2f node_pos = node_.particle()->position();
@@ -240,99 +225,6 @@ void CalloutBox::add_connection_end(int a) {
         connection_ends_[0] = a;
     else
         connection_ends_[1] = a;
-}
-
-void CalloutBox::render_connection() {
-    is_next_to_node_ = is_below_node_ = false;
-
-    // build up the lines in cairo
-    // render with OpenGL
-
-
-    if (particle_->position().y > node_.particle()->position().y)
-        is_below_node_ = true;
-
-    if (node_.particle()->position().y > 
-        particle_->position().y - surface_size_.y / 2.0f * scale_ &&
-        node_.particle()->position().y <
-        particle_->position().y + surface_size_.y / 2.0f * scale_)
-        is_next_to_node_ = true;
-
-    float box_top_offset_, box_bottom_offset_, node_top_offset_, node_bottom_offset_;
-    ci::Vec2f node_pos = node_.particle()->position();
-
-    if (is_next_to_node_) {
-        box_top_offset_ = box_bottom_offset_ = 0.0f;
-        node_top_offset_ = node_pos.y - box_top_y_;
-        node_bottom_offset_ = box_bottom_y_ - node_pos.y;
-    } else {
-        if (is_below_node_) {
-            box_top_offset_ = box_top_y_ - node_pos.y;
-            box_bottom_offset_ = 0.0f;
-            node_bottom_offset_ = box_bottom_y_ - node_pos.y;
-            node_top_offset_ = 0.0f;
-        } else { // is on top of node
-            box_top_offset_ = 0.0f;
-            box_bottom_offset_ = node_pos.y - box_bottom_y_;
-            node_top_offset_ = node_pos.y - box_top_y_;
-            node_bottom_offset_ = 0.0f;
-        }
-    }
-
-    // convert to cairo dimensions
-    box_top_offset_ /= scale_;
-    box_bottom_offset_ /= scale_;
-    node_top_offset_ /= scale_;
-    node_bottom_offset_ /= scale_;
-
-    // we can now determine the size of the surface to draw the connection
-
-    float conn_surface_w = ci::math<float>::abs(node_pos.x - box_position_.x) / scale_;
-    float conn_surface_h = (node_top_offset_ + node_bottom_offset_);
-
-    connection_surface_size_ = ci::Vec2f(conn_surface_w, conn_surface_h);
-
-    connect_surface_ = std::shared_ptr<ci::cairo::SurfaceImage>(new 
-        ci::cairo::SurfaceImage(conn_surface_w, conn_surface_h, true));
-
-    connect_context_ = std::shared_ptr<ci::cairo::Context>(new
-        ci::cairo::Context(*(connect_surface_.get())));
-
-    connect_context_->setSourceRgb(node_.node_highlight_color().r, 
-        node_.node_highlight_color().g, node_.node_highlight_color().b);
-
-    context_setup_dash(connect_context_);
-
-    if (is_left_of_node_) {
-        connect_context_->line(ci::Vec2f(0.0f, box_top_offset_),
-            ci::Vec2f(conn_surface_w, node_top_offset_));
-        connect_context_->line(ci::Vec2f(0.0f, conn_surface_h - box_bottom_offset_),
-            ci::Vec2f(conn_surface_w, node_top_offset_));
-    } else { // is right of node
-        connect_context_->line(ci::Vec2f(0.0f, node_top_offset_), 
-            ci::Vec2f(conn_surface_w, box_top_offset_));
-        connect_context_->line(ci::Vec2f(0.0f, node_top_offset_),
-            ci::Vec2f(conn_surface_w, conn_surface_h - box_bottom_offset_));
-    }
-
-    connect_context_->stroke();
-
-    connection_texture_ = ci::gl::Texture(connect_surface_->getSurface());
-
-    if (is_left_of_node_) {
-        if (is_below_node_ && !is_next_to_node_)
-            ci::gl::draw(connection_texture_, ci::Vec2f(0.0f, -conn_surface_h + 
-                surface_size_.y / 2.0f));
-        else // is on top of node
-            ci::gl::draw(connection_texture_, ci::Vec2f(0.0f, -surface_size_.y / 2.0f));
-    } else { // is right of node
-        if (is_below_node_ && !is_next_to_node_)
-            ci::gl::draw(connection_texture_, ci::Vec2f(-conn_surface_w, 
-            -conn_surface_h + surface_size_.y / 2.0f));
-        else // is on top of node
-            ci::gl::draw(connection_texture_, ci::Vec2f(-conn_surface_w, 
-                -surface_size_.y / 2.0f));
-    }
 }
 
 void CalloutBox::show() {

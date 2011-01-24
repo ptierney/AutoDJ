@@ -18,6 +18,8 @@
 #include "cinder/Rand.h"
 
 #include "adj/adj_Song.h"
+#include "adj/adj_User.h"
+#include "adj/adj_VoteManager.h"
 
 namespace adj {
 
@@ -171,6 +173,7 @@ SongId SongFactory::get_random_song_id() {
 
 void Song::register_vote(VotePtr vote) {
     votes_.push_back(vote);
+    users_.push_back(vote->user);
 }
 
 // TODO: should be nullptr
