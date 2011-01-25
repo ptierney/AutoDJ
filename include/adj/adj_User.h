@@ -33,7 +33,7 @@ Sample Vote:
 
 namespace adj {
 
-typedef int UserId;
+typedef std::string UserId;
 
 class User {
 public:
@@ -99,7 +99,7 @@ public:
 
     void register_query_reply(QueryReplyPtr);
 
-    UserId get_id_from_value(Json::Value& val) { return val["id"].asInt(); }
+    UserId get_id_from_value(Json::Value& val) { return val["id"].asString(); }
 
     void update_nodes_after_user_change(UserPtr);
 

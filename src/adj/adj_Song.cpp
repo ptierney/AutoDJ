@@ -31,8 +31,10 @@ Song::Song(SongId id, std::string name, std::string file_name, int duration,
 }
 
 void Song::init() {
-    source_ = ci::audio::load(SongFactory::instance().base_song_directory_path() + 
-        file_name_);
+    std::string song_file = SongFactory::instance().base_song_directory_path() + 
+        file_name_;
+
+    source_ = ci::audio::load(song_file);
 }
 
 // TODO: this could cause bugs when dealing with transition times
@@ -77,7 +79,7 @@ int Song::time_remaining() {
 
 SongFactory::SongFactory() {
     base_song_directory_path_ = "/data/songs/";
-    song_database_file_ = "/data/songs.txt";
+    song_database_file_ = "/data/songs.json";
 }
 
 void SongFactory::parse_song_database_file() {

@@ -174,8 +174,6 @@ void UserFactory::prune_threads() {
 void UserFactory::register_query_reply(QueryReplyPtr reply) {
     boost::mutex::scoped_lock lock(query_reply_mutex_);
 
-    ci::app::console() << "loaded image for: " << reply->id << std::endl;
-
     query_replies_.push_back(reply);
 }
 

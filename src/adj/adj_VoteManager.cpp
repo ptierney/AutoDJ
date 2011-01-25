@@ -57,7 +57,7 @@ void VoteServerQuery::parse_votes(Json::Value& val) {
 
 VoteManager::VoteManager() {
     query_time_ = 5; // in seconds
-    vote_server_ = "http://ptierney.com/~patrick/votes/votes.json";
+    vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
     thread_finished_ = true;
 }
 
@@ -92,8 +92,6 @@ void VoteManager::query_vote_server() {
 
     if (query_thread_.get() != NULL)
         query_thread_->join();
-
-    ci::app::console() << "Querying vote server." << std::endl;
 
     thread_finished_ = false;
 
