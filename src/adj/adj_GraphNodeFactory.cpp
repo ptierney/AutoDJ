@@ -76,6 +76,7 @@ void GraphNodeFactory::add_node_to_physics(GraphNodePtr a) {
     connect_nodes(a, GraphNodePtr());
 }
 
+// what the hell's the difference between connect_nodes and pair_nodes
 void GraphNodeFactory::connect_nodes(GraphNodePtr a, GraphNodePtr b) {
     if (b.get() != NULL) {
         a->parent_ = b;
@@ -109,7 +110,7 @@ void GraphNodeFactory::update_graph_from_vote(VotePtr vote) {
 }
 
 void GraphNodeFactory::create_new_node_from_vote(VotePtr vote) {
-    // create a new node
+    // create a new node. This doesn't create a particle
     GraphNodePtr new_node = create_new_node(vote->song_id);
     new_node->register_vote(vote);
 
@@ -131,21 +132,20 @@ void GraphNodeFactory::create_new_node_from_vote(VotePtr vote) {
     // when the query comes back, pair the node and show it.
 }
 
-void GraphNodeFactory::pair_nodes(SongId a, SongId b) {
-    GraphNodePtr node_a = song_map_[a];
-    GraphNodePtr node_b = song_map_[b];
+void GraphNodeFactory::pair_nodes(SongId new_id, SongId existing_id) {
+    GraphNodePtr new_node = song_map_[new_id];
+    GraphNodePtr existing_node = song_map_[existing_id];
 
-    if (node_a.get() == NULL || node_b.get() == NULL) {
-        assert(0); // wtf something's wrong
-    }
+    assert(new_node.get() != NULL && existing_node.get() != NULL);
 
-    assert_node_has_particle(node_a);
-    assert_node_has_particle(node_b);
+    if (new_node->particle().get() == NULL)
+        new_node->particle_ = 
+            GraphPhysics::instance().create_unlinked_particle(existing_node->particle());
 
-    GraphPhysics::instance().link_nodes(node_a, node_b);
+    GraphPhysics::instance().link_nodes(new_node, existing_node);
 
-    node_a->show();
-    node_b->show();
+    new_node->show();
+    existing_node->show();
 }
 
 void GraphNodeFactory::add_pair_request(PairRequest request) {

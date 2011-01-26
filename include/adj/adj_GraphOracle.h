@@ -20,6 +20,8 @@ typedef std::shared_ptr<EdgeList> EdgeListPtr;
 
 typedef std::shared_ptr<boost::thread> ThreadPtr;
 
+// first is the song you're querying for (the new / moving song)
+// second is the existing
 typedef std::pair<SongId, SongId> PairRequest;
 
 class GraphOracleQuery {

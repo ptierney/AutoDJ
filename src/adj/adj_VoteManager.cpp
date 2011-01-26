@@ -23,12 +23,22 @@ VoteServerQuery::VoteServerQuery() {
 // THIS RUNS IN A SEPARATE THREAD
 void VoteServerQuery::operator()() {
     query_vote_server();
+
+    // if an exception has been thrown, register as finished
+    // though no new votes will have been registered
     VoteManager::instance().register_thread_finished();
 }
 
 void VoteServerQuery::query_vote_server() {
     std::string root;
-    ci::IStreamUrlRef urlRef = ci::IStreamUrl::createRef(vote_server_);
+
+    ci::IStreamUrlRef urlRef;
+
+    try {
+        urlRef = ci::IStreamUrl::createRef(vote_server_);
+    } catch (...) { // it can't connect to the server
+        return;
+    }
 
     ci::Buffer buf = loadStreamBuffer(urlRef);
     unsigned char* j = (unsigned char*) buf.getData();

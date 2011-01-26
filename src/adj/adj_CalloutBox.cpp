@@ -54,9 +54,9 @@ void CalloutBox::init() {
     medium_font_ = ci::Font(ci::app::loadResource(RES_MEDIUM_FONT), 
         static_cast<float>(font_size_));
 
-    //particle_ = GraphPhysics::instance().create_box_particle(node_.particle());
-    particle_ = GraphPhysics::instance().create_particle(node_.particle(),
-        GraphPhysics::instance().edge_length() * 2.0f);
+    particle_ = GraphPhysics::instance().create_box_particle(node_.particle());
+    //particle_ = GraphPhysics::instance().create_particle(node_.particle(),
+    //    GraphPhysics::instance().edge_length() * 2.0f);
 
     update_contents();
 }
