@@ -38,12 +38,17 @@ public:
     static const int kMaxImageWidth;
     static const int kMaxImageHeight;
 
+    static float max_width() { return max_width_ * max_scale_; }
+    static float max_height() { return max_height_ * max_scale_; }
+    static float max_scale() { return max_scale_; }
+
 private:
     void set_contents();
     void context_setup_dash(std::shared_ptr<ci::cairo::Context>);
     void context_setup_solid(std::shared_ptr<ci::cairo::Context>);
     void update_box_position();
     void get_user_photos();
+    void update_maxima();
 
     void calculate_surface_size();
     void create_surface();
@@ -105,6 +110,7 @@ private:
     //ci::Font bold_font_;
 
     float scale_;
+    static float max_scale_;
 
     std::shared_ptr<ci::cairo::SurfaceImage> surface_;
     std::shared_ptr<ci::cairo::Context> context_;
@@ -116,6 +122,9 @@ private:
     std::deque<ci::Vec2f> photo_coords_;
 
     ParticlePtr particle_;
+
+    static int max_width_;
+    static int max_height_;
 };
 
 }

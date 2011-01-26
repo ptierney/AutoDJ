@@ -46,6 +46,7 @@ public:
     void update();
 
     ParticleSystemPtr particle_system() { return p_system_; }
+    ParticleSystemPtr box_particle_system() { return box_p_system_; }
 
     float edge_length() { return edge_length_; }
 

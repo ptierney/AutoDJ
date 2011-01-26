@@ -29,6 +29,10 @@ namespace adj {
 const int CalloutBox::kMaxImageWidth = 120;
 const int CalloutBox::kMaxImageHeight = 150;
 
+int CalloutBox::max_width_ = 0;
+int CalloutBox::max_height_ = 0;
+float CalloutBox::max_scale_ = 0.0f;
+
 CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     visible_ = true;
     text_color_ = ci::ColorA(1.0f, 0.0f, 1.0f, 1.0f);
@@ -55,8 +59,6 @@ void CalloutBox::init() {
         static_cast<float>(font_size_));
 
     particle_ = GraphPhysics::instance().create_box_particle(node_.particle());
-    //particle_ = GraphPhysics::instance().create_particle(node_.particle(),
-    //    GraphPhysics::instance().edge_length() * 2.0f);
 
     update_contents();
 }
@@ -69,6 +71,14 @@ void CalloutBox::update_contents() {
     update_box_position();
 
     set_contents();
+
+    update_maxima();
+}
+
+void CalloutBox::update_maxima() {
+    max_width_ = ci::math<int>::max(max_width_, surface_size_.x);
+    max_height_ = ci::math<int>::max(max_height_, surface_size_.y);
+    max_scale_ = ci::math<float>::max(max_scale_, scale_);
 }
 
 void CalloutBox::calculate_surface_size() {

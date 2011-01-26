@@ -47,11 +47,11 @@ void Visualizer::setup() {
 
 void Visualizer::update() {
     GraphPhysics::instance().update();
-    Camera::instance().update(); // updates centroid
     PlayManager::instance().update();
     VoteManager::instance().update();
     GraphNodeFactory::instance().update();
     UserFactory::instance().update();
+    Camera::instance().update(); // updates centroid
 }
 
 void Visualizer::draw() {

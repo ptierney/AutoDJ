@@ -46,6 +46,7 @@ private:
     ci::Vec2f centroid_;
 
     ParticleSystemPtr p_system_;
+    ParticleSystemPtr box_p_system_;
 };
 
 }
