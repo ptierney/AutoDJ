@@ -90,15 +90,17 @@ ParticlePtr GraphPhysics::create_box_particle(ParticlePtr parent) {
 
     boxes_.push_back(box_p);
 
+    float edge_l = edge_length_ * 2.0f;
+
     make_separation_between(box_p_system_, box_p, node_p);
-    make_edge_between(box_p_system_, box_p, node_p, edge_length_ * 2.0f, 
+    make_edge_between(box_p_system_, box_p, node_p, edge_l, 
         edge_strength_);
 
     ci::Rand rand;
     rand.randomize();
 
     box_p->position() = parent->position() + ci::Vec2f(rand.randFloat(-1.0f, 1.0f),
-        rand.randFloat(-1.0f, 1.0f));
+        rand.randFloat(-1.0f, 1.0f)).normalized() * edge_l;
 
     return box_p;
 }
@@ -122,7 +124,7 @@ void GraphPhysics::setup_new_node(ParticlePtr p, ParticlePtr q,
     rand.randomize();
 
     p->position() = q->position() + ci::Vec2f(rand.randFloat(-1.0f, 1.0f),
-        rand.randFloat(-1.0f, 1.0f));
+        rand.randFloat(-1.0f, 1.0f)).normalized() * length;
 }
 
 void GraphPhysics::add_spacers_to_node(ParticleSystemPtr system, 
