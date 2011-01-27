@@ -70,8 +70,6 @@ void Camera::update_centroid() {
     float width_max = CalloutBox::max_width();
     float height_max = CalloutBox::max_height();
 
-    ci::app::console() << width_max << " " << height_max << std::endl;
-
     // check all the box particles for their bounds
     for (std::vector<ParticlePtr>::iterator it = box_p_system_->particles_.begin();
         it != box_p_system_->particles_.end(); ++it) {

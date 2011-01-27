@@ -92,7 +92,7 @@ ParticlePtr GraphPhysics::create_box_particle(ParticlePtr parent) {
 
     boxes_.push_back(box_p);
 
-    float edge_l = edge_length_ * 2.0f;
+    float edge_l = edge_length_ * 1.3f;
 
     make_separation_between(box_p_system_, box_p, node_p);
     make_edge_between(box_p_system_, box_p, node_p, edge_l, 

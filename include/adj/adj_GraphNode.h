@@ -61,6 +61,7 @@ public:
     void set_is_next_song(bool next);
     void register_song_playing();
     void register_just_added();
+    void register_path_activate();
 
     int distance_from_current() { return distance_from_current_; }
 
@@ -80,8 +81,6 @@ public:
 
 private:
     void draw_current_song();
-    void draw_transitioning_out();
-    void draw_transitioning_in();
     void draw_node(); // regular drawing
     void update_distance_from_current();
     int get_milliseconds_elapsed(boost::posix_time::ptime&);
@@ -89,8 +88,10 @@ private:
     void transition_fading_in();
     void transition_fading_out();
     void check_display_time();
+    void check_path_delay();
     void start_callout_fadein();
     void start_callout_fadeout();
+    void trigger_next_node();
 
     SongPtr song_;
     ParticlePtr particle_;
@@ -106,10 +107,13 @@ private:
 
     bool is_fading_in_;
     bool is_fading_out_;
+    bool is_path_delaying_;
     int fade_time_; // in milliseconds
     int display_time_; // in milliseconds
+    int path_trigger_delay_time_; // in milliseconds
     boost::posix_time::ptime fade_timer_;
     boost::posix_time::ptime display_timer_;
+    boost::posix_time::ptime path_trigger_timer_;
 
     float scale_;
 

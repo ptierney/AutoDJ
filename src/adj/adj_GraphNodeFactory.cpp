@@ -145,6 +145,7 @@ void GraphNodeFactory::pair_nodes(SongId new_id, SongId existing_id) {
     GraphPhysics::instance().link_nodes(new_node, existing_node);
 
     existing_node->add_child(new_node);
+    new_node->parent_ = existing_node;
 
     new_node->register_just_added();
     new_node->show();

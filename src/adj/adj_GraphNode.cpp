@@ -6,6 +6,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 
 #include "cinder/gl/gl.h"
+#include "cinder/app/App.h"
 #include "cinder/Utilities.h"
 #include "cinder/CinderMath.h"
 
@@ -33,9 +34,11 @@ GraphNode::GraphNode() {
     visible_ = false;
     fade_time_ = 1000; // in milliseconds
     display_time_ = 4000; // in milliseconds
+    path_trigger_delay_time_ = 750; // in ms
 
     is_fading_in_ = false;
     is_fading_out_ = false;
+    is_path_delaying_ = false;
 }
 
 void GraphNode::init() {
@@ -109,14 +112,6 @@ void GraphNode::draw_current_song() {
     ci::gl::scale(ci::Vec3f::one() * max_scale_);
     ci::gl::color(node_highlight_color_);
     ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
-}
-
-void GraphNode::draw_transitioning_out() {
-
-}
-
-void GraphNode::draw_transitioning_in() {
-
 }
 
 void GraphNode::draw_node() {
@@ -193,6 +188,9 @@ void GraphNode::register_song_playing() {
     start_callout_fadein();
 
     display_timer_ = boost::posix_time::microsec_clock::universal_time();
+
+    is_path_delaying_ = true;
+    path_trigger_timer_ = boost::posix_time::microsec_clock::universal_time();
 }
 
 // call this when it is added to the graph
@@ -200,6 +198,25 @@ void GraphNode::register_just_added() {
     start_callout_fadein();
 
     display_timer_ = boost::posix_time::microsec_clock::universal_time();
+
+    is_path_delaying_ = true;
+    path_trigger_timer_ = boost::posix_time::microsec_clock::universal_time();
+}
+
+void GraphNode::register_path_activate() {
+    // begin transition
+    start_callout_fadein();
+
+    callout_box_->show();
+    display_timer_ = boost::posix_time::microsec_clock::universal_time();
+
+        // if you've reached the now playing (or transitioning) song, 
+    // don't bother activating the path
+    if (song_->is_playing())
+        return;
+
+    is_path_delaying_ = true;
+    path_trigger_timer_ = boost::posix_time::microsec_clock::universal_time();
 }
 
 void GraphNode::start_callout_fadein() {
@@ -228,6 +245,9 @@ void GraphNode::check_transition_states() {
 
     if (callout_box_->visible())
         check_display_time();
+
+    if (is_path_delaying_)
+        check_path_delay();
 }
 
 void GraphNode::transition_fading_in() {
@@ -246,7 +266,7 @@ void GraphNode::transition_fading_out() {
     int elapsed = get_milliseconds_elapsed(fade_timer_);
 
     if (elapsed > fade_time_) {
-        is_fading_in_ = false;
+        is_fading_out_ = false;
         callout_box_->hide();
         return;
     }
@@ -264,6 +284,24 @@ void GraphNode::check_display_time() {
         return;
 
     start_callout_fadeout();
+}
+
+void GraphNode::check_path_delay() {
+    int elapsed = get_milliseconds_elapsed(display_timer_);
+
+    if (elapsed < path_trigger_delay_time_)
+        return;
+
+    is_path_delaying_ = false;
+
+    trigger_next_node();
+}
+
+void GraphNode::trigger_next_node() {
+    if (parent_.get() == NULL)
+        return;
+
+    parent_->register_path_activate();
 }
 
 }
