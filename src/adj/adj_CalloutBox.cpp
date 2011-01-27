@@ -58,12 +58,13 @@ void CalloutBox::init() {
     medium_font_ = ci::Font(ci::app::loadResource(RES_MEDIUM_FONT), 
         static_cast<float>(font_size_));
 
-    show();
-
-    update_contents();
+    hide();
 }
 
 void CalloutBox::update_contents() {
+    if (!visible_)
+        return;
+
     get_user_photos();
     calculate_surface_size();
     create_surface();
@@ -247,9 +248,9 @@ void CalloutBox::show() {
 void CalloutBox::hide() {
     visible_ = false;
 
-    // remove the particle from the particle system
-    // delete any attractions
-
+    if (particle_.get() != NULL)
+        GraphPhysics::instance().remove_box_particle(particle_);
+    particle_.reset();
 }
 
 void CalloutBox::set_contents() {

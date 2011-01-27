@@ -84,7 +84,7 @@ UserFactory::UserFactory() {
     default_name_ = "AutoDJ User";
     image_url_base_ = "http://ptierney.com/~patrick/user_photos/";
     max_threads_ = 5;
-    query_rate_ = 3; // spawn threads at least query_rate_ seconds apart
+    query_rate_ = 1; // spawn threads at least query_rate_ seconds apart
 }
 
 void UserFactory::init() {

@@ -3,6 +3,8 @@
 
 #include <exception>
 
+#include "boost/date_time/posix_time/posix_time.hpp"
+
 #include "cinder/gl/gl.h"
 #include "cinder/Utilities.h"
 #include "cinder/CinderMath.h"
@@ -29,6 +31,11 @@ GraphNode::GraphNode() {
     is_transitioning_ = false;
     distance_from_current_ = 0;
     visible_ = false;
+    fade_time_ = 1000; // in milliseconds
+    display_time_ = 4000; // in milliseconds
+
+    is_fading_in_ = false;
+    is_fading_out_ = false;
 }
 
 void GraphNode::init() {
@@ -58,6 +65,7 @@ void GraphNode::show() {
     if (callout_box_.get() == NULL) {
         callout_box_ = CalloutBoxPtr(new CalloutBox(*this));
         callout_box_->init();
+        callout_box_->show();
     }
 
     update_appearance();
@@ -75,6 +83,9 @@ void GraphNode::hide() {
 void GraphNode::draw() {
     if (!visible_)
         return;
+
+    // check if it's fading in / out, if it's been displayed long enough, etc
+    check_transition_states();
     
     ci::gl::pushMatrices();
 
@@ -177,5 +188,82 @@ void GraphNode::register_vote(VotePtr vote) {
     update_appearance();
 }
 
+void GraphNode::register_song_playing() {
+    // begin transition
+    start_callout_fadein();
+
+    display_timer_ = boost::posix_time::microsec_clock::universal_time();
+}
+
+// call this when it is added to the graph
+void GraphNode::register_just_added() {
+    start_callout_fadein();
+
+    display_timer_ = boost::posix_time::microsec_clock::universal_time();
+}
+
+void GraphNode::start_callout_fadein() {
+    is_fading_in_ = true;
+    fade_timer_ = boost::posix_time::microsec_clock::universal_time();
+}
+
+void GraphNode::start_callout_fadeout() {
+    is_fading_out_ = true;
+    fade_timer_ = boost::posix_time::microsec_clock::universal_time();
+}
+
+int GraphNode::get_milliseconds_elapsed(boost::posix_time::ptime& t) {
+    boost::posix_time::time_duration diff = 
+        boost::posix_time::microsec_clock::universal_time() - t;
+
+    return diff.total_milliseconds();
+}
+
+void GraphNode::check_transition_states() {
+    if (is_fading_in_)
+        transition_fading_in();
+
+    if (is_fading_out_)
+        transition_fading_out();
+
+    if (callout_box_->visible())
+        check_display_time();
+}
+
+void GraphNode::transition_fading_in() {
+    int elapsed = get_milliseconds_elapsed(fade_timer_);
+
+    if (elapsed > fade_time_) {
+        is_fading_in_ = false;
+        callout_box_->set_alpha(1.0f);
+        return;
+    }
+
+    callout_box_->set_alpha(ci::lmap<float>(elapsed, 0, fade_time_, 0.0f, 1.0f));
+}
+
+void GraphNode::transition_fading_out() {
+    int elapsed = get_milliseconds_elapsed(fade_timer_);
+
+    if (elapsed > fade_time_) {
+        is_fading_in_ = false;
+        callout_box_->hide();
+        return;
+    }
+
+    callout_box_->set_alpha(ci::lmap<float>(elapsed, 0, fade_time_, 1.0f, 0.0f));
+}
+
+void GraphNode::check_display_time() {
+    int elapsed = get_milliseconds_elapsed(display_timer_);
+
+    if (elapsed < display_time_)
+        return;
+
+    if (is_fading_out_)
+        return;
+
+    start_callout_fadeout();
+}
 
 }

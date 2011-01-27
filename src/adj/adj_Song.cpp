@@ -20,6 +20,8 @@
 #include "adj/adj_Song.h"
 #include "adj/adj_User.h"
 #include "adj/adj_VoteManager.h"
+#include "adj/adj_GraphNodeFactory.h"
+#include "adj/adj_GraphNode.h"
 
 namespace adj {
 
@@ -45,6 +47,8 @@ void Song::play() {
     track_ = ci::audio::Output::addTrack(source_);
 
     play_start_ = SongFactory::instance().get_current_time();
+
+    GraphNodeFactory::instance().song_map()[id_]->register_song_playing();
 
     is_playing_ = true;
 }

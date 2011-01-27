@@ -16,8 +16,8 @@ Camera* Camera::instance_ = NULL;
 
 Camera::Camera() {
     // the circles are approximately 10 units wide
-    width_border_ = 5.0f; 
-    height_border_ = 5.0f;
+    width_border_ = 15.0f; 
+    height_border_ = 15.0f;
     scale_ = 1.0f;
     centroid_ = ci::Vec2f::zero();
 }
@@ -78,10 +78,10 @@ void Camera::update_centroid() {
 
         graph::Particle& p = *(*it);
 
-        x_max = ci::math<float>::max(x_max, p.position().x + width_max);
-        x_min = ci::math<float>::min(x_min, p.position().x - width_max);
-        y_min = ci::math<float>::min(y_min, p.position().y - height_max);
-        y_max = ci::math<float>::max(y_max, p.position().y + height_max);
+        x_max = ci::math<float>::max(x_max, p.position().x + width_max * 0.5f);
+        x_min = ci::math<float>::min(x_min, p.position().x - width_max * 0.5f);
+        y_min = ci::math<float>::min(y_min, p.position().y - height_max * 0.5f);
+        y_max = ci::math<float>::max(y_max, p.position().y + height_max * 0.5f);
     }
 
     float delta_x = x_max - x_min;

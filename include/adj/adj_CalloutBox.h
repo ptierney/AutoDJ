@@ -42,6 +42,8 @@ public:
     static float max_height() { return max_height_ * max_scale_; }
     static float max_scale() { return max_scale_; }
 
+    void set_alpha(float a) { alpha_ = a; }
+
 private:
     void set_contents();
     void context_setup_dash(std::shared_ptr<ci::cairo::Context>);

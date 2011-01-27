@@ -195,6 +195,10 @@ void GraphPhysics::remove_particle(ParticlePtr p) {
 }
 
 void GraphPhysics::remove_box_particle(ParticlePtr p) {
+    // first remove the dummy particle that's anchored to the particle in the
+    // actual graph
+    remove_particle(box_p_system_, box_p_to_anchor_p_map_[p]);
+    // then remove the box's particle
     remove_particle(box_p_system_, p);
 }
 
