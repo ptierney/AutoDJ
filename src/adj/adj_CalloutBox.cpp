@@ -58,7 +58,7 @@ void CalloutBox::init() {
     medium_font_ = ci::Font(ci::app::loadResource(RES_MEDIUM_FONT), 
         static_cast<float>(font_size_));
 
-    particle_ = GraphPhysics::instance().create_box_particle(node_.particle());
+    show();
 
     update_contents();
 }
@@ -102,8 +102,7 @@ void CalloutBox::create_surface() {
 }
 
 void CalloutBox::create_context() {
-    context_ = std::shared_ptr<ci::cairo::Context>(new
-        ci::cairo::Context(*(surface_.get())));
+    context_ = std::shared_ptr<ci::cairo::Context>(new ci::cairo::Context(*surface_));
 }
 
 void CalloutBox::update_box_position() {
@@ -197,7 +196,7 @@ void CalloutBox::render_connection() {
         ci::cairo::SurfaceImage(surface_width, surface_height, true));
 
     connect_context_ = std::shared_ptr<ci::cairo::Context>(new
-        ci::cairo::Context(*(connect_surface_.get())));
+        ci::cairo::Context(*connect_surface_));
 
     connect_context_->setSourceRgb(node_.node_highlight_color().r, 
         node_.node_highlight_color().g, node_.node_highlight_color().b);
@@ -238,11 +237,19 @@ void CalloutBox::add_connection_end(int a) {
 
 void CalloutBox::show() {
     visible_ = true;
+
+    if (particle_.get() == NULL)
+        particle_ = GraphPhysics::instance().create_box_particle(node_.particle());
+
     update_contents();
 }
 
 void CalloutBox::hide() {
     visible_ = false;
+
+    // remove the particle from the particle system
+    // delete any attractions
+
 }
 
 void CalloutBox::set_contents() {

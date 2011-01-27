@@ -35,7 +35,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ != 
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_free()) {
             original_positions_[i] = p.position();
@@ -53,7 +53,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ != 
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_free()) {
             k1_forces_[i] = p.force();
@@ -66,7 +66,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ != 
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_fixed())
             continue;
@@ -85,7 +85,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ != 
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_free()) {
             k2_forces_[i] = p.force();
@@ -100,7 +100,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ !=
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_fixed())
             continue;
@@ -119,7 +119,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ != 
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_free()) {
             k3_forces_[i] = p.force();
@@ -134,7 +134,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ != 
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_fixed())
             continue;
@@ -150,7 +150,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ !=
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         if (p.is_fixed())
             continue;
@@ -164,7 +164,7 @@ void RungeKuttaIntegrator::step(float delta_t) {
     for (particles_it_ = s_.particles_.begin(), i = 0; particles_it_ != 
         s_.particles_.end(); ++particles_it_, ++i) {
 
-        Particle& p = *(*particles_it_).get();
+        Particle& p = *(*particles_it_);
 
         p.age() += delta_t;
 

@@ -18,7 +18,7 @@ void CalloutConnectionDrawer::init() {
         AdjApp::instance().getWindowHeight(), true));
 
     context_ = std::shared_ptr<ci::cairo::Context>(new
-        ci::cairo::Context(*(surface_.get())));
+        ci::cairo::Context(*surface_));
 }
 
 void CalloutConnectionDrawer::draw() {

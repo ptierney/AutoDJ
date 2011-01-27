@@ -48,6 +48,9 @@ public:
     ParticleSystemPtr particle_system() { return p_system_; }
     ParticleSystemPtr box_particle_system() { return box_p_system_; }
 
+    void remove_particle(ParticlePtr);
+    void remove_box_particle(ParticlePtr);
+
     float edge_length() { return edge_length_; }
 
 private:
@@ -63,6 +66,7 @@ private:
     // this updates the box particle system, but also makes sure the 
     // box's node particle is anchored to the node in the graph 
     void update_box_particles();
+    void remove_particle(ParticleSystemPtr, ParticlePtr);
 
     std::vector<ParticlePtr> boxes_;
     // this is the mapping from a box's node particle

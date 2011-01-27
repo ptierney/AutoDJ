@@ -4,6 +4,8 @@
 
 #include "graph/graph_ParticleSystem.h"
 #include "graph/graph_Particle.h"
+#include "graph/graph_Attraction.h"
+#include "graph/graph_Spring.h"
 
 #include "adj/adj_GraphPhysics.h"
 #include "adj/adj_GraphNode.h"
@@ -141,18 +143,17 @@ void GraphPhysics::add_spacers_to_node(ParticleSystemPtr system,
 
 void GraphPhysics::make_edge_between(ParticleSystemPtr system, ParticlePtr a, 
     ParticlePtr b) {
-    system->make_spring(*(a.get()), *(b.get()), edge_strength_,
-        edge_strength_, edge_length_);
+    system->make_spring(*a, *b, edge_strength_, edge_strength_, edge_length_);
 }
 
 void GraphPhysics::make_edge_between(ParticleSystemPtr system, ParticlePtr a, 
     ParticlePtr b, float length, float strength) {
-    system->make_spring(*(a.get()), *(b.get()), strength, strength, length);
+    system->make_spring(*a, *b, strength, strength, length);
 }
 
 void GraphPhysics::make_separation_between(ParticleSystemPtr system, 
     ParticlePtr a, ParticlePtr b) {
-    system->make_attraction(*(a.get()), *(b.get()), -spacer_strength_, 20);
+    system->make_attraction(*a, *b, -spacer_strength_, 20);
 }
 
 ParticlePtr GraphPhysics::create_unlinked_particle(ParticlePtr q) {
@@ -174,8 +175,8 @@ void GraphPhysics::link_nodes(GraphNodePtr new_node, GraphNodePtr existing_node,
     ParticlePtr new_ptr = new_node->particle();
     ParticlePtr existing_ptr = existing_node->particle();
 
-    graph::Particle& new_p = *(new_ptr.get());
-    graph::Particle& existing_p = *(existing_ptr.get());
+    graph::Particle& new_p = *new_ptr;
+    graph::Particle& existing_p = *existing_ptr;
 
     p_system_->make_spring(new_p, existing_p, strength, strength, length);
 
@@ -189,6 +190,58 @@ void GraphPhysics::link_nodes(GraphNodePtr new_node, GraphNodePtr existing_node,
         rand.randFloat(-1.0f, 1.0f));
 }
 
+void GraphPhysics::remove_particle(ParticlePtr p) {
+    remove_particle(p_system_, p);
+}
+
+void GraphPhysics::remove_box_particle(ParticlePtr p) {
+    remove_particle(box_p_system_, p);
+}
+
+void GraphPhysics::remove_particle(ParticleSystemPtr system, ParticlePtr p) {
+    graph::Particle& to_remove = *p;
+
+    // remove any attractions the particle is a part of
+    for (std::vector<std::shared_ptr<graph::Attraction> >::iterator it = 
+        system->attractions_.begin(); it != system->attractions_.end(); ) {
+
+        if (to_remove == (*it)->get_one_end() || to_remove == 
+            (*it)->get_the_other_end()) {
+            system->attractions_.erase(it); // this invalidates iterator
+            it = system->attractions_.begin();
+            continue;
+        }
+
+        ++it;
+    }
+
+    // remove any springs the particle is a part of
+    for (std::vector<std::shared_ptr<graph::Spring> >::iterator it = 
+        system->springs_.begin(); it != system->springs_.end(); ) {
+
+        if (to_remove == (*it)->get_one_end() || to_remove == 
+            (*it)->get_the_other_end()) {
+            system->springs_.erase(it); // this invalidates iterator
+            it = system->springs_.begin();
+            continue;
+        }
+
+        ++it;
+    }
+
+    // remove particle from the system
+    for (std::vector<ParticlePtr>::iterator it = system->particles_.begin(); 
+        it != system->particles_.end(); ) {
+
+        if (to_remove == *(*it)) {
+            system->particles_.erase(it); // this invalidates iterator
+            it = system->particles_.begin();
+            continue;
+        }
+
+        ++it;
+    }
+}
 
 GraphPhysics& GraphPhysics::instance() {
     if (instance_ == NULL) {

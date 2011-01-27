@@ -44,7 +44,7 @@ public:
 
     friend class GraphNodeFactory;
 
-    Song& song() { return *(song_.get()); }
+    Song& song() { return *song_; }
 
     bool is_current_song() { return is_current_song_; }
     bool is_next_song() { return is_next_song_; }

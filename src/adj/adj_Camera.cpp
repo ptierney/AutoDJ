@@ -16,8 +16,8 @@ Camera* Camera::instance_ = NULL;
 
 Camera::Camera() {
     // the circles are approximately 10 units wide
-    width_border_ = 10.0f; 
-    height_border_ = 10.0f;
+    width_border_ = 5.0f; 
+    height_border_ = 5.0f;
     scale_ = 1.0f;
     centroid_ = ci::Vec2f::zero();
 }
@@ -39,8 +39,8 @@ void Camera::update() {
 void Camera::transform_draw() {
     ci::gl::translate(static_cast<ci::Vec2f>(
         AdjApp::instance().getWindowSize()) / 2.0f);
-    ci::gl::translate(centroid_ / scale_);
     ci::gl::scale(ci::Vec3f::one() * scale_);
+    ci::gl::translate(centroid_);
     
 }
 
@@ -59,7 +59,7 @@ void Camera::update_centroid() {
     for (std::vector<ParticlePtr>::iterator it = p_system_->particles_.begin();
         it != p_system_->particles_.end(); ++it) {
 
-        graph::Particle& p = *((*it).get());
+        graph::Particle& p = *(*it);
 
         x_max = ci::math<float>::max(x_max, p.position().x);
         x_min = ci::math<float>::min(x_min, p.position().x);
@@ -76,7 +76,7 @@ void Camera::update_centroid() {
     for (std::vector<ParticlePtr>::iterator it = box_p_system_->particles_.begin();
         it != box_p_system_->particles_.end(); ++it) {
 
-        graph::Particle& p = *((*it).get());
+        graph::Particle& p = *(*it);
 
         x_max = ci::math<float>::max(x_max, p.position().x + width_max);
         x_min = ci::math<float>::min(x_min, p.position().x - width_max);
@@ -89,6 +89,8 @@ void Camera::update_centroid() {
 
     centroid_.x = x_min + 0.5f * delta_x;
     centroid_.y = y_min + 0.5f * delta_y;
+
+    centroid_ *= -1.0f;
 
     float width_scale  = static_cast<float>(AdjApp::instance().getWindowWidth()) / 
         (delta_x + width_border_);
