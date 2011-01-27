@@ -21,6 +21,7 @@ Renderer::Renderer() {
     node_size_ = 10.0f;
     background_color_ = ci::Color::black();
     network_color_ = ci::ColorA(1.0f, 1.0f, 1.0f, 0.25f);
+    line_width_ = 3.0f;
 }
 
 void Renderer::init() {
@@ -54,18 +55,18 @@ void Renderer::draw_nodes() {
 // store their line weight based on their distance to "now playing"
 void Renderer::draw_connections() {
     ci::gl::color(network_color_);
-    glLineWidth(3.0f);
+    glLineWidth(line_width_);
 
     glBegin(GL_LINES);
 
-    for (std::vector<std::shared_ptr<graph::Spring> >::iterator it = 
-        p_system_->springs_.begin(); it != p_system_->springs_.end(); ++it)  {
+    std::vector<std::pair<GraphNodePtr, GraphNodePtr> >& edges = 
+        GraphNodeFactory::instance().edges();
 
-        graph::Particle& a = (*it)->get_one_end();
-        graph::Particle& b = (*it)->get_the_other_end();
+    for (std::vector<std::pair<GraphNodePtr, GraphNodePtr> >::iterator it = 
+        edges.begin(); it != edges.end(); ++it) {
 
-        glVertex2f(a.position());
-        glVertex2f(b.position());
+        glVertex2f(it->first->particle()->position());
+        glVertex2f(it->second->particle()->position());
     }
 
     glEnd();

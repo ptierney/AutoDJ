@@ -90,9 +90,6 @@
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\adj\adj_CalloutConnectionDrawer.h">
-      <Filter>Header Files\adj</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\adj\adj_VoteManager.h">
       <Filter>Header Files\adj</Filter>
     </ClInclude>
@@ -156,9 +153,6 @@
       <Filter>Source Files\adj</Filter>
     </ClCompile>
     <ClCompile Include="..\src\adj\adj_CalloutBox.cpp">
-      <Filter>Source Files\adj</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\adj\adj_CalloutConnectionDrawer.cpp">
       <Filter>Source Files\adj</Filter>
     </ClCompile>
     <ClCompile Include="..\src\adj\adj_VoteManager.cpp">

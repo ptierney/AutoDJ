@@ -52,6 +52,11 @@ public:
 
     void update();
 
+    std::vector<std::pair<GraphNodePtr, GraphNodePtr> >& edges() { return edges_; }
+
+    void add_edge(std::pair<GraphNodePtr, GraphNodePtr>&);
+    void remove_edge(std::pair<GraphNodePtr, GraphNodePtr>&);
+
 private:
     GraphNodeFactory();
     void init();
@@ -72,6 +77,8 @@ private:
     std::map<SongId, GraphNodePtr> song_map_;
 
     std::map<SongId, GraphNodePtr>::iterator song_map_it_;
+
+    std::vector<std::pair<GraphNodePtr, GraphNodePtr> > edges_;
 
     std::deque<PairRequest> pair_requests_;
     boost::mutex pair_requests_mutex_;

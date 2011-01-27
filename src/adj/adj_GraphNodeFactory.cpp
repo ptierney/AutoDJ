@@ -147,6 +147,8 @@ void GraphNodeFactory::pair_nodes(SongId new_id, SongId existing_id) {
     existing_node->add_child(new_node);
     new_node->parent_ = existing_node;
 
+    add_edge(std::pair<GraphNodePtr, GraphNodePtr>(new_node, existing_node));
+
     new_node->register_just_added();
     new_node->show();
     existing_node->show();
@@ -171,6 +173,26 @@ void GraphNodeFactory::check_pair_requests() {
     }
 
     pair_requests_.clear();
+}
+
+void GraphNodeFactory::add_edge(std::pair<GraphNodePtr, GraphNodePtr>& edge) {
+    edges_.push_back(edge);
+}
+
+void GraphNodeFactory::remove_edge(std::pair<GraphNodePtr, GraphNodePtr>& edge) {
+    for (std::vector<std::pair<GraphNodePtr, GraphNodePtr> >::iterator
+        it = edges_.begin(); it != edges_.end(); ) {
+        
+        if ( (it->first == edge.first && it->second == edge.second) ||
+            (it->first == edge.second && it->second == edge.first) ) {
+
+            edges_.erase(it);
+            it = edges_.begin();
+            continue;
+        }
+
+        ++it;
+    }
 }
 
 

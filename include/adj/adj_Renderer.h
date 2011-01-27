@@ -35,6 +35,7 @@ private:
     ci::Color background_color_;
     ci::ColorA network_color_;
 
+    float line_width_;
     float node_size_;
 
     ParticleSystemPtr p_system_;
