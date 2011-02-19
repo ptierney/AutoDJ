@@ -33,8 +33,8 @@ GraphNode::GraphNode() {
     distance_from_current_ = 0;
     visible_ = false;
     fade_time_ = 1000; // in milliseconds
-    display_time_ = 4000; // in milliseconds
-    path_trigger_delay_time_ = 750; // in ms
+    display_time_ = 6000; // in milliseconds
+    path_trigger_delay_time_ = 400; // in ms
 
     is_fading_in_ = false;
     is_fading_out_ = false;
@@ -118,8 +118,14 @@ void GraphNode::draw_node() {
     // TODO: cache this value
     ci::gl::scale(ci::Vec3f::one() * ci::lmap<float>(distance_from_current_,
         0, 10, max_scale_, min_scale_));
-    ci::gl::color(node_color_);
-    ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
+
+    if (highlight_connection()) {
+        ci::gl::color(node_highlight_color_);
+        ci::gl::drawStrokedCircle(ci::Vec2f::zero(), circle_radius_);
+    } else {
+        ci::gl::color(node_color_);
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
+    }
 }
 
 void GraphNode::add_child(GraphNodePtr child) {
@@ -302,6 +308,10 @@ void GraphNode::trigger_next_node() {
         return;
 
     parent_->register_path_activate();
+}
+
+bool GraphNode::highlight_connection() {
+    return callout_box_->visible();
 }
 
 }

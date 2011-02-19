@@ -54,6 +54,8 @@ public:
     bool is_transitioning_out() { return is_current_song_ && is_transitioning_; }
     bool is_transitioning_in() { return is_next_song_ && is_transitioning_; }
 
+    bool highlight_connection();
+
     GraphNodePtr parent() { return parent_; }
 
     void set_is_transitioning(bool trans);

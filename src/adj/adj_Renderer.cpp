@@ -21,7 +21,8 @@ Renderer::Renderer() {
     node_size_ = 10.0f;
     background_color_ = ci::Color::black();
     network_color_ = ci::ColorA(1.0f, 1.0f, 1.0f, 0.25f);
-    line_width_ = 3.0f;
+    line_width_ = 6.0f;
+    highlight_width_ = line_width_ * 2.0f;
 }
 
 void Renderer::init() {
@@ -29,7 +30,8 @@ void Renderer::init() {
 }
 
 void Renderer::setup() {
-    glEnable(GL_LINE_SMOOTH);
+    // line widths aren't working atm
+    //glEnable(GL_LINE_SMOOTH);
     ci::gl::enableAlphaBlending();
 }
 
@@ -54,9 +56,6 @@ void Renderer::draw_nodes() {
 // in the future, the nodes will probably draw their own connections, or at least
 // store their line weight based on their distance to "now playing"
 void Renderer::draw_connections() {
-    ci::gl::color(network_color_);
-    glLineWidth(line_width_);
-
     glBegin(GL_LINES);
 
     std::vector<std::pair<GraphNodePtr, GraphNodePtr> >& edges = 
@@ -64,6 +63,14 @@ void Renderer::draw_connections() {
 
     for (std::vector<std::pair<GraphNodePtr, GraphNodePtr> >::iterator it = 
         edges.begin(); it != edges.end(); ++it) {
+
+        if (it->first->highlight_connection()) {
+            glLineWidth(highlight_width_);
+            ci::gl::color(it->first->node_highlight_color());
+        } else {
+            glLineWidth(line_width_);
+            ci::gl::color(network_color_);
+        }
 
         glVertex2f(it->first->particle()->position());
         glVertex2f(it->second->particle()->position());
