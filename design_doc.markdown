@@ -4,8 +4,8 @@ Introduction
 
 The so called "Auto DJ" system is a collection of system to enable a dance party without the need for a (human) DJ or playlist. It is composed of three connected systems:
 
-* **Mobile-enabled voting sytem.** Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
-* **Playlist visualizer.** Displays information about user's votes and upcomming songs in a communal (read: massively projected) setting. 
+* **Mobile-enabled voting system.** Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
+* **Playlist visualizer.** Displays information about user's votes and upcoming songs in a communal (read: massively projected) setting. 
 * **Graph analyzer (Sylvester).** Trims graph from a potential > 2000 songs to approx. 20 relevant, timely, important, or otherwise "hot" songs for display on the visualizer.
 
 The adj git repo contains code for the visualizer and graph analyzer. Code for the voting system is stored on a separate repo.
@@ -36,7 +36,7 @@ Songs objects represent songs, and should contain all information about a song, 
 adj::User Object
 ----------------
 
-Similar to Song, a user object contains information about a user, in particular their name and a photo. Additionally, each Uuser contains a list of all Songs that the user has voted on.
+Similar to Song, a user object contains information about a user, in particular their name and a photo. Additionally, each User contains a list of all Songs that the user has voted on.
 
 adj::GraphOracle Object
 -----------------------
