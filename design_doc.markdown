@@ -8,7 +8,7 @@ The so called "Auto DJ" system is a collection of system to enable a dance party
 * **Playlist visualizer.** Displays information about user's votes and upcomming songs in a communal (read: massively projected) setting. 
 * **Graph analyzer (Sylvester).** Trims graph from a potential > 2000 songs to approx. 20 relevant, timely, important, or otherwise "hot" songs for display on the visualizer.
 
-The adj git repo contains code for the visualizer and graph analyzer. Code for the voting system is stored on a separet repo.
+The adj git repo contains code for the visualizer and graph analyzer. Code for the voting system is stored on a separate repo.
 
 Architecture Overview
 =====================
@@ -56,7 +56,7 @@ This namespace contains objects related to connecting with other parts of the sy
 json Namespace
 --------------
 
-Files for JsonCpp library, found [here](http://jsoncpp.sourceforge.net/).
+Files for the JsonCpp library, found [here](http://jsoncpp.sourceforge.net/).
 
 Coding Conventions
 ==================
