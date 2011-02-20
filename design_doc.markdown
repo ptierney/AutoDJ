@@ -16,7 +16,7 @@ Architecture Overview
 graph Namespace
 ---------------
 
-This namespace contains objects related to a particle system / spring simulation. It is heavily modeled after the [Traer physics library](http://murderandcreate.com/physics/) (read: C++ port), and as such follows Traer's own coding conventions and styles. It wasn't built from the ground up for the purposes of this visualizer. If its capabilities aren't adequate, it would most likely be best to rewrite these objects rather than modifying Traer's code.
+This namespace contains objects related to a particle system / spring simulation. It is heavily modeled after the [Traer physics library](http://murderandcreate.com/physics/) (read: C++ port), and as such follows Traer's own coding conventions and styles. It wasn't built from the ground up for the purposes of this visualizer. If its capabilities aren't adequate, it's probably best to rewrite these objects from the ground up rather than modifying Traer's code.
 
 adj Namespace
 -------------
