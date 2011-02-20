@@ -31,12 +31,32 @@ This is the fundamental unit of the visualization. Each GraphNode contains a son
 adj::Song Object
 ----------------
 
+Songs objects represent songs, and should contain all information about a song, including artist, album, cover art, and some means of playing the song.
 
+adj::User Object
+----------------
 
-dj::net Namespace
------------------
+Similar to Song, a user object contains information about a user, in particular their name and a photo. Additionally, each Uuser contains a list of all Songs that the user has voted on.
+
+adj::GraphOracle Object
+-----------------------
+
+The GraphOracle is the main interface for querying the Sylvester. It builds a representation of the current state of the graph, and gets a new representation. How the GraphOracle acts on this data hasn't been decided.
+
+adj::Renderer Object
+--------------------
+
+Handles all things OpenGL related, and draws all necessary objects.
+
+adj::net Namespace
+------------------
 
 This namespace contains objects related to connecting with other parts of the system over the network, typically by HTTP.
+
+json Namespace
+--------------
+
+Files for JsonCpp library, found [here](http://jsoncpp.sourceforge.net/).
 
 Coding Conventions
 ==================
