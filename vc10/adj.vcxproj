@@ -25,6 +25,9 @@
     <ClInclude Include="..\include\adj\adj_User.h" />
     <ClInclude Include="..\include\adj\adj_Visualizer.h" />
     <ClInclude Include="..\include\adj\adj_VoteManager.h" />
+    <ClInclude Include="..\include\adj\net\adj_net_Client.h" />
+    <ClInclude Include="..\include\adj\net\adj_net_Reply.h" />
+    <ClInclude Include="..\include\adj\net\adj_net_Request.h" />
     <ClInclude Include="..\include\graph\graph_Attraction.h" />
     <ClInclude Include="..\include\graph\graph_Force.h" />
     <ClInclude Include="..\include\graph\graph_Integrator.h" />
@@ -48,6 +51,9 @@
     <ClCompile Include="..\src\adj\adj_User.cpp" />
     <ClCompile Include="..\src\adj\adj_Visualizer.cpp" />
     <ClCompile Include="..\src\adj\adj_VoteManager.cpp" />
+    <ClCompile Include="..\src\adj\net\adj_net_Client.cpp" />
+    <ClCompile Include="..\src\adj\net\adj_net_Reply.cpp" />
+    <ClCompile Include="..\src\adj\net\adj_net_Request.cpp" />
     <ClCompile Include="..\src\graph\graph_Attraction.cpp" />
     <ClCompile Include="..\src\graph\graph_Particle.cpp" />
     <ClCompile Include="..\src\graph\graph_ParticleSystem.cpp" />
