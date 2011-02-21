@@ -136,6 +136,29 @@ C++ Coding Conventions
 
 The graphic components of the visualizer are writen using the [Cinder library](http://libcinder.org), and effort should be made to use as many of their built in objects as possible (Vector 3D/2D, Surface, OpenGL texture, Color, math functions such as lerp, floor, ceiling, etc..).
 
+Here are some general points:
+
+Use angle brackets for #include
+-------------------------------
+
+__Right:__ #include <adj/adj_GraphNode.h>
+__Wrong:__ #include "adj/adj_GraphNode.h"
+
+A lot of the code doesn't conform to this. I'm working on it.
+
+Include namespace in .cpp files
+-------------------------------
+
+Example: Client object in the abj::net namespace:
+
+__Right:__ adj_net_Client.cpp 
+__Wrong:__ Client.cpp
+
+This is because some copilers put all compiled files into the same directory as .o's, and if the files are named the same, they get clobbered.
+
+Follow Google's style guide
+---------------------------
+
 Almost all the code conforms to Google's C++ sytle guidelines, found [here](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml). Notable exceptions to Google's style include:
 
 Exceptions are used 

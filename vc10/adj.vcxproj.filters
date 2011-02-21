@@ -111,6 +111,9 @@
     <ClInclude Include="..\include\adj\net\adj_net_Client.h">
       <Filter>Header Files\adj\net</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\adj\adj_SocialConnector.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\src\adj\net\adj_net_Reply.cpp">
       <Filter>Source Files\adj\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\adj_SocialConnector.cpp">
+      <Filter>Source Files\adj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
