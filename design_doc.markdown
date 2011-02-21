@@ -4,7 +4,7 @@ Introduction
 
 The so called "Auto DJ" system is a collection of system to enable a dance party without the need for a (human) DJ or playlist. It is composed of three connected systems:
 
-* **Mobile-enabled voting system.** Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
+* **Mobile-enabled social media voting system.** Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
 * **Playlist visualizer.** Displays information about user's votes and upcoming songs in a communal (read: massively projected) setting. 
 * **Graph analyzer (Sylvester).** Trims graph from a potential > 2000 songs to approx. 20 relevant, timely, important, or otherwise "hot" songs for display on the visualizer.
 
@@ -47,6 +47,26 @@ adj::Renderer Object
 --------------------
 
 Handles all things OpenGL related, and draws all necessary objects.
+
+adj::SocialConnector Object
+---------------------------
+
+This object connects to the "social media" part of the system, currently implemented in HTTP. The exchange is fairly straightforward: 
+
+1. Visualizer sends a request containing the timestamp of the last response it received
+2. Social media server sends a response
+3. Both sides disconnect
+
+The visualizer's request is fairly basic (and still to be determined), but contains:
+
+* **Timestamp** of the last response
+
+The media server responds with the following:
+
+* **Votes:** the songs that have been voted on, and who voted for them (specified by an ID)
+* **People:** at the moment people only have 2 values associated with them, their ID, and their name
+* **Blacklist:** IDs of people who have misbehaved or entered offensive information
+* **Timestamp:** to uniquely identify the request
 
 adj::net Namespace
 ------------------
