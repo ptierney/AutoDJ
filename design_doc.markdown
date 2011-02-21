@@ -5,7 +5,7 @@ Introduction
 The so called "Auto DJ" system is a collection of system to enable a dance party without the need for a (human) DJ or playlist. It is composed of three connected systems:
 
 * __Mobile-enabled social media voting system.__ Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
-* __Playlist visualizer.__ Displays information about user's votes and upcoming songs in a communal (read: massively projected) setting. 
+* __Playlist visualizer.__ Displays information about user's votes and upcoming songs in a communal (read: projected) setting. 
 * __Graph analyzer (Sylvester).__ Trims graph from a potential > 2000 songs to approx. 20 relevant, timely, important, or otherwise "hot" songs for display on the visualizer.
 
 The adj git repo contains code for the visualizer and graph analyzer. Code for the voting system is stored on a separate repo.
@@ -13,10 +13,20 @@ The adj git repo contains code for the visualizer and graph analyzer. Code for t
 Visualizer Architecture Overview
 ================================
 
+AdjApp Object
+-------------
+
+Lightweight object that creates a window and sets operating system / gui settings (such as fullscreen and framerate). Calls main(...).
+
 adj Namespace
 -------------
 
 This namespace concerns objects related to the visualization of data, managing connections with other servers, loading resources, and spawning a new application window.
+
+adj::Visualizer Object
+----------------------
+
+Lightweight class that holds pointers to the main objects that do things. Calls update once per draw loop, and cleanup when the program shuts down.
 
 adj::GraphNode Object
 ---------------------
@@ -49,11 +59,6 @@ adj::GraphOracle Object
 
 The __GraphOracle__ is the main interface for querying Sylvester. See the section on Visualizer - Sylvester connection for more information.
 
-adj::Renderer Object
---------------------
-
-Handles all things OpenGL related, and draws all necessary objects.
-
 adj::SocialConnector Object
 ---------------------------
 
@@ -64,10 +69,27 @@ adj::net Namespace
 
 This namespace contains objects related to connecting with other parts of the system over the network, typically by HTTP, composed of a __Request__, __Reply__, and a __Client__.
 
+adj::Renderer Object
+--------------------
+
+Handles all things OpenGL related, and draws all necessary objects.
+
+adj::Camera Object
+------------------
+
+The camera changes the global scale and position of the objects being visualized to maintain them all on screen. It should also have functionality to center on a particular node, or set / path of nodes.
+
+adj::PlayManager Object
+-----------------------
+
+Manages the playback of __Songs__, and transitions between them. NOTE: this is not used for the current Crowdtap branch
+
 graph Namespace
 ---------------
 
 This namespace contains objects related to a particle system / spring simulation. It is heavily modeled after the [Traer physics library](http://murderandcreate.com/physics/) (read: C++ port), and as such follows Traer's own coding conventions and styles. It wasn't built from the ground up for the purposes of this visualizer. If its capabilities aren't adequate, it's probably best to rewrite these objects from the ground up rather than modifying Traer's code.
+
+The adj namespace mainly interacts with the __graph::Particle__ object, getting its position and centering the containing __GraphNode__ on that position.
 
 json Namespace
 --------------
