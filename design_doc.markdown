@@ -141,9 +141,11 @@ Here are some general points:
 Use angle brackets for #include
 -------------------------------
 
-__Right:__ #include <adj/adj_GraphNode.h>
+__Right:__ 
+    #include <adj/adj_GraphNode.h>
 
-__Wrong:__ #include "adj/adj_GraphNode.h"
+__Wrong:__ 
+    #include "adj/adj_GraphNode.h"
 
 A lot of the code doesn't conform to this. I'm working on it.
 
@@ -152,9 +154,11 @@ Include namespace in .cpp files
 
 Example: Client object in the abj::net namespace:
 
-__Right:__ adj_net_Client.cpp
+__Right:__ 
+    adj_net_Client.cpp
  
-__Wrong:__ Client.cpp
+__Wrong:__ 
+    Client.cpp
 
 This is because some copilers put all compiled files into the same directory as .o's, and if the files are named the same, they get clobbered.
 
