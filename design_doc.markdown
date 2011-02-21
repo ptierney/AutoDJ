@@ -3,45 +3,51 @@ Introduction
 ============
 
 The so called "Auto DJ" system is a collection of system to enable a dance party without the need for a (human) DJ or playlist. It is composed of three connected systems:
-
-* **Mobile-enabled social media voting system.** Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
-* **Playlist visualizer.** Displays information about user's votes and upcoming songs in a communal (read: massively projected) setting. 
-* **Graph analyzer (Sylvester).** Trims graph from a potential > 2000 songs to approx. 20 relevant, timely, important, or otherwise "hot" songs for display on the visualizer.
+re
+* __Mobile-enabled social media voting system.__ Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
+* __Playlist visualizer.__ Displays information about user's votes and upcoming songs in a communal (read: massively projected) setting. 
+* __Graph analyzer (Sylvester).__ Trims graph from a potential > 2000 songs to approx. 20 relevant, timely, important, or otherwise "hot" songs for display on the visualizer.
 
 The adj git repo contains code for the visualizer and graph analyzer. Code for the voting system is stored on a separate repo.
 
-Architecture Overview
-=====================
-
-graph Namespace
----------------
-
-This namespace contains objects related to a particle system / spring simulation. It is heavily modeled after the [Traer physics library](http://murderandcreate.com/physics/) (read: C++ port), and as such follows Traer's own coding conventions and styles. It wasn't built from the ground up for the purposes of this visualizer. If its capabilities aren't adequate, it's probably best to rewrite these objects from the ground up rather than modifying Traer's code.
+Visualizer Architecture Overview
+================================
 
 adj Namespace
 -------------
 
-This namespace concerns objects related to the visualization of data, connection with other servers, and spawns a new application window.
+This namespace concerns objects related to the visualization of data, managing connections with other servers, loading resources, and spawning a new application window.
 
 adj::GraphNode Object
 ---------------------
 
-This is the fundamental unit of the visualization. Each GraphNode contains a song (which it represents), and a graph::Particle object, linking it back to the physics simulation.
+This is the basic unit of the particle system visualization. A __GraphNode__ contains three main components: a __Song__,  a __graph::Particle__ object linking it back to the physics simulation,
+and a __CalloutBox__ object to display relevant information.
 
 adj::Song Object
 ----------------
 
-Songs objects represent songs, and should contain all information about a song, including artist, album, cover art, and some means of playing the song.
+__Song__ objects represent songs, and should contain all information about a song, including artist, album, cover art, and some means of playing the song.
+
+adj::SongFactory Object
+-----------------------
+
+The __SongFactory__ creates __Songs__, and crucially contains the location of the main directory where all the songs are contained on disk.
 
 adj::User Object
 ----------------
 
-Similar to Song, a user object contains information about a user, in particular their name and a photo. Additionally, each User contains a list of all Songs that the user has voted on.
+Similar to __Song__, a __User__ object contains information about a user, in particular their name and a photo. Additionally, each __User__ contains a list of all __Songs__ that the user has voted on.
+
+adj::UserFactory Object
+-----------------------
+
+The __UserFactory__ has two main roles: creating a __User__ object from a Json value received from the __SocialConnector__, and acting as a lookup table for other objects which have a __UserID__, but need an actual __User__ object.
 
 adj::GraphOracle Object
 -----------------------
 
-The GraphOracle is the main interface for querying the Sylvester. It builds a representation of the current state of the graph, and gets a new representation. How the GraphOracle acts on this data hasn't been decided.
+The __GraphOracle__ is the main interface for querying Sylvester. See the section on Visualizer - Sylvester connection for more information.
 
 adj::Renderer Object
 --------------------
@@ -51,6 +57,27 @@ Handles all things OpenGL related, and draws all necessary objects.
 adj::SocialConnector Object
 ---------------------------
 
+This object opens a HTTP connection with the Social Media Server, and runs requests in a background thread. It is responsible with communicating with the __VoteManager__ and the __UserFactory__ which subsequently create votes and users.
+
+adj::net Namespace
+------------------
+
+This namespace contains objects related to connecting with other parts of the system over the network, typically by HTTP, composed of a __Request__, __Reply__, and a __Client__.
+
+graph Namespace
+---------------
+
+This namespace contains objects related to a particle system / spring simulation. It is heavily modeled after the [Traer physics library](http://murderandcreate.com/physics/) (read: C++ port), and as such follows Traer's own coding conventions and styles. It wasn't built from the ground up for the purposes of this visualizer. If its capabilities aren't adequate, it's probably best to rewrite these objects from the ground up rather than modifying Traer's code.
+
+json Namespace
+--------------
+
+Files for the JsonCpp library, found [here](http://jsoncpp.sourceforge.net/).
+
+
+Social Media Server <--> Visualizer Connection
+==============================================
+
 This object connects to the "social media" part of the system, currently implemented in HTTP. The exchange is fairly straightforward: 
 
 1. Visualizer sends a request containing the timestamp of the last response it received
@@ -59,27 +86,33 @@ This object connects to the "social media" part of the system, currently impleme
 
 The visualizer's request is fairly basic (and still to be determined), but contains:
 
-* **Timestamp** of the last response
+* __Timestamp__ of the last response
 
 The media server responds with the following:
 
-* **Votes:** the songs that have been voted on, and who voted for them (specified by an ID)
-* **People:** at the moment people only have 2 values associated with them, their ID, and their name
-* **Blacklist:** IDs of people who have misbehaved or entered offensive information
-* **Timestamp:** to uniquely identify the request
+* __Votes:__ the songs that have been voted on, and who voted for them (specified by an ID)
+* __People:__ at the moment people only have 2 values associated with them, their ID, and their name
+* __Blacklist:__ IDs of people who have misbehaved or entered offensive information
+* __Timestamp:__ to uniquely identify the request
 
-adj::net Namespace
-------------------
+Note that votes and users voting are split up in this model. This allows the visualizer to create user objects (involving heavyweight operations such as loading an image from the web), in the time between the user logging into the website, and actually casting a vote.
 
-This namespace contains objects related to connecting with other parts of the system over the network, typically by HTTP.
 
-json Namespace
---------------
+Sylvester (Graph Oracle) <--> Visualizer Conection
+==================================================
 
-Files for the JsonCpp library, found [here](http://jsoncpp.sourceforge.net/).
+Initially proposed as a HTTP network connection, this may move into the visualizer binary for speed reasons. The currently proposed exchange involves:
 
-Coding Conventions
-==================
+1. The Visualizer compiles a state of its graph nodes, and their connections. This would likely contain the _number of votes for each song_, and the _time when a vote was cast_.
+2. Visualizer sends this to Sylvester.
+3. Sylvester compiles a more optimal arrangement of this graph, based on how related the songs are, the number of votes, and the time since votes.
+4. Sylvester sends a structure containing the more optimal arrangement of the graph.
+5. Visualizer merges this optimal arrangement with the currently displaying graph, possible via a "rearrangement" animation.
+
+C++ Coding Conventions
+======================
+
+The graphic components of the visualizer are writen using the [Cinder library](http://libcinder.org), and effort should be made to use as many of their built in objects as possible (Vector 3D/2D, Surface, OpenGL texture, Color, math functions such as lerp, floor, ceiling, etc..).
 
 Almost all the code conforms to Google's C++ sytle guidelines, found [here](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml). Notable exceptions to Google's style include:
 
@@ -88,8 +121,8 @@ Exceptions are used
 
 A function throws an exception if and only if it fails to do what it claims to do (presumably because it can't). When using exceptions, remember to:
 
-* **Leak no resources**
-* **Don't allow data structures to become corrupted.**
+* __Leak no resources__
+* __Don't allow data structures to become corrupted.__
 
 See *Effective C++* item 29 for more info.
 
