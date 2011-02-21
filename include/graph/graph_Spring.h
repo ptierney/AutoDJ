@@ -12,13 +12,13 @@ public:
     Spring(Particle& a, Particle& b, float ks, float d, float r);
     virtual ~Spring();
 
-    void Spring::turn_off() { on_ = false; }
-    void Spring::turn_on() { on_ = true; }
-    bool Spring::is_on() { return on_; }
-    bool Spring::is_off() { return !on_; }
+    void turn_off() { on_ = false; }
+    void turn_on() { on_ = true; }
+    bool is_on() { return on_; }
+    bool is_off() { return !on_; }
 
-    Particle& Spring::get_one_end() { return a_; }
-    Particle& Spring::get_the_other_end() { return b_; }
+    Particle& get_one_end() { return a_; }
+    Particle& get_the_other_end() { return b_; }
 
     float current_length();
     float rest_length() { return rest_length_; }
