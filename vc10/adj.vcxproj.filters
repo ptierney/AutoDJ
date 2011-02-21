@@ -28,6 +28,12 @@
     <Filter Include="Source Files\json">
       <UniqueIdentifier>{f714a35a-efd0-4d77-8282-df7439ed0e75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\adj\net">
+      <UniqueIdentifier>{c5c18e59-138f-48c7-88e5-ea1811294272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\adj\net">
+      <UniqueIdentifier>{d26be620-5e6d-4576-aa8a-db1dba3580a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AdjApp.h">
@@ -96,6 +102,18 @@
     <ClInclude Include="..\include\adj\adj_GraphOracle.h">
       <Filter>Header Files\adj</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\adj\net\adj_net_Request.h">
+      <Filter>Header Files\adj\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\adj\net\adj_net_Reply.h">
+      <Filter>Header Files\adj\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\adj\net\adj_net_Client.h">
+      <Filter>Header Files\adj\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\adj\adj_SocialConnector.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -159,6 +177,18 @@
       <Filter>Source Files\adj</Filter>
     </ClCompile>
     <ClCompile Include="..\src\adj\adj_GraphOracle.cpp">
+      <Filter>Source Files\adj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\net\adj_net_Request.cpp">
+      <Filter>Source Files\adj\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\net\adj_net_Client.cpp">
+      <Filter>Source Files\adj\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\net\adj_net_Reply.cpp">
+      <Filter>Source Files\adj\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\adj_SocialConnector.cpp">
       <Filter>Source Files\adj</Filter>
     </ClCompile>
   </ItemGroup>
