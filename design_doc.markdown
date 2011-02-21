@@ -3,7 +3,7 @@ Introduction
 ============
 
 The so called "Auto DJ" system is a collection of system to enable a dance party without the need for a (human) DJ or playlist. It is composed of three connected systems:
-re
+
 * __Mobile-enabled social media voting system.__ Allows participants to request songs to be played. Their identities are accessed via this system, allowing names, and photos (and potentially other things), to be accessed by other parts of the system.
 * __Playlist visualizer.__ Displays information about user's votes and upcoming songs in a communal (read: massively projected) setting. 
 * __Graph analyzer (Sylvester).__ Trims graph from a potential > 2000 songs to approx. 20 relevant, timely, important, or otherwise "hot" songs for display on the visualizer.
