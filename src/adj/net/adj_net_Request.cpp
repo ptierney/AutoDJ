@@ -4,7 +4,7 @@
 namespace adj {
 namespace net {
 
-Request::Request() {
+Request::Request(const std::string& val) : value_(val) {
 
 }
 

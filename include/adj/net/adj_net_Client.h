@@ -46,7 +46,6 @@ private:
     std::shared_ptr<boost::asio::ip::tcp::socket> socket_;
     boost::asio::ip::tcp::resolver::iterator iterator_;
     std::shared_ptr<boost::asio::io_service> timer_io_;
-    std::shared_ptr<boost::asio::deadline_timer> t_;
 
     Client& client_;
     Request request_;
@@ -67,6 +66,7 @@ public:
     void update();
 
     void register_reply(std::shared_ptr<Reply>);
+    void add_receivable(ReceivableInterface&);
 
     void send_request(const Request&);
 
@@ -84,7 +84,7 @@ private:
     std::deque<ThreadPtr> threads_;
 
     // when a response comes back, let these receivables know
-    std::vector<ReceivableInterfacePtr> receivables_;
+    std::vector<ReceivableInterface*> receivables_;
 
     std::string address_;
 

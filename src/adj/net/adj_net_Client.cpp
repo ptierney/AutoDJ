@@ -16,9 +16,6 @@ ClientQuery::ClientQuery(Client& c, const Request& r)
     timer_io_ = std::shared_ptr<boost::asio::io_service>(
             new boost::asio::io_service());
 
-    t_ = std::shared_ptr<boost::asio::deadline_timer>(
-        new boost::asio::deadline_timer(*timer_io_, boost::posix_time::seconds(1)));
-
     address_ = client_.address();
     port_ = boost::lexical_cast<std::string>(client_.port());
 
@@ -33,7 +30,8 @@ void ClientQuery::operator()() {
         connect();
         send_request();
         receive_reply();
-    } catch (...) {
+    } catch (std::runtime_error err) {
+        ci::app::console() << err.what() << std::endl;
         return;
     }
 }
@@ -54,8 +52,6 @@ void ClientQuery::connect() {
         socket_->connect(*iterator_);
 
     } catch (...) {
-        ci::app::console() << "Error connecting to server" << std::endl;
-
         throw (std::runtime_error("Could not connect to server"));
     }
 
@@ -68,7 +64,8 @@ void ClientQuery::connect() {
         if (t_counter > connect_timeout_)
             throw (std::runtime_error("Could not connect to server"));
 
-        t_->wait(); // I don't think this is threadsafe
+        boost::asio::deadline_timer t(*timer_io_, boost::posix_time::seconds(1));
+        t.wait();
         
         ++t_counter;
     }
@@ -86,14 +83,13 @@ void ClientQuery::send_request() {
     std::string write_string;
 
     // just write the request
-    write_string += "GET /" + request_string + "HTTP/1.1\r\n";
+    write_string += "GET " + request_string + "HTTP/1.1\r\n";
     write_string += "\r\n";
 
     try {
         ret = boost::asio::write(*socket_, 
             boost::asio::buffer(write_string));
     } catch (...) {
-        ci::app::console() << "Could not write to server" << std::endl;
         throw (std::runtime_error("Could not write to server"));
     }
 
@@ -104,7 +100,7 @@ void ClientQuery::send_request() {
 void ClientQuery::receive_reply() {
     int t_counter = 0;
 
-    for (;;) {
+   for (;;) {
 		if (socket_->available() > 0u) {
 			socket_read();
             break;
@@ -113,31 +109,47 @@ void ClientQuery::receive_reply() {
         if (t_counter > reply_timeout_)
             throw (std::runtime_error("Reply timout"));
 
-        t_->wait();
+        boost::asio::deadline_timer t(*timer_io_, boost::posix_time::seconds(1));
+        t.wait();
+
         ++t_counter;
     }
 }
 
 void ClientQuery::socket_read() {
     std::string buf_incoming;
+    std::string buf;
+    size_t amount_received;
+
     int t_counter = 0;
 
     for (;;) {
-        socket_->read_some(boost::asio::buffer(buf_incoming));
 
-        if (buf_incoming.find("\r\n\r\n") != std::string::npos)
+        do {
+            buf_incoming.clear();
+            amount_received = socket_->receive(boost::asio::buffer(buf_incoming));
+            buf += buf_incoming;
+        } while (amount_received != 0);
+
+        ci::app::console() << buf_incoming << std::endl;
+
+        if (buf.find("\r\n\r\n") != std::string::npos)
             break;
 
         if (t_counter > receive_data_timeout_)
             throw (std::runtime_error("Receive data timout"));
 
-        t_->wait();
+        boost::asio::deadline_timer t(*timer_io_, boost::posix_time::seconds(1));
+        t.wait();
+
         ++t_counter;
     } 
 
+    ci::app::console() << buf << std::endl;
+
     // TODO: FIX THIS; VERY GHETTO
-    size_t json_start = buf_incoming.find("{");
-    std::string content = buf_incoming.substr(json_start);
+    size_t json_start = buf.find("{");
+    std::string content = buf.substr(json_start);
 
     std::shared_ptr<Reply> r(new Reply(content));
     client_.register_reply(r);
@@ -176,7 +188,7 @@ void Client::parse_replies() {
     for (std::deque<std::shared_ptr<Reply> >::iterator it = replies_.begin();
         it != replies_.end(); ++it) {
 
-        for (std::vector<ReceivableInterfacePtr>::iterator rec_it = 
+        for (std::vector<ReceivableInterface*>::iterator rec_it = 
             receivables_.begin(); rec_it != receivables_.end(); ++rec_it) {
 
             (*rec_it)->receive_reply(*it);
@@ -206,6 +218,10 @@ void Client::register_reply(std::shared_ptr<Reply> reply) {
     boost::mutex::scoped_lock lock(reply_mutex_);
 
     replies_.push_back(reply);
+}
+
+void Client::add_receivable(ReceivableInterface& r) {
+    receivables_.push_back(&r);
 }
 
 }
