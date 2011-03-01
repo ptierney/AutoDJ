@@ -205,8 +205,8 @@ void GraphNode::register_just_added() {
 
     display_timer_ = boost::posix_time::microsec_clock::universal_time();
 
-    is_path_delaying_ = true;
-    path_trigger_timer_ = boost::posix_time::microsec_clock::universal_time();
+    //is_path_delaying_ = true;
+    //path_trigger_timer_ = boost::posix_time::microsec_clock::universal_time();
 }
 
 void GraphNode::register_path_activate() {
