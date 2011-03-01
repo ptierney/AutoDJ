@@ -89,6 +89,22 @@ void GraphNode::hide() {
     visible_ = false;
 }
 
+float GraphNode::get_width() {
+    return 2.0f * circle_radius_;
+}
+
+float GraphNode::get_height() {
+    return 2.0f * circle_radius_;
+}
+
+float GraphNode::get_pos_x() {
+    return particle_->position().x;
+}
+
+float GraphNode::get_pos_y() {
+    return particle_->position().y;
+}
+
 void GraphNode::draw() {
     if (!visible_)
         return;
@@ -122,8 +138,8 @@ void GraphNode::draw_current_song() {
 
 void GraphNode::draw_node() {
     // TODO: cache this value
-    ci::gl::scale(ci::Vec3f::one() * ci::lmap<float>(distance_from_current_,
-        0, 10, max_scale_, min_scale_));
+    //ci::gl::scale(ci::Vec3f::one() * ci::lmap<float>(distance_from_current_,
+    //    0, 10, max_scale_, min_scale_));
 
     if (highlight_connection()) {
         ci::gl::pushMatrices();

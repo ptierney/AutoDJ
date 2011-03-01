@@ -1,19 +1,21 @@
 
 #include <deque>
+#include <algorithm>
 
-#include "cinder/gl/gl.h"
-#include "cinder/Color.h"
+#include <cinder/gl/gl.h>
+#include <cinder/Color.h>
 
-#include "graph/graph_Particle.h"
-#include "graph/graph_ParticleSystem.h"
-#include "graph/graph_Spring.h"
+#include <graph/graph_Particle.h>
+#include <graph/graph_ParticleSystem.h>
+#include <graph/graph_Spring.h>
 
-#include "AdjApp.h"
-#include "adj/adj_Renderer.h"
-#include "adj/adj_Camera.h"
-#include "adj/adj_GraphPhysics.h"
-#include "adj/adj_GraphNodeFactory.h"
-#include "adj/adj_GraphNode.h"
+#include <AdjApp.h>
+#include <adj/adj_Renderer.h>
+#include <adj/adj_Camera.h>
+#include <adj/adj_GraphPhysics.h>
+#include <adj/adj_GraphNodeFactory.h>
+#include <adj/adj_GraphNode.h>
+#include <adj/adj_GraphicItem.h>
 
 namespace adj {
 
@@ -80,6 +82,13 @@ void Renderer::draw_connections() {
     glEnd();
 }
 
+void Renderer::register_new_graphic_item(GraphicItem* item) {
+    if (std::find(graphic_items_.begin(), graphic_items_.end(), item) !=
+        graphic_items_.end())
+        return;
+
+    graphic_items_.push_back(item);
+}
 
 Renderer* Renderer::instance_ = NULL;
 

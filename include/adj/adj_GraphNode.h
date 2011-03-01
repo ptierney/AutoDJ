@@ -3,14 +3,15 @@
 
 #include <vector>
 
-#include "boost/date_time/posix_time/posix_time.hpp"
+#include <boost/date_time/posix_time/posix_time.hpp>
 
-#include "cinder/gl/gl.h"
-#include "cinder/gl/Texture.h"
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
 
-#include "adj/adj_Adj.h"
-#include "adj/adj_GraphNodeFactory.h"
-#include "adj/adj_PlayManager.h"
+#include <adj/adj_Adj.h>
+#include <adj/adj_GraphNodeFactory.h>
+#include <adj/adj_PlayManager.h>
+#include <adj/adj_GraphicItem.h>
 
 namespace graph {
     class Particle;
@@ -31,7 +32,7 @@ typedef std::shared_ptr<CalloutBox> CalloutBoxPtr;
 
 typedef std::shared_ptr<struct Vote> VotePtr;
 
-class GraphNode {
+class GraphNode : public GraphicItem {
 public:
     GraphNode();
     ~GraphNode();
@@ -39,6 +40,11 @@ public:
     void init();
 
     void draw();
+
+    float get_width();
+    float get_height();
+    float get_pos_x();
+    float get_pos_y();
 
     // checks to see if the child has already been added 
     void add_child(GraphNodePtr);

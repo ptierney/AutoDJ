@@ -4,16 +4,18 @@
 // CalloutBoxes display text about the song, it's place in the queue,
 // and the names and faces of the people who voted on the song
 
-#include "adj/adj_Adj.h"
+#include <adj/adj_Adj.h>
 
 #include <string>
 
-#include "cinder/gl/gl.h"
-#include "cinder/gl/Texture.h"
-#include "cinder/Color.h"
-#include "cinder/cairo/Cairo.h"
-#include "cinder/Text.h"
-#include "cinder/Font.h"
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
+#include <cinder/Color.h>
+#include <cinder/cairo/Cairo.h>
+#include <cinder/Text.h>
+#include <cinder/Font.h>
+
+#include <adj/adj_GraphicItem.h>
 
 namespace adj {
 
@@ -21,7 +23,7 @@ class GraphNode;
 
 typedef std::shared_ptr<class graph::Particle> ParticlePtr;
 
-class CalloutBox {
+class CalloutBox : public GraphicItem {
 public:
     CalloutBox(GraphNode& parent);
     void init();
@@ -29,6 +31,11 @@ public:
     void update_contents();
 
     void draw();
+
+    float get_width();
+    float get_height();
+    float get_pos_x();
+    float get_pos_y();
 
     bool visible() { return visible_; }
     void show();

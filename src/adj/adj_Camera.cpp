@@ -1,14 +1,15 @@
 
-#include "cinder/gl/gl.h"
-#include "cinder/CinderMath.h"
+#include <cinder/gl/gl.h>
+#include <cinder/CinderMath.h>
 
-#include "graph/graph_ParticleSystem.h"
-#include "graph/graph_Particle.h"
+#include <graph/graph_ParticleSystem.h>
+#include <graph/graph_Particle.h>
 
-#include "adj/adj_Camera.h"
-#include "AdjApp.h"
-#include "adj/adj_GraphPhysics.h"
-#include "adj/adj_CalloutBox.h"
+#include <adj/adj_Camera.h>
+#include <AdjApp.h>
+#include <adj/adj_GraphPhysics.h>
+#include <adj/adj_CalloutBox.h>
+#include <adj/adj_Renderer.h>
 
 namespace adj {
 
@@ -48,16 +49,33 @@ void Camera::transform_draw() {
 }
 
 void Camera::update_centroid() {
-    if (p_system_->particles_.size() < 2)
+    std::vector<GraphicItem*>& g_items = 
+        Renderer::instance().graphic_items();
+
+    if (g_items.size() < 2)
         return;
 
-    ParticlePtr first = p_system_->particles_[0];
+    GraphicItem& first = *(g_items[0]);
 
-    float x_min = first->position().x;
-    float x_max = first->position().x;
-    float y_min = first->position().y;
-    float y_max = first->position().y;
+    float x_min = first.get_pos_x();
+    float x_max = first.get_pos_y();
+    float y_min = first.get_pos_y();
+    float y_max = first.get_pos_y();
 
+    for (std::vector<GraphicItem*>::iterator it = g_items.begin();
+        it != g_items.end(); ++it) {
+
+        GraphicItem& g = *(*it);
+        float half_w = g.get_width() / 2.0f;
+        float half_h = g.get_height() / 2.0f;
+
+        x_max = ci::math<float>::max(x_max, g.get_pos_x() + half_w);
+        x_min = ci::math<float>::min(x_min, g.get_pos_x() - half_w);
+        y_min = ci::math<float>::min(y_min, g.get_pos_y() - half_h);
+        y_max = ci::math<float>::max(y_max, g.get_pos_y() + half_h);
+    }
+
+    /*
     // check all node particles for bounds
     for (std::vector<ParticlePtr>::iterator it = p_system_->particles_.begin();
         it != p_system_->particles_.end(); ++it) {
@@ -84,6 +102,7 @@ void Camera::update_centroid() {
         y_min = ci::math<float>::min(y_min, p.position().y - height_max * 0.5f);
         y_max = ci::math<float>::max(y_max, p.position().y + height_max * 0.5f);
     }
+    */
 
     float delta_x = x_max - x_min;
     float delta_y = y_max - y_min;
@@ -91,8 +110,8 @@ void Camera::update_centroid() {
     float target_x = x_min + 0.5f * delta_x;
     float target_y = y_min + 0.5f * delta_y;
 
-    centroid_.x = (target_x - centroid_.x) * centroid_damping_;
-    centroid_.y = (target_y - centroid_.y) * centroid_damping_;
+    centroid_.x += (target_x - centroid_.x) * centroid_damping_;
+    centroid_.y += (target_y - centroid_.y) * centroid_damping_;
 
     centroid_ *= -1.0f;
 

@@ -125,6 +125,22 @@ void CalloutBox::update_box_position() {
     box_coords_[3] = box_lower_left_;
 }
 
+float CalloutBox::get_width() {
+    return surface_size_.x * scale_;
+}
+
+float CalloutBox::get_height() {
+    return surface_size_.y * scale_;
+}
+
+float CalloutBox::get_pos_x() {
+    return box_position_.x;
+}
+
+float CalloutBox::get_pos_y() {
+    return box_position_.y;
+}
+
 void CalloutBox::draw() {
     if (visible_ == false)
         return;

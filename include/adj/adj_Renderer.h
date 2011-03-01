@@ -1,7 +1,9 @@
 
 #pragma once
 
-#include "cinder/Color.h"
+#include <vector>
+
+#include <cinder/Color.h>
 
 namespace graph {
     class Particle;
@@ -9,6 +11,8 @@ namespace graph {
 }
 
 namespace adj {
+
+class GraphicItem;
 
 typedef std::shared_ptr<graph::Particle> ParticlePtr;
 typedef std::shared_ptr<graph::ParticleSystem> ParticleSystemPtr;
@@ -22,6 +26,9 @@ public:
     void draw();
 
     const ci::Color& background_color() { return background_color_; } 
+
+    void register_new_graphic_item(GraphicItem*);
+    std::vector<GraphicItem*>& graphic_items() { return graphic_items_; }
 
 private:
     Renderer();
@@ -40,6 +47,8 @@ private:
     float node_size_;
 
     ParticleSystemPtr p_system_;
+
+    std::vector<GraphicItem*> graphic_items_;
 
 };
 
