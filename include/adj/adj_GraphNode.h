@@ -129,6 +129,10 @@ private:
     bool visible_;
 
     float circle_radius_;
+
+    ci::Surface highlight_circle_;
+    ci::gl::Texture highlight_circle_texture_;
+    float circle_texture_scale_;
 };
 
 }

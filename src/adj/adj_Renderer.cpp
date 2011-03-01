@@ -64,13 +64,14 @@ void Renderer::draw_connections() {
     for (std::vector<std::pair<GraphNodePtr, GraphNodePtr> >::iterator it = 
         edges.begin(); it != edges.end(); ++it) {
 
-        if (it->first->highlight_connection()) {
-            glLineWidth(highlight_width_);
-            ci::gl::color(it->first->node_highlight_color());
-        } else {
-            glLineWidth(line_width_);
-            ci::gl::color(network_color_);
-        }
+        // removed due to gl line weight problems
+        //if (it->first->highlight_connection()) {
+        //    glLineWidth(highlight_width_);
+        //    ci::gl::color(it->first->node_highlight_color());
+        //}
+
+        glLineWidth(line_width_);
+        ci::gl::color(network_color_);
 
         glVertex2f(it->first->particle()->position());
         glVertex2f(it->second->particle()->position());

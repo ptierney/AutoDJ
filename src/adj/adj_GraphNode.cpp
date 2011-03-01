@@ -17,6 +17,8 @@
 #include "adj/adj_CalloutBox.h"
 #include "adj/adj_VoteManager.h"
 
+#include <Resources.h>
+
 namespace adj {
 
 GraphNode::GraphNode() {
@@ -45,6 +47,10 @@ void GraphNode::init() {
     // Graph nodes must have a song at the moment
     if (song_.get() == NULL)
         throw(std::runtime_error("Trying to create a graph node without a song"));
+
+    highlight_circle_ = ci::loadImage(ci::app::loadResource(RES_NODE_HIGHLIGHT));
+    highlight_circle_texture_ = ci::gl::Texture(highlight_circle_);
+    circle_texture_scale_ = circle_radius_ * 2.0f / highlight_circle_.getWidth();
 }
 
 GraphNode::~GraphNode() {
@@ -120,8 +126,12 @@ void GraphNode::draw_node() {
         0, 10, max_scale_, min_scale_));
 
     if (highlight_connection()) {
-        ci::gl::color(node_highlight_color_);
-        ci::gl::drawStrokedCircle(ci::Vec2f::zero(), circle_radius_);
+        ci::gl::pushMatrices();
+            ci::gl::translate(ci::Vec2f(-circle_radius_, -circle_radius_));
+            ci::gl::scale(ci::Vec3f::one() * circle_texture_scale_);
+            ci::gl::color(ci::Color::white());
+            ci::gl::draw(highlight_circle_texture_);
+        ci::gl::popMatrices();
     } else {
         ci::gl::color(node_color_);
         ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
