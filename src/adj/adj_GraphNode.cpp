@@ -216,7 +216,7 @@ void GraphNode::register_path_activate() {
     callout_box_->show();
     display_timer_ = boost::posix_time::microsec_clock::universal_time();
 
-        // if you've reached the now playing (or transitioning) song, 
+    // if you've reached the now playing (or transitioning) song, 
     // don't bother activating the path
     if (song_->is_playing())
         return;

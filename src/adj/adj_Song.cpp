@@ -36,7 +36,7 @@ void Song::init() {
     std::string song_file = SongFactory::instance().base_song_directory_path() + 
         file_name_;
 
-    source_ = ci::audio::load(song_file);
+    //source_ = ci::audio::load(song_file);
 }
 
 // TODO: this could cause bugs when dealing with transition times
@@ -44,7 +44,7 @@ void Song::play() {
     if (is_playing_)
         return;
 
-    track_ = ci::audio::Output::addTrack(source_);
+    //track_ = ci::audio::Output::addTrack(source_);
 
     play_start_ = SongFactory::instance().get_current_time();
 
@@ -54,16 +54,20 @@ void Song::play() {
 }
 
 void Song::pause() {
+    return;
+
     if (is_playing_ == false)
         return;
 
-    track_->stop();
+    //track_->stop();
 
     is_playing_ = false;
 }
 
 void Song::stop() {
-    track_->stop();
+    return;
+
+    //track_->stop();
 
     is_playing_ = false;
 
