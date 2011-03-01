@@ -147,7 +147,8 @@ void GraphNodeFactory::pair_nodes(SongId new_id, SongId existing_id) {
     existing_node->add_child(new_node);
     new_node->parent_ = existing_node;
 
-    add_edge(std::pair<GraphNodePtr, GraphNodePtr>(new_node, existing_node));
+	std::pair<GraphNodePtr, GraphNodePtr> p(new_node, existing_node);
+    add_edge(p);
 
     new_node->register_just_added();
     new_node->show();
