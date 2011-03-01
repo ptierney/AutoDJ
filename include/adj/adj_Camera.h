@@ -45,6 +45,9 @@ private:
     float scale_;
     ci::Vec2f centroid_;
 
+    float scale_damping_;
+    float centroid_damping_;
+
     ParticleSystemPtr p_system_;
     ParticleSystemPtr box_p_system_;
 };

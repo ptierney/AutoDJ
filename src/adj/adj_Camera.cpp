@@ -20,6 +20,9 @@ Camera::Camera() {
     height_border_ = 15.0f;
     scale_ = 1.0f;
     centroid_ = ci::Vec2f::zero();
+
+    scale_damping_ = 0.01;
+    centroid_damping_ = 0.01;
 }
 
 void Camera::init() {
@@ -85,8 +88,11 @@ void Camera::update_centroid() {
     float delta_x = x_max - x_min;
     float delta_y = y_max - y_min;
 
-    centroid_.x = x_min + 0.5f * delta_x;
-    centroid_.y = y_min + 0.5f * delta_y;
+    float target_x = x_min + 0.5f * delta_x;
+    float target_y = y_min + 0.5f * delta_y;
+
+    centroid_.x = (target_x - centroid_.x) * centroid_damping_;
+    centroid_.y = (target_y - centroid_.y) * centroid_damping_;
 
     centroid_ *= -1.0f;
 
@@ -95,7 +101,7 @@ void Camera::update_centroid() {
     float height_scale = static_cast<float>(AdjApp::instance().getWindowHeight()) / 
         (delta_y + height_border_);
 
-    scale_ = ci::math<float>::min(width_scale, height_scale);
+    scale_ += (ci::math<float>::min(width_scale, height_scale) - scale_) * scale_damping_;
 }
 
 Camera& Camera::instance() {
