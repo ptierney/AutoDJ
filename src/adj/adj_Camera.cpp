@@ -44,8 +44,6 @@ void Camera::transform_draw() {
         AdjApp::instance().getWindowSize()) / 2.0f);
     ci::gl::translate(centroid_);
     ci::gl::scale(ci::Vec3f::one() * scale_);
-    
-    
 }
 
 void Camera::update_centroid() {
@@ -90,8 +88,12 @@ void Camera::update_centroid() {
         (delta_x + width_border_);
     float height_scale = static_cast<float>(AdjApp::instance().getWindowHeight()) / 
         (delta_y + height_border_);
+    
+    float abs_scale = width_scale < 1.0f || height_scale < 1.0f ? 
+        ci::math<float>::min(width_scale, height_scale) :
+        ci::math<float>::max(width_scale, height_scale);
 
-    scale_ += (ci::math<float>::min(width_scale, height_scale) - scale_) * scale_damping_;
+    scale_ += (abs_scale - scale_) * scale_damping_;
 }
 
 Camera& Camera::instance() {

@@ -24,8 +24,11 @@ namespace adj {
 GraphNode::GraphNode() {
     is_valid_ = false;
     circle_radius_ = 5.0f;
-    node_color_ = ci::ColorA(0.839f, 0.839f, 0.839f, 1.0f);
-    node_highlight_color_ = ci::ColorA(0.0f, 0.643f, 1.0f, 1.0f);
+    // Crowdtap medium grey
+    node_color_ = ci::ColorA(120.0f / 255.f, 122.f / 255.f, 
+        126.f / 255.f, 1.0f);
+    // Crowdtap red
+    node_highlight_color_ = ci::ColorA(255.f / 255.f, 51.f / 255.f, 0.f, 1.f);
     scale_ = 1.0f;
     max_scale_ = 1.0f;
     min_scale_ = 0.35f;

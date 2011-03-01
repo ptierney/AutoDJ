@@ -21,7 +21,9 @@ namespace adj {
 
 Renderer::Renderer() {
     node_size_ = 10.0f;
-    background_color_ = ci::Color::black();
+    // Crowdtap dark grey
+    background_color_ = ci::Color(30.f / 255.0f, 32.f / 255.0f,
+        35.0f / 255.0f);
     network_color_ = ci::ColorA(1.0f, 1.0f, 1.0f, 0.25f);
     line_width_ = 6.0f;
     highlight_width_ = line_width_ * 2.0f;
