@@ -22,8 +22,8 @@ Camera::Camera() {
     scale_ = 1.0f;
     centroid_ = ci::Vec2f::zero();
 
-    scale_damping_ = 0.01;
-    centroid_damping_ = 0.01;
+    scale_damping_ = 0.08;
+    centroid_damping_ = 0.08;
 }
 
 void Camera::init() {
@@ -36,15 +36,15 @@ void Camera::setup() {
 }
 
 void Camera::update() {
-    // monitor time and update tweening
     update_centroid();
 }
 
 void Camera::transform_draw() {
     ci::gl::translate(static_cast<ci::Vec2f>(
         AdjApp::instance().getWindowSize()) / 2.0f);
-    ci::gl::scale(ci::Vec3f::one() * scale_);
     ci::gl::translate(centroid_);
+    ci::gl::scale(ci::Vec3f::one() * scale_);
+    
     
 }
 
