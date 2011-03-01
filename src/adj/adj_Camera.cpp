@@ -75,35 +75,6 @@ void Camera::update_centroid() {
         y_max = ci::math<float>::max(y_max, g.get_pos_y() + half_h);
     }
 
-    /*
-    // check all node particles for bounds
-    for (std::vector<ParticlePtr>::iterator it = p_system_->particles_.begin();
-        it != p_system_->particles_.end(); ++it) {
-
-        graph::Particle& p = *(*it);
-
-        x_max = ci::math<float>::max(x_max, p.position().x);
-        x_min = ci::math<float>::min(x_min, p.position().x);
-        y_min = ci::math<float>::min(y_min, p.position().y);
-        y_max = ci::math<float>::max(y_max, p.position().y);
-    }
-
-    float width_max = CalloutBox::max_width();
-    float height_max = CalloutBox::max_height();
-
-    // check all the box particles for their bounds
-    for (std::vector<ParticlePtr>::iterator it = box_p_system_->particles_.begin();
-        it != box_p_system_->particles_.end(); ++it) {
-
-        graph::Particle& p = *(*it);
-
-        x_max = ci::math<float>::max(x_max, p.position().x + width_max * 0.5f);
-        x_min = ci::math<float>::min(x_min, p.position().x - width_max * 0.5f);
-        y_min = ci::math<float>::min(y_min, p.position().y - height_max * 0.5f);
-        y_max = ci::math<float>::max(y_max, p.position().y + height_max * 0.5f);
-    }
-    */
-
     float delta_x = x_max - x_min;
     float delta_y = y_max - y_min;
 
