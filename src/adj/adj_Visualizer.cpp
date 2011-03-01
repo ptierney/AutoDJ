@@ -13,7 +13,8 @@
 #include <adj/adj_PlayManager.h>
 #include <adj/adj_VoteManager.h>
 #include <adj/adj_User.h>
-#include <adj/adj_SocialConnector.h>
+//#include <adj/adj_SocialConnector.h>
+
 
 namespace adj {
 
@@ -53,7 +54,7 @@ void Visualizer::update() {
     GraphNodeFactory::instance().update();
     UserFactory::instance().update();
     Camera::instance().update(); // updates centroid
-    SocialConnector::instance().update();
+    //SocialConnector::instance().update();
 }
 
 void Visualizer::draw() {
@@ -61,7 +62,7 @@ void Visualizer::draw() {
 }
 
 void Visualizer::shutdown() {
-    SocialConnector::instance().cleanup();
+    //SocialConnector::instance().cleanup();
     GraphNodeFactory::cleanup();
     SongFactory::cleanup();
     GraphPhysics::cleanup();
@@ -87,8 +88,8 @@ bool Visualizer::key_down(ci::app::KeyEvent key) {
         PlayManager::instance().next_song();
     else if (key.getChar() == 's')
         PlayManager::instance().switch_to_next_song();
-    else if (key.getChar() == '1')
-        SocialConnector::instance().test_connect();
+    //else if (key.getChar() == '1')
+    //   SocialConnector::instance().test_connect();
 
     return true;
 }

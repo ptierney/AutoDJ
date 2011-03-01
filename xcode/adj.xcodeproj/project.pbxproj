@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		CD245F55131D5B1700BA37CB /* adj_GraphicItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD245F54131D5B1700BA37CB /* adj_GraphicItem.cpp */; };
+		CD245F5C131D5B6100BA37CB /* blue_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = CD245F5B131D5B6100BA37CB /* blue_ring.png */; };
 		CDF9CCA91311DE6B0094E56F /* adj_CalloutBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC8E1311DE6B0094E56F /* adj_CalloutBox.cpp */; };
 		CDF9CCAA1311DE6B0094E56F /* adj_Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC8F1311DE6B0094E56F /* adj_Camera.cpp */; };
 		CDF9CCAB1311DE6B0094E56F /* adj_GraphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC901311DE6B0094E56F /* adj_GraphNode.cpp */; };
@@ -53,6 +55,9 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* adj-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "adj-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* adj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adj.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD245F53131D5B0900BA37CB /* adj_GraphicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adj_GraphicItem.h; sourceTree = "<group>"; };
+		CD245F54131D5B1700BA37CB /* adj_GraphicItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_GraphicItem.cpp; sourceTree = "<group>"; };
+		CD245F5B131D5B6100BA37CB /* blue_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blue_ring.png; path = ../resources/blue_ring.png; sourceTree = SOURCE_ROOT; };
 		CDF9CC8E1311DE6B0094E56F /* adj_CalloutBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_CalloutBox.cpp; sourceTree = "<group>"; };
 		CDF9CC8F1311DE6B0094E56F /* adj_Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_Camera.cpp; sourceTree = "<group>"; };
 		CDF9CC901311DE6B0094E56F /* adj_GraphNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_GraphNode.cpp; sourceTree = "<group>"; };
@@ -191,6 +196,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CD245F5B131D5B6100BA37CB /* blue_ring.png */,
 				CDF9CD691311E5EF0094E56F /* isocpeui.ttf */,
 				CDF9CD6A1311E5EF0094E56F /* isocpeur.ttf */,
 				CDF9CD511311E4BF0094E56F /* defaulticon.jpg */,
@@ -231,6 +237,7 @@
 		CDF9CC8D1311DE6B0094E56F /* adj */ = {
 			isa = PBXGroup;
 			children = (
+				CD245F54131D5B1700BA37CB /* adj_GraphicItem.cpp */,
 				CDF9CC8E1311DE6B0094E56F /* adj_CalloutBox.cpp */,
 				CDF9CC8F1311DE6B0094E56F /* adj_Camera.cpp */,
 				CDF9CC901311DE6B0094E56F /* adj_GraphNode.cpp */,
@@ -289,6 +296,7 @@
 		CDF9CCC21311DE7D0094E56F /* adj */ = {
 			isa = PBXGroup;
 			children = (
+				CD245F53131D5B0900BA37CB /* adj_GraphicItem.h */,
 				CDF9CCC31311DE7D0094E56F /* adj_Adj.h */,
 				CDF9CCC41311DE7D0094E56F /* adj_CalloutBox.h */,
 				CDF9CCC51311DE7D0094E56F /* adj_Camera.h */,
@@ -391,6 +399,7 @@
 				CDF9CD521311E4BF0094E56F /* defaulticon.jpg in Resources */,
 				CDF9CD6B1311E5EF0094E56F /* isocpeui.ttf in Resources */,
 				CDF9CD6C1311E5EF0094E56F /* isocpeur.ttf in Resources */,
+				CD245F5C131D5B6100BA37CB /* blue_ring.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +431,7 @@
 				CDF9CCBD1311DE6B0094E56F /* json_reader.cpp in Sources */,
 				CDF9CCBE1311DE6B0094E56F /* json_value.cpp in Sources */,
 				CDF9CCC01311DE6B0094E56F /* json_writer.cpp in Sources */,
+				CD245F55131D5B1700BA37CB /* adj_GraphicItem.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +481,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(CINDER_PATH)/boost",
 					../include,
+					"$(CINDER_PATH)/include",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder_d.a";
@@ -491,6 +502,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(CINDER_PATH)/boost",
 					../include,
+					"$(CINDER_PATH)/include",
 				);
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder.a";
 				PREBINDING = NO;
