@@ -50,7 +50,11 @@ public:
 
     // checks to see if the child has already been added 
     void add_child(GraphNodePtr);
+    void remove_child(GraphNodePtr);
     const std::vector<GraphNodePtr>& children() { return children_; }
+
+    // this is probably a Bad Thing....
+    void delete_parent() { parent_.reset(); }
 
     friend class GraphNodeFactory;
 

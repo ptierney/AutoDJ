@@ -174,15 +174,23 @@ void GraphNode::draw_node() {
 }
 
 void GraphNode::add_child(GraphNodePtr child) {
-    // check children_ to see if it already contains child
-    // TODO: replace this with a proper std::algorithm
-    for (std::vector<GraphNodePtr>::const_iterator it = children_.begin();
-        it != children_.end(); ++it) {
-        if (it->get() == child.get())
-            return;
-    }
+    std::vector<GraphNodePtr>::iterator it = std::find(
+        children_.begin(), children_.end(), child);
+
+    if (it != children_.end())
+        return;
 
     children_.push_back(child);
+}
+
+void GraphNode::remove_child(GraphNodePtr child) {
+    std::vector<GraphNodePtr>::iterator it = std::find(
+        children_.begin(), children_.end(), child);
+
+    if (it == children_.end())
+        return;
+
+    children_.erase(it);
 }
 
 void GraphNode::update_distance_from_current() {

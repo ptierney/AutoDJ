@@ -65,6 +65,18 @@ void NowPlayingHeadline::create_cairo_surface() {
     texture_ = ci::gl::Texture(surface_->getSurface());
 }
 
+void NowPlayingHeadline::remove_now_playing() {
+    now_playing_.reset();
+}
+
+void NowPlayingHeadline::remove_now_playing(GraphNodePtr node) {
+    if (node != now_playing_)
+        return;
+
+    now_playing_.reset();
+}
+
+
 NowPlayingHeadline& NowPlayingHeadline::instance() {
     if (instance_ == NULL) {
         instance_ = new NowPlayingHeadline();

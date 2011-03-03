@@ -23,6 +23,9 @@ public:
 
     static NowPlayingHeadline& instance();
 
+    void remove_now_playing();
+    void remove_now_playing(GraphNodePtr);
+
 private:
     void create_cairo_surface();
 
