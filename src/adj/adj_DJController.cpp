@@ -71,14 +71,17 @@ void DJController::transition() {
     now_playing->set_is_current_song(true);
 
     std::vector<GraphNodePtr>& nodes = GraphNodeFactory::instance().nodes();
+	
+	std::pair<GraphNodePtr, GraphNodePtr> temp_pair;
 
     for (std::vector<GraphNodePtr>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
         if (*it == now_playing)
             continue;
 
         GraphPhysics::instance().link_nodes(now_playing, *it);
-        GraphNodeFactory::instance().add_edge(std::pair<GraphNodePtr, GraphNodePtr>(
-            now_playing, *it));
+		
+		temp_pair = std::pair<GraphNodePtr, GraphNodePtr>(now_playing, *it);
+        GraphNodeFactory::instance().add_edge(temp_pair);
     }
 
     // add edges
