@@ -206,8 +206,8 @@ void CalloutBox::render_connection() {
 
     ci::Vec2f surface_origin(leftmost_x, topmost_y);
 
-    float surface_width = width / scale_;
-    float surface_height = height / scale_;
+    float surface_width = width / scale_ + line_width_ / scale_;
+    float surface_height = height / scale_ + line_width_ / scale_;
 
     connect_surface_ = std::shared_ptr<ci::cairo::SurfaceImage>(new 
         ci::cairo::SurfaceImage(surface_width, surface_height, true));
@@ -219,6 +219,10 @@ void CalloutBox::render_connection() {
         node_.node_highlight_color().g, node_.node_highlight_color().b);
 
     context_setup_dash(connect_context_);
+
+    ci::Vec2f width_vec(line_width_, line_width_);
+
+    surface_origin -= width_vec / 2.0f;
 
     connect_context_->line((node_pos - surface_origin) / scale_,
         (a - surface_origin) / scale_);

@@ -12,7 +12,7 @@ namespace graph {
 
 ParticleSystem::ParticleSystem() {
     gravity_ = ci::Vec2f::zero();
-    drag_ = 0.001f;
+    drag_ = 0.0000001f;
 }
 
 ParticleSystem::ParticleSystem(ci::Vec2f gravity, float somedrag) {
