@@ -86,7 +86,7 @@ void CalloutBox::calculate_surface_size() {
     int width = 600; // TODO: make this real
     int num_photos = resized_user_photos_.size();
     int height = top_margin_ * 2 + font_size_ * 3 + 
-        text_spacing_ * 2 + num_photos * photo_spacing_;
+        text_spacing_ * 4 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
 
     for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin();
         it != resized_user_photos_.end(); ++it) {
@@ -289,10 +289,7 @@ void CalloutBox::set_contents() {
     context_->setFontSize(static_cast<double>(font_size_));
     context_->setSourceRgb(1.0f, 1.0f, 1.0f);
 
-    context_->moveTo(text_pos);
-    context_->showText(boost::lexical_cast<std::string>(node_.distance_from_current()));
 
-    text_pos += font_height_offset;
 
     context_->moveTo(text_pos);
     context_->showText(node_.song().name());
@@ -301,6 +298,12 @@ void CalloutBox::set_contents() {
 
     context_->moveTo(text_pos);
     context_->showText(node_.song().artist());
+
+    text_pos += font_height_offset;
+    text_pos += ci::Vec2f(0.0f, 2.f * text_spacing_);
+
+    context_->moveTo(text_pos);
+    context_->showText("Voted By:");
 
     text_pos += ci::Vec2f(0.0f, photo_spacing_);
     ci::Vec2f photo_pos = text_pos + ci::Vec2f(kMaxImageWidth / 2.0f, 0.0f);
