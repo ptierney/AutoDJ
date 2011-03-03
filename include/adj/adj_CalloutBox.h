@@ -36,10 +36,12 @@ public:
     float get_height();
     float get_pos_x();
     float get_pos_y();
+    std::string type() { return "CalloutBox"; }
 
     bool visible() { return visible_; }
     void show();
     void hide();
+
 
     // in pixels
     static const int kMaxImageWidth;

@@ -45,6 +45,8 @@ public:
     float get_height();
     float get_pos_x();
     float get_pos_y();
+    bool visible() { return visible_; } 
+    std::string type() { return "GraphNode"; }
 
     // checks to see if the child has already been added 
     void add_child(GraphNodePtr);

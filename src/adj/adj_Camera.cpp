@@ -22,8 +22,8 @@ Camera::Camera() {
     scale_ = 1.0f;
     centroid_ = ci::Vec2f::zero();
 
-    scale_damping_ = 0.08;
-    centroid_damping_ = 0.08;
+    scale_damping_ = 0.03;
+    centroid_damping_ = 0.03;
 }
 
 void Camera::init() {
@@ -40,10 +40,8 @@ void Camera::update() {
 }
 
 void Camera::transform_draw() {
-    ci::gl::translate(static_cast<ci::Vec2f>(
-        AdjApp::instance().getWindowSize()) / 2.0f);
-    ci::gl::translate(centroid_);
     ci::gl::scale(ci::Vec3f::one() * scale_);
+    ci::gl::translate(centroid_);
 }
 
 void Camera::update_centroid() {
@@ -56,7 +54,7 @@ void Camera::update_centroid() {
     GraphicItem& first = *(g_items[0]);
 
     float x_min = first.get_pos_x();
-    float x_max = first.get_pos_y();
+    float x_max = first.get_pos_x();
     float y_min = first.get_pos_y();
     float y_max = first.get_pos_y();
 
@@ -64,6 +62,10 @@ void Camera::update_centroid() {
         it != g_items.end(); ++it) {
 
         GraphicItem& g = *(*it);
+
+        if (!g.visible())
+            continue;
+
         float half_w = g.get_width() / 2.0f;
         float half_h = g.get_height() / 2.0f;
 
@@ -76,22 +78,26 @@ void Camera::update_centroid() {
     float delta_x = x_max - x_min;
     float delta_y = y_max - y_min;
 
-    float target_x = x_min + 0.5f * delta_x;
-    float target_y = y_min + 0.5f * delta_y;
+    float target_x = x_min;
+    float target_y = y_min;
 
-    centroid_.x += (target_x - centroid_.x) * centroid_damping_;
-    centroid_.y += (target_y - centroid_.y) * centroid_damping_;
+    ci::Vec2f centroid_target = ci::Vec2f(target_x, target_y);
 
-    centroid_ *= -1.0f;
+    centroid_target *= -1.0f;
 
     float width_scale  = static_cast<float>(AdjApp::instance().getWindowWidth()) / 
-        (delta_x + width_border_);
+        (delta_x);
     float height_scale = static_cast<float>(AdjApp::instance().getWindowHeight()) / 
-        (delta_y + height_border_);
-    
-    float abs_scale = width_scale < 1.0f || height_scale < 1.0f ? 
-        ci::math<float>::min(width_scale, height_scale) :
-        ci::math<float>::max(width_scale, height_scale);
+        (delta_y);
+
+    float abs_scale = ci::math<float>::min(width_scale, height_scale);
+
+    if (width_scale < height_scale)
+        centroid_target.y += (AdjApp::instance().getWindowHeight() / scale_ - delta_y) / 2.0f;
+    else
+        centroid_target.x += (AdjApp::instance().getWindowWidth() / scale_ - delta_x) / 2.0f;
+
+    centroid_ += (centroid_target - centroid_) * centroid_damping_;
 
     scale_ += (abs_scale - scale_) * scale_damping_;
 }
