@@ -38,10 +38,13 @@ void DJController::transition() {
     // delete now playing node
     GraphNodeFactory::instance().delete_node(old_song);
 
+    // make sure this method works
+    assert(old_song.unique()); 
+
     // this call should actually delete the object
     old_song.reset();
 
-    assert(old_song.use_count() == 0); // make sure
+
 
     // make "choose 2" separations between nodes
     ParticleSystemPtr system = GraphPhysics::instance().particle_system();
