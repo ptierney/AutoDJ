@@ -207,6 +207,9 @@ void GraphPhysics::remove_box_particle(ParticlePtr p) {
 }
 
 void GraphPhysics::remove_particle(ParticleSystemPtr system, ParticlePtr p) {
+    if (p.get() == NULL)
+        return;
+
     graph::Particle& to_remove = *p;
 
     // remove any attractions the particle is a part of

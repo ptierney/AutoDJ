@@ -198,15 +198,11 @@ void GraphNodeFactory::remove_edge(std::pair<GraphNodePtr, GraphNodePtr>& edge) 
 }
 
 void GraphNodeFactory::delete_node(GraphNodePtr node) {
-    ci::app::console() << "Deleting node count = " << node.use_count() << std::endl;
-
     // remove from main vector
     std::vector<GraphNodePtr>::iterator vec_it = std::find(
         graph_nodes_.begin(), graph_nodes_.end(), node);
     
     graph_nodes_.erase(vec_it);
-
-    ci::app::console() << "Deleting node count = " << node.use_count() << std::endl;
 
     // remove from edges
 
@@ -222,14 +218,10 @@ void GraphNodeFactory::delete_node(GraphNodePtr node) {
         ++it;
     }
 
-    ci::app::console() << "Deleting node count = " << node.use_count() << std::endl;
-
     // remove from song map
     song_map_it_ = song_map_.find(node->song().id());
 
     song_map_.erase(song_map_it_);
-
-    ci::app::console() << "Deleting node count = " << node.use_count() << std::endl;
 
     // remove from any nodes's children
 
@@ -238,8 +230,6 @@ void GraphNodeFactory::delete_node(GraphNodePtr node) {
 
         (*it)->remove_child(node);
     }
-
-    ci::app::console() << "Deleting node count = " << node.use_count() << std::endl;
 
     // remove from any node's parents
     for (std::vector<GraphNodePtr>::iterator it = graph_nodes_.begin();
@@ -251,13 +241,9 @@ void GraphNodeFactory::delete_node(GraphNodePtr node) {
         (*it)->delete_parent();
     }
 
-    ci::app::console() << "Deleting node count = " << node.use_count() << std::endl;
-
     // check if it's in the Now Playing Headline
 
     NowPlayingHeadline::instance().remove_now_playing(node);
-
-    ci::app::console() << "Deleting node count = " << node.use_count() << std::endl;
 }
 
 

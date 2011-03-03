@@ -90,6 +90,9 @@ void DJController::set_next_song(SongId id) {
 }
 
 void DJController::set_next_song_randomly() {
+    // search over all nodes, continue if it's equal to now playing
+
+    // BAD DO NOT USE
     GraphNodePtr node = PlayManager::instance().get_next_song_randomly();
 
     if (node.get() == NULL)
