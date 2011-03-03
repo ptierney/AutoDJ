@@ -83,7 +83,7 @@ void CalloutBox::update_maxima() {
 }
 
 void CalloutBox::calculate_surface_size() {
-    int width = 600; // TODO: make this real
+    int width = calculate_surface_width(); 
     int num_photos = resized_user_photos_.size();
     int height = top_margin_ * 2 + font_size_ * 3 + 
         text_spacing_ * 4 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
@@ -271,6 +271,40 @@ void CalloutBox::hide() {
     if (particle_.get() != NULL)
         GraphPhysics::instance().remove_box_particle(particle_);
     particle_.reset();
+}
+
+float CalloutBox::calculate_surface_width() {
+    std::string max_name;
+    bool user_name_max = true;
+
+    for (std::deque<UserPtr>::iterator user_it = node_.song().users().begin();
+        user_it != node_.song().users().end(); ++user_it) {
+        if (max_name.length() > (*user_it)->name_.length())
+            continue;
+
+        max_name = (*user_it)->name_;
+    }
+
+    if (node_.song().name().length() > max_name.length()) {
+        max_name = node_.song().name();
+        user_name_max = false;
+    }
+
+    if (node_.song().artist().length() > max_name.length()) {
+        max_name = node_.song().artist();
+        user_name_max = false;
+    }
+
+    // CHANGE THIS IF THE TEXT IS GOING OUTSIDE CALLOUT BOX
+    // ====================================================
+    float letter_width = 2.2f / scale_;
+
+    if (user_name_max)
+        return kMaxImageWidth + photo_spacing_ * 2.f + 
+            max_name.length() * letter_width +
+            side_margin_ * 2.f;
+
+    return max_name.length() * letter_width + side_margin_ * 2.f;
 }
 
 void CalloutBox::set_contents() {

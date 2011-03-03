@@ -62,6 +62,7 @@ private:
     void update_maxima();
 
     void calculate_surface_size();
+    float calculate_surface_width();
     void create_surface();
     void create_context();
 
