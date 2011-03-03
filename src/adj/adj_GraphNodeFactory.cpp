@@ -16,6 +16,7 @@
 #include "adj/adj_Song.h"
 #include "adj/adj_VoteManager.h"
 #include "adj/adj_GraphOracle.h"
+#include "adj/adj_NowPlayingHeadline.h"
 
 namespace adj {
 
@@ -194,6 +195,55 @@ void GraphNodeFactory::remove_edge(std::pair<GraphNodePtr, GraphNodePtr>& edge) 
 
         ++it;
     }
+}
+
+void GraphNodeFactory::delete_node(GraphNodePtr node) {
+    // remove from main vector
+    std::vector<GraphNodePtr>::iterator vec_it = std::find(
+        graph_nodes_.begin(), graph_nodes_.end(), node);
+    
+    graph_nodes_.erase(vec_it);
+
+    // remove from edges
+
+    for (std::vector<std::pair<GraphNodePtr, GraphNodePtr> >::iterator
+        it = edges_.begin(); it != edges_.end(); ) {
+        
+         if (it->first == node || it->second == node) {
+            edges_.erase(it);
+            it = edges_.begin();
+            continue;
+        }
+
+        ++it;
+    }
+
+    // remove from song map
+    song_map_it_ = song_map_.find(node->song().id());
+
+    song_map_.erase(song_map_it_);
+
+    // remove from any nodes's children
+
+    for (std::vector<GraphNodePtr>::iterator it = graph_nodes_.begin();
+        it != graph_nodes_.end(); ++it) {
+
+        (*it)->remove_child(node);
+    }
+
+    // remove from any node's parents
+    for (std::vector<GraphNodePtr>::iterator it = graph_nodes_.begin();
+        it != graph_nodes_.end(); ++it) {
+
+        if ((*it)->parent() != node)
+             continue;
+
+        (*it)->delete_parent();
+    }
+
+    // check if it's in the Now Playing Headline
+
+    NowPlayingHeadline::instance().remove_now_playing(node);
 }
 
 

@@ -27,6 +27,7 @@ class CalloutBox : public GraphicItem {
 public:
     CalloutBox(GraphNode& parent);
     void init();
+    ~CalloutBox();
 
     void update_contents();
 

@@ -43,10 +43,14 @@ void Renderer::draw() {
     ci::gl::setMatricesWindow(AdjApp::instance().getWindowSize());
     ci::gl::clear(background_color_);
 
-    Camera::instance().transform_draw();
+    ci::gl::pushMatrices();
 
-    draw_connections();
-    draw_nodes();
+        Camera::instance().transform_draw();
+
+        draw_connections();
+        draw_nodes();
+
+    ci::gl::popMatrices();
 }
 
 void Renderer::draw_nodes() {
@@ -90,6 +94,16 @@ void Renderer::register_new_graphic_item(GraphicItem* item) {
         return;
 
     graphic_items_.push_back(item);
+}
+
+void Renderer::remove_graphic_item(GraphicItem* item) {
+    std::vector<GraphicItem*>::iterator it = std::find(graphic_items_.begin(), 
+        graphic_items_.end(), item);
+
+    if (it == graphic_items_.end())
+        return;
+
+    graphic_items_.erase(it);
 }
 
 Renderer* Renderer::instance_ = NULL;

@@ -13,6 +13,8 @@
 #include <adj/adj_PlayManager.h>
 #include <adj/adj_VoteManager.h>
 #include <adj/adj_User.h>
+#include <adj/adj_NowPlayingHeadline.h>
+#include <adj/adj_DJController.h>
 //#include <adj/adj_SocialConnector.h>
 
 
@@ -55,10 +57,13 @@ void Visualizer::update() {
     UserFactory::instance().update();
     Camera::instance().update(); // updates centroid
     //SocialConnector::instance().update();
+    NowPlayingHeadline::instance().update();
 }
 
 void Visualizer::draw() {
     Renderer::instance().draw();
+
+    NowPlayingHeadline::instance().draw();
 }
 
 void Visualizer::shutdown() {
@@ -85,7 +90,7 @@ bool Visualizer::key_down(ci::app::KeyEvent key) {
     if (key.getChar() == 'a')
         add_node();
     else if (key.getChar() == ' ')
-        PlayManager::instance().next_song();
+        DJController::instance().transition();
     else if (key.getChar() == 's')
         PlayManager::instance().switch_to_next_song();
     //else if (key.getChar() == '1')

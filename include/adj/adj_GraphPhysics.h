@@ -53,6 +53,11 @@ public:
 
     float edge_length() { return edge_length_; }
 
+    // clears all springs and attractions
+    void clear_all_node_connections();
+
+    void make_separation_between_node_particles(ParticlePtr a, ParticlePtr b);
+
 private:
     GraphPhysics();
     void init();

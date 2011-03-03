@@ -50,7 +50,11 @@ public:
 
     // checks to see if the child has already been added 
     void add_child(GraphNodePtr);
+    void remove_child(GraphNodePtr);
     const std::vector<GraphNodePtr>& children() { return children_; }
+
+    // this is probably a Bad Thing....
+    void delete_parent() { parent_.reset(); }
 
     friend class GraphNodeFactory;
 
@@ -102,6 +106,7 @@ private:
     void start_callout_fadein();
     void start_callout_fadeout();
     void trigger_next_node();
+    void update_spring_values();
 
     SongPtr song_;
     ParticlePtr particle_;
@@ -124,6 +129,7 @@ private:
     boost::posix_time::ptime fade_timer_;
     boost::posix_time::ptime display_timer_;
     boost::posix_time::ptime path_trigger_timer_;
+    boost::posix_time::ptime last_vote_time_;
 
     float scale_;
 
@@ -141,6 +147,12 @@ private:
     ci::Surface highlight_circle_;
     ci::gl::Texture highlight_circle_texture_;
     float circle_texture_scale_;
+
+    int relax_time_; // in milliseconds
+    float closest_spring_length_;
+    float closest_spring_strength_;
+    float farthest_spring_length_;
+    float farthest_spring_strength_;
 };
 
 }

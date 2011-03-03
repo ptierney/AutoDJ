@@ -28,6 +28,8 @@ public:
     const ci::Color& background_color() { return background_color_; } 
 
     void register_new_graphic_item(GraphicItem*);
+    void remove_graphic_item(GraphicItem*);
+
     std::vector<GraphicItem*>& graphic_items() { return graphic_items_; }
 
 private:

@@ -8,6 +8,7 @@ namespace adj {
 class GraphicItem {
 public:
     GraphicItem();
+    virtual ~GraphicItem();
 
     virtual float get_pos_x() = 0;
     virtual float get_pos_y() = 0;

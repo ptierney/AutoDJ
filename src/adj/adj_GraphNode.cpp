@@ -3,19 +3,21 @@
 
 #include <exception>
 
-#include "boost/date_time/posix_time/posix_time.hpp"
+#include <boost/date_time/posix_time/posix_time.hpp>
 
-#include "cinder/gl/gl.h"
-#include "cinder/app/App.h"
-#include "cinder/Utilities.h"
-#include "cinder/CinderMath.h"
+#include <cinder/gl/gl.h>
+#include <cinder/app/App.h>
+#include <cinder/Utilities.h>
+#include <cinder/CinderMath.h>
 
-#include "graph/graph_Particle.h"
+#include <graph/graph_Particle.h>
+#include <graph/graph_Spring.h>
 
-#include "adj/adj_GraphNode.h"
-#include "adj/adj_Song.h"
-#include "adj/adj_CalloutBox.h"
-#include "adj/adj_VoteManager.h"
+#include <adj/adj_GraphNode.h>
+#include <adj/adj_Song.h>
+#include <adj/adj_CalloutBox.h>
+#include <adj/adj_VoteManager.h>
+#include <adj/adj_GraphPhysics.h>
 
 #include <Resources.h>
 
@@ -41,6 +43,12 @@ GraphNode::GraphNode() {
     display_time_ = 6000; // in milliseconds
     path_trigger_delay_time_ = 400; // in ms
 
+    relax_time_ = 120000; // in milliseconds
+    closest_spring_length_ = 20.0f;
+    closest_spring_strength_ = 0.2f;
+    farthest_spring_length_ = 100.0f;
+    farthest_spring_strength_ = 0.1f;
+
     is_fading_in_ = false;
     is_fading_out_ = false;
     is_path_delaying_ = false;
@@ -54,11 +62,17 @@ void GraphNode::init() {
     highlight_circle_ = ci::loadImage(ci::app::loadResource(RES_NODE_HIGHLIGHT));
     highlight_circle_texture_ = ci::gl::Texture(highlight_circle_);
     circle_texture_scale_ = circle_radius_ * 2.0f / highlight_circle_.getWidth();
+
+    last_vote_time_ = boost::posix_time::microsec_clock::universal_time();
 }
 
 GraphNode::~GraphNode() {
-    // remove from GraphNodeFactory list
     // remove / delete particle
+    GraphPhysics::instance().remove_particle(particle_);
+
+    // delete callout box
+    callout_box_.reset();
+
     // remove / delete / stop song
 }
 
@@ -112,6 +126,8 @@ void GraphNode::draw() {
     if (!visible_)
         return;
 
+    update_spring_values();
+
     // check if it's fading in / out, if it's been displayed long enough, etc
     check_transition_states();
     
@@ -158,15 +174,23 @@ void GraphNode::draw_node() {
 }
 
 void GraphNode::add_child(GraphNodePtr child) {
-    // check children_ to see if it already contains child
-    // TODO: replace this with a proper std::algorithm
-    for (std::vector<GraphNodePtr>::const_iterator it = children_.begin();
-        it != children_.end(); ++it) {
-        if (it->get() == child.get())
-            return;
-    }
+    std::vector<GraphNodePtr>::iterator it = std::find(
+        children_.begin(), children_.end(), child);
+
+    if (it != children_.end())
+        return;
 
     children_.push_back(child);
+}
+
+void GraphNode::remove_child(GraphNodePtr child) {
+    std::vector<GraphNodePtr>::iterator it = std::find(
+        children_.begin(), children_.end(), child);
+
+    if (it == children_.end())
+        return;
+
+    children_.erase(it);
 }
 
 void GraphNode::update_distance_from_current() {
@@ -214,6 +238,8 @@ void GraphNode::register_vote(VotePtr vote) {
     assert(vote->song_id == song_->id());
 
     song_->register_vote(vote);
+
+    last_vote_time_ = boost::posix_time::microsec_clock::universal_time();
 
     update_appearance();
 }
@@ -341,6 +367,28 @@ void GraphNode::trigger_next_node() {
 
 bool GraphNode::highlight_connection() {
     return callout_box_->visible();
+}
+
+void GraphNode::update_spring_values() {
+    if (particle_->springs().empty())
+        return;
+
+    int elapsed = get_milliseconds_elapsed(last_vote_time_);
+
+    float strength = ci::lmap<float>(elapsed, 0, relax_time_,
+        closest_spring_strength_, farthest_spring_strength_);
+
+    strength = ci::math<float>::clamp(strength, closest_spring_strength_,
+        farthest_spring_strength_);
+
+    float length = ci::lmap<float>(elapsed, 0, relax_time_, 
+        closest_spring_length_, farthest_spring_length_);
+
+    length = ci::math<float>::clamp(length, closest_spring_length_,
+        farthest_spring_length_);
+
+    particle_->springs()[0]->set_rest_length(length);
+    particle_->springs()[0]->set_strength(strength);
 }
 
 }

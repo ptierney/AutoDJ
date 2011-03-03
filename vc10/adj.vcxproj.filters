@@ -117,6 +117,12 @@
     <ClInclude Include="..\include\adj\adj_GraphicItem.h">
       <Filter>Header Files\adj</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\adj\adj_NowPlayingHeadline.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\adj\adj_DJController.h">
+      <Filter>Header Files\adj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AdjApp.cpp">
@@ -195,6 +201,12 @@
       <Filter>Source Files\adj</Filter>
     </ClCompile>
     <ClCompile Include="..\src\adj\adj_GraphicItem.cpp">
+      <Filter>Source Files\adj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\adj_NowPlayingHeadline.cpp">
+      <Filter>Source Files\adj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\adj\adj_DJController.cpp">
       <Filter>Source Files\adj</Filter>
     </ClCompile>
   </ItemGroup>

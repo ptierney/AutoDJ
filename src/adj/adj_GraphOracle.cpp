@@ -42,9 +42,19 @@ void GraphOracle::init() {
 }
 
 void GraphOracle::query_best_connection(SongId id) {
+
+    // THIS IS CROWDTAP SPECIFIC CODE TO BE REPLACED
+
+    SongId other_id = PlayManager::instance().now_playing()->song().id();
+
+    GraphNodeFactory::instance().add_pair_request(PairRequest(id, other_id));
+
+    return;
+
+
     // THIS IS DUMMY CODE TO BE REPLACED
 
-    SongId other_id = SongFactory::instance().get_random_song_id();
+    other_id = SongFactory::instance().get_random_song_id();
 
     while (other_id == id || (GraphNodeFactory::instance().song_map().find(
         other_id) == GraphNodeFactory::instance().song_map().end())) {

@@ -61,6 +61,11 @@ void CalloutBox::init() {
     hide();
 }
 
+CalloutBox::~CalloutBox() {
+    // delete box particle
+    GraphPhysics::instance().remove_box_particle(particle_);
+}
+
 void CalloutBox::update_contents() {
     if (!visible_)
         return;

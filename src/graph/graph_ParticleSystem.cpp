@@ -42,6 +42,9 @@ std::shared_ptr<Spring> ParticleSystem::make_spring(Particle& a, Particle& b,
 
     std::shared_ptr<Spring> s(new Spring(a, b, ks, d, r));
     springs_.push_back(s);
+    a.add_spring(s);
+    b.add_spring(s);
+
     return s;
 }
 

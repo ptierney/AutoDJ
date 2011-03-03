@@ -15,11 +15,13 @@
     <ClInclude Include="..\include\adj\adj_Adj.h" />
     <ClInclude Include="..\include\adj\adj_CalloutBox.h" />
     <ClInclude Include="..\include\adj\adj_Camera.h" />
+    <ClInclude Include="..\include\adj\adj_DJController.h" />
     <ClInclude Include="..\include\adj\adj_GraphicItem.h" />
     <ClInclude Include="..\include\adj\adj_GraphNode.h" />
     <ClInclude Include="..\include\adj\adj_GraphNodeFactory.h" />
     <ClInclude Include="..\include\adj\adj_GraphOracle.h" />
     <ClInclude Include="..\include\adj\adj_GraphPhysics.h" />
+    <ClInclude Include="..\include\adj\adj_NowPlayingHeadline.h" />
     <ClInclude Include="..\include\adj\adj_PlayManager.h" />
     <ClInclude Include="..\include\adj\adj_Renderer.h" />
     <ClInclude Include="..\include\adj\adj_SocialConnector.h" />
@@ -43,11 +45,13 @@
     <ClCompile Include="..\src\AdjApp.cpp" />
     <ClCompile Include="..\src\adj\adj_CalloutBox.cpp" />
     <ClCompile Include="..\src\adj\adj_Camera.cpp" />
+    <ClCompile Include="..\src\adj\adj_DJController.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphicItem.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphNode.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphNodeFactory.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphOracle.cpp" />
     <ClCompile Include="..\src\adj\adj_GraphPhysics.cpp" />
+    <ClCompile Include="..\src\adj\adj_NowPlayingHeadline.cpp" />
     <ClCompile Include="..\src\adj\adj_PlayManager.cpp" />
     <ClCompile Include="..\src\adj\adj_Renderer.cpp" />
     <ClCompile Include="..\src\adj\adj_SocialConnector.cpp" />
