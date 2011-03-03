@@ -2,6 +2,8 @@
 #include <cassert>
 #include <utility>
 
+#include <cinder/Rand.h>
+
 #include <graph/graph_ParticleSystem.h>
 
 #include <adj/adj_DJController.h>
@@ -90,15 +92,18 @@ void DJController::set_next_song(SongId id) {
 }
 
 void DJController::set_next_song_randomly() {
-    // search over all nodes, continue if it's equal to now playing
+    ci::Rand rand;
+    rand.randomize();
 
-    // BAD DO NOT USE
-    GraphNodePtr node = PlayManager::instance().get_next_song_randomly();
+    SongId possible_id;
 
-    if (node.get() == NULL)
-        assert(0); // epic fail
+    int num_nodes = GraphNodeFactory::instance().nodes().size();
 
-    next_song_ = node->song().id();
+    do {
+        possible_id = GraphNodeFactory::instance().nodes()[rand.randInt(num_nodes)]->song().id();
+    } while (has_next_song_ && possible_id == next_song_);
+
+    next_song_ = possible_id;
     has_next_song_ = true;
 }
 
