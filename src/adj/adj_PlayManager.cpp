@@ -28,6 +28,9 @@ void PlayManager::setup() {
 }
 
 void PlayManager::update() {
+    // at the moment, with the Crowdtap configuration, this isn't needed
+    return;
+
     if (now_playing_.get() == NULL)
         return;
 
@@ -157,6 +160,10 @@ void PlayManager::register_new_graph_node(GraphNodePtr node) {
 
     now_playing_ = node;
     now_playing_->song().play();
+}
+
+void PlayManager::set_now_playing(GraphNodePtr np) {
+    now_playing_ = np;
 }
 
 PlayManager& PlayManager::instance() {

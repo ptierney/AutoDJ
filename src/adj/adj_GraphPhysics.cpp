@@ -151,6 +151,10 @@ void GraphPhysics::make_edge_between(ParticleSystemPtr system, ParticlePtr a,
     system->make_spring(*a, *b, strength, strength, length);
 }
 
+void GraphPhysics::make_separation_between_node_particles(ParticlePtr a, ParticlePtr b) {
+    make_separation_between(p_system_, a, b);
+}
+
 void GraphPhysics::make_separation_between(ParticleSystemPtr system, 
     ParticlePtr a, ParticlePtr b) {
     system->make_attraction(*a, *b, -spacer_strength_, 20);
@@ -244,6 +248,20 @@ void GraphPhysics::remove_particle(ParticleSystemPtr system, ParticlePtr p) {
         }
 
         ++it;
+    }
+}
+
+void GraphPhysics::clear_all_node_connections() {
+    // delete all connections in the p_system
+    p_system_->springs_.clear();
+    p_system_->attractions_.clear();
+
+    // delete all connections contained in the nodes themselves
+
+    for (std::vector<ParticlePtr>::iterator it = p_system_->particles_.begin();
+        it != p_system_->particles_.end(); ++it) {
+
+        (*it)->springs().clear();
     }
 }
 

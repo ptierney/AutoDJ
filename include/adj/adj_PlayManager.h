@@ -29,13 +29,16 @@ public:
     // should be private
     void switch_to_next_song();
 
+    // maybe should be private?
+    GraphNodePtr get_next_song_randomly();
+
     friend class GraphNodeFactory;
 
 private:
     PlayManager();
     void init();
     void begin_transition();
-    GraphNodePtr get_next_song_randomly();
+    
     GraphNodePtr get_next_song(); //TODO: implement this method, doesn't work.
     
     void begin_override_transition();

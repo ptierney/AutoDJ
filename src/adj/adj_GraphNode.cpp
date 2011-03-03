@@ -17,6 +17,7 @@
 #include <adj/adj_Song.h>
 #include <adj/adj_CalloutBox.h>
 #include <adj/adj_VoteManager.h>
+#include <adj/adj_GraphPhysics.h>
 
 #include <Resources.h>
 
@@ -66,8 +67,12 @@ void GraphNode::init() {
 }
 
 GraphNode::~GraphNode() {
-    // remove from GraphNodeFactory list
     // remove / delete particle
+    GraphPhysics::instance().remove_particle(particle_);
+
+    // delete callout box
+    callout_box_.reset();
+
     // remove / delete / stop song
 }
 

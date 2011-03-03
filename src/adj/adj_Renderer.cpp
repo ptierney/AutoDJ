@@ -96,6 +96,16 @@ void Renderer::register_new_graphic_item(GraphicItem* item) {
     graphic_items_.push_back(item);
 }
 
+void Renderer::remove_graphic_item(GraphicItem* item) {
+    std::vector<GraphicItem*>::iterator it = std::find(graphic_items_.begin(), 
+        graphic_items_.end(), item);
+
+    if (it == graphic_items_.end())
+        return;
+
+    graphic_items_.erase(it);
+}
+
 Renderer* Renderer::instance_ = NULL;
 
 Renderer& Renderer::instance() {

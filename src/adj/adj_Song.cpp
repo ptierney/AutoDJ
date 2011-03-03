@@ -87,6 +87,8 @@ int Song::time_remaining() {
 
 SongFactory::SongFactory() {
     base_song_directory_path_ = "/data/songs/";
+
+    // TODO: change this to a resource
     song_database_file_ = "/data/songs.json";
 }
 

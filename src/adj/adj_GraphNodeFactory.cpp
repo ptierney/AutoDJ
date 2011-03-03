@@ -196,6 +196,34 @@ void GraphNodeFactory::remove_edge(std::pair<GraphNodePtr, GraphNodePtr>& edge) 
     }
 }
 
+void GraphNodeFactory::delete_node(GraphNodePtr node) {
+    // remove from main vector
+    std::vector<GraphNodePtr>::iterator vec_it = std::find(
+        graph_nodes_.begin(), graph_nodes_.end(), node);
+    
+    graph_nodes_.erase(vec_it);
+
+    // remove from edges
+
+    for (std::vector<std::pair<GraphNodePtr, GraphNodePtr> >::iterator
+        it = edges_.begin(); it != edges_.end(); ) {
+        
+         if (it->first == node || it->second == node) {
+            edges_.erase(it);
+            it = edges_.begin();
+            continue;
+        }
+
+        ++it;
+    }
+
+
+    // remove from song map
+    song_map_it_ = song_map_.find(node->song().id());
+
+    song_map_.erase(song_map_it_);
+}
+
 
 GraphNodeFactory* GraphNodeFactory::instance_ = NULL;
 
