@@ -19,7 +19,7 @@ public:
     void setup();
     void update();
 
-    GraphNodePtr now_playing();
+    GraphNodePtr now_playing() { return now_playing_; }
     void set_now_playing(GraphNodePtr);
 
     void play();
