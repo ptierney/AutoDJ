@@ -13,6 +13,7 @@
 #include <adj/adj_PlayManager.h>
 #include <adj/adj_VoteManager.h>
 #include <adj/adj_User.h>
+#include <adj/adj_NowPlayingHeadline.h>
 //#include <adj/adj_SocialConnector.h>
 
 
@@ -55,10 +56,13 @@ void Visualizer::update() {
     UserFactory::instance().update();
     Camera::instance().update(); // updates centroid
     //SocialConnector::instance().update();
+    NowPlayingHeadline::instance().update();
 }
 
 void Visualizer::draw() {
     Renderer::instance().draw();
+
+    NowPlayingHeadline::instance().draw();
 }
 
 void Visualizer::shutdown() {

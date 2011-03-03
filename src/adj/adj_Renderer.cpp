@@ -43,10 +43,14 @@ void Renderer::draw() {
     ci::gl::setMatricesWindow(AdjApp::instance().getWindowSize());
     ci::gl::clear(background_color_);
 
-    Camera::instance().transform_draw();
+    ci::gl::pushMatrices();
 
-    draw_connections();
-    draw_nodes();
+        Camera::instance().transform_draw();
+
+        draw_connections();
+        draw_nodes();
+
+    ci::gl::popMatrices();
 }
 
 void Renderer::draw_nodes() {
