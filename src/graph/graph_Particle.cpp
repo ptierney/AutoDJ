@@ -1,12 +1,15 @@
 
-#include "boost/uuid/uuid.hpp"
-#include "boost/uuid/uuid_io.hpp"
-#include "boost/uuid/uuid_generators.hpp"
-#include "boost/lexical_cast.hpp"
+#include <algorithm>
 
-#include "cinder/Vector.h"
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/lexical_cast.hpp>
 
-#include "graph/graph_Particle.h"
+#include <cinder/Vector.h>
+
+#include <graph/graph_Particle.h>
+#include <graph/graph_Spring.h>
 
 namespace graph {
 
@@ -44,6 +47,17 @@ void Particle::reset() {
     position_ = ci::Vec2f::zero();
     velocity_ = ci::Vec2f::zero();
     force_ = ci::Vec2f::zero();
+}
+
+void Particle::add_spring(SpringPtr s) {
+    // TODO: decide if this is needed
+    /*
+    if (std::find(springs_.begin(), springs_.end(), s) !=
+        springs_.end())
+        return;
+    */
+
+    springs_.push_back(s);
 }
 
 }

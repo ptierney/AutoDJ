@@ -24,7 +24,7 @@ public:
     float rest_length() { return rest_length_; }
     void set_rest_length(float r) { rest_length_ = r; }
     float strength() { return spring_constant_; }
-    void set_strength(float ks);
+    void set_strength(float ks) { spring_constant_ = ks; }
     float damping() { return damping_; }
     void set_damping(float d) { damping_ = d; }
     

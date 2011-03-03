@@ -2,12 +2,14 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "cinder/Vector.h"
 
 namespace graph {
 
 typedef std::string ParticleId;
+typedef std::shared_ptr<class Spring> SpringPtr;
 
 class Particle {
 public:
@@ -43,6 +45,11 @@ public:
         return other.id() == id_;
     }
 
+    // This does not make a spring, it merely records the springs
+    // this node has.
+    void add_spring(SpringPtr);
+    std::vector<SpringPtr>& springs() { return springs_; }
+
 protected:
     ci::Vec2f position_;
     ci::Vec2f velocity_;
@@ -52,6 +59,8 @@ protected:
     bool dead_;
 
     bool fixed_;
+
+    std::vector<SpringPtr> springs_;
 
 private:
     ParticleId id_;
