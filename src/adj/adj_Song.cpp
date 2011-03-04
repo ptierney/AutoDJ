@@ -88,8 +88,9 @@ int Song::time_remaining() {
 SongFactory::SongFactory() {
     base_song_directory_path_ = "/data/songs/";
 
-    // TODO: change this to a resource
-    song_database_file_ = "/data/songs.json";
+    // This should be a resource. Sadly, Windows has issues 
+    // loading a text as a resource.
+    song_database_file_ = "/data/crowdtap.json";
 }
 
 void SongFactory::parse_song_database_file() {
