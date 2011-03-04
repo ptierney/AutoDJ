@@ -18,6 +18,7 @@ namespace adj {
 VoteServerQuery::VoteServerQuery() {
     vote_server_ = VoteManager::instance().vote_server();
     known_ids_ = VoteManager::instance().known_ids();
+    last_id_ = VoteManager::instance().last_id();
 }
 
 // THIS RUNS IN A SEPARATE THREAD
@@ -34,8 +35,18 @@ void VoteServerQuery::query_vote_server() {
 
     ci::IStreamUrlRef urlRef;
 
+    std::string url_string;
+
+    if (last_id_.empty())
+        url_string = vote_server_;
+    else {
+        url_string = vote_server_;
+        url_string += "?since_vote=";
+        url_string += last_id_;
+    }
+
     try {
-        urlRef = ci::IStreamUrl::createRef(vote_server_);
+        urlRef = ci::IStreamUrl::createRef(url_string);
     } catch (...) { // it can't connect to the server
         return;
     }
@@ -67,7 +78,8 @@ void VoteServerQuery::parse_votes(Json::Value& val) {
 
 VoteManager::VoteManager() {
     query_time_ = 5; // in seconds
-    vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
+    //vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
+    vote_server_ = "http://glebden.com/djdp3000/get_votes.php";
     thread_finished_ = true;
 }
 
@@ -105,7 +117,11 @@ void VoteManager::query_vote_server() {
 
     thread_finished_ = false;
 
+    new_votes_mutex_.lock();
+
     VoteServerQuery query;
+
+    new_votes_mutex_.unlock();
 
     query_thread_ = ThreadPtr(new boost::thread(query));
 }
@@ -123,6 +139,8 @@ void VoteManager::parse_new_votes() {
         known_ids_.insert(id);
 
         parse_vote(*it);
+
+        last_id_ = id;
     }
 }
 

@@ -38,6 +38,7 @@ private:
 
     std::string vote_server_;
     std::set<VoteId> known_ids_;
+    VoteId last_id_;
 };
 
 typedef std::shared_ptr<boost::thread> ThreadPtr;
@@ -54,6 +55,7 @@ public:
 
     const std::string& vote_server() { return vote_server_; }
     const std::set<VoteId>& known_ids() { return known_ids_; }
+    const std::string& last_id() { return last_id_; }
 
 private:
     VoteManager();
@@ -75,6 +77,7 @@ private:
     std::string vote_server_;
 
     std::set<VoteId> known_ids_;
+    VoteId last_id_;
 
     std::deque<Json::Value> new_votes_;
     boost::mutex new_votes_mutex_;
