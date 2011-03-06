@@ -95,6 +95,8 @@ public:
     void show();
     void hide();
 
+    friend class DJController;
+
 private:
     void draw_current_song();
     void draw_node(); // regular drawing

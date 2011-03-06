@@ -3,6 +3,7 @@
 #include <utility>
 
 #include <cinder/Rand.h>
+#include <cinder/app/App.h>
 
 #include <graph/graph_ParticleSystem.h>
 
@@ -28,14 +29,12 @@ void DJController::transition() {
     if (!has_next_song_)
         set_next_song_randomly();
 
+    // return if next song == now playing
+
     // delete all attractions
     GraphPhysics::instance().clear_all_node_connections();
 
     GraphNodePtr old_song = PlayManager::instance().now_playing();
-
-    // update now playing to new node
-    PlayManager::instance().set_now_playing(
-        GraphNodeFactory::instance().song_map()[next_song_]);
 
     // delete now playing node
     GraphNodeFactory::instance().delete_node(old_song);
@@ -46,7 +45,9 @@ void DJController::transition() {
     // this call should actually delete the object
     old_song.reset();
 
-
+    // update now playing to new node
+    PlayManager::instance().set_now_playing(
+        GraphNodeFactory::instance().song_map()[next_song_]);
 
     // make "choose 2" separations between nodes
     ParticleSystemPtr system = GraphPhysics::instance().particle_system();
@@ -68,7 +69,10 @@ void DJController::transition() {
     // make n-1 springs to now playing
 
     GraphNodePtr now_playing = PlayManager::instance().now_playing();
+
     now_playing->set_is_current_song(true);
+    // tell the node to fade in
+    now_playing->start_callout_fadein();
 
     std::vector<GraphNodePtr>& nodes = GraphNodeFactory::instance().nodes();
 	
@@ -104,7 +108,8 @@ void DJController::set_next_song_randomly() {
 
     do {
         possible_id = GraphNodeFactory::instance().nodes()[rand.randInt(num_nodes)]->song().id();
-    } while (has_next_song_ && possible_id == next_song_);
+    } while (possible_id == PlayManager::instance().now_playing()->song().id() || 
+        (has_next_song_ && possible_id == next_song_));
 
     next_song_ = possible_id;
     has_next_song_ = true;
