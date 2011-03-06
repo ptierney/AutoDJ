@@ -27,6 +27,8 @@ void NowPlayingHeadline::init() {
 }
 
 void NowPlayingHeadline::update() {
+    return;
+
     if (now_playing_.get() == PlayManager::instance().now_playing().get())
         return;
 
