@@ -245,6 +245,14 @@ void GraphNode::register_vote(VotePtr vote) {
 
     last_vote_time_ = boost::posix_time::microsec_clock::universal_time();
 
+    if (callout_box_.get() != NULL) {
+        callout_box_->show();
+
+        start_callout_fadein();
+
+        display_timer_ = boost::posix_time::microsec_clock::universal_time();
+    }
+
     update_appearance();
 }
 
