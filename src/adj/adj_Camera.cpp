@@ -17,8 +17,8 @@ Camera* Camera::instance_ = NULL;
 
 Camera::Camera() {
     // the circles are approximately 10 units wide
-    width_border_ = 15.0f; 
-    height_border_ = 15.0f;
+    width_border_ = 40.0f; 
+    height_border_ = 40.0f;
     scale_ = 1.0f;
     centroid_ = ci::Vec2f::zero();
 
@@ -81,13 +81,18 @@ void Camera::update_centroid() {
     float target_x = x_min;
     float target_y = y_min;
 
+    target_x -= width_border_ / scale_;
+    target_y -= height_border_ / scale_;
+
     ci::Vec2f centroid_target = ci::Vec2f(target_x, target_y);
 
     centroid_target *= -1.0f;
 
-    float width_scale  = static_cast<float>(AdjApp::instance().getWindowWidth()) / 
+    float width_scale  = static_cast<float>(AdjApp::instance().getWindowWidth() - 
+        2 * width_border_) / 
         (delta_x);
-    float height_scale = static_cast<float>(AdjApp::instance().getWindowHeight()) / 
+    float height_scale = static_cast<float>(AdjApp::instance().getWindowHeight() - 
+        2 * height_border_) / 
         (delta_y);
 
     float abs_scale = ci::math<float>::min(width_scale, height_scale);
