@@ -241,6 +241,14 @@ void GraphNodeFactory::delete_node(GraphNodePtr node) {
         (*it)->delete_parent();
     }
 
+    // check the PlayManager
+
+    if (PlayManager::instance().next_song_ == node)
+        PlayManager::instance().next_song_.reset();
+
+    if (PlayManager::instance().now_playing_ == node)
+        PlayManager::instance().now_playing_.reset();
+
     // check if it's in the Now Playing Headline
 
     NowPlayingHeadline::instance().remove_now_playing(node);
