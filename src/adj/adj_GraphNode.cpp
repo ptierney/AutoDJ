@@ -301,7 +301,7 @@ void GraphNode::check_transition_states() {
     if (is_fading_in_)
         transition_fading_in();
 
-    if (is_fading_out_)
+    if (is_fading_out_ && !is_current_song_)
         transition_fading_out();
 
     if (callout_box_->visible())

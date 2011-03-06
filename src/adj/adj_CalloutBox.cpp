@@ -90,7 +90,14 @@ void CalloutBox::update_maxima() {
 void CalloutBox::calculate_surface_size() {
     int width = calculate_surface_width(); 
     int num_photos = resized_user_photos_.size();
-    int height = top_margin_ * 2 + font_size_ * 3 + 
+
+    int extra_vert_dim = 0;
+
+    if (node_.is_current_song())
+        extra_vert_dim = font_size_ + text_spacing_ * 3;
+
+
+    int height = extra_vert_dim + top_margin_ * 2 + font_size_ * 3 + 
         text_spacing_ * 4 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
 
     for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin();
@@ -328,7 +335,11 @@ void CalloutBox::set_contents() {
     context_->setFontSize(static_cast<double>(font_size_));
     context_->setSourceRgb(1.0f, 1.0f, 1.0f);
 
-
+    if (node_.is_current_song()) {
+        context_->moveTo(text_pos);
+        context_->showText("Now Playing:");
+        text_pos += ci::Vec2f(0.0f, font_size_ + text_spacing_ * 3);
+    }
 
     context_->moveTo(text_pos);
     context_->showText(node_.song().name());
