@@ -12,6 +12,7 @@
 #include <adj/adj_PlayManager.h>
 #include <adj/adj_GraphNodeFactory.h>
 #include <adj/adj_GraphNode.h>
+#include <adj/adj_CalloutBox.h>
 
 namespace adj {
 
@@ -75,7 +76,8 @@ void DJController::transition() {
 
     now_playing->set_is_current_song(true);
     // tell the node to fade in
-    now_playing->start_callout_fadein();
+    now_playing->callout_box_->show();
+    now_playing->register_song_playing();
 
     std::vector<GraphNodePtr>& nodes = GraphNodeFactory::instance().nodes();
 	
