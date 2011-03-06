@@ -58,6 +58,13 @@ void Renderer::draw_nodes() {
         it != GraphNodeFactory::instance().nodes().end(); ++it) {
 
         (*it)->draw();
+        (*it)->draw_node_body();
+    }
+
+    for (std::vector<GraphNodePtr>::iterator it = GraphNodeFactory::instance().nodes().begin();
+        it != GraphNodeFactory::instance().nodes().end(); ++it) {
+
+        (*it)->draw_callout_box();
     }
 }
 

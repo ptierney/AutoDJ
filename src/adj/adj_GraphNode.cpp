@@ -130,7 +130,17 @@ void GraphNode::draw() {
 
     // check if it's fading in / out, if it's been displayed long enough, etc
     check_transition_states();
-    
+}
+
+void GraphNode::draw_callout_box() {
+    ci::gl::pushMatrices();
+
+        callout_box_->draw();
+
+    ci::gl::popMatrices();
+}
+
+void GraphNode::draw_node_body() {
     ci::gl::pushMatrices();
 
         ci::gl::translate(particle_->position());
@@ -139,12 +149,6 @@ void GraphNode::draw() {
             draw_current_song();
         else
             draw_node();
-
-    ci::gl::popMatrices();
-
-    ci::gl::pushMatrices();
-
-        callout_box_->draw();
 
     ci::gl::popMatrices();
 }

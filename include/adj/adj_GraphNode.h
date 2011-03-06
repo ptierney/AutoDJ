@@ -40,6 +40,8 @@ public:
     void init();
 
     void draw();
+    void draw_callout_box();
+    void draw_node_body();
 
     float get_width();
     float get_height();
