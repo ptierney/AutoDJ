@@ -31,10 +31,13 @@ void DJController::transition() {
 
     // return if next song == now playing
 
+    GraphNodePtr old_song = PlayManager::instance().now_playing();
+
+    if (old_song->song().id() == next_song_)
+        set_next_song_randomly();
+
     // delete all attractions
     GraphPhysics::instance().clear_all_node_connections();
-
-    GraphNodePtr old_song = PlayManager::instance().now_playing();
 
     // delete now playing node
     GraphNodeFactory::instance().delete_node(old_song);
