@@ -58,6 +58,7 @@ void Visualizer::update() {
     Camera::instance().update(); // updates centroid
     //SocialConnector::instance().update();
     NowPlayingHeadline::instance().update();
+    DJController::instance().update();
 }
 
 void Visualizer::draw() {

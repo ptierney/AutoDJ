@@ -234,12 +234,18 @@ void UserFactory::parse_query_replies() {
     }    
 }
 
+bool UserFactory::has_pending_queries() {
+    boost::mutex::scoped_lock lock(query_reply_mutex_);
+    
+    return !pending_queries_.empty();
+}
+
 void UserFactory::update_nodes_after_user_change(UserPtr user) {
     std::map<SongId, GraphNodePtr>& song_map = GraphNodeFactory::instance().song_map();
 
     for (std::deque<SongId>::iterator it = user->voted_songs().begin();
         it != user->voted_songs().end(); ++it) {
-
+        
         song_map[*it]->update_appearance();
     }
 }

@@ -144,7 +144,9 @@ void VoteManager::parse_new_votes() {
 
         parse_vote(*it);
 
-        if (boost::lexical_cast<int>(id) > boost::lexical_cast<int>(last_id_))
+        if (last_id_.empty())
+            last_id_ = id;
+        else if (boost::lexical_cast<int>(id) > boost::lexical_cast<int>(last_id_))
             last_id_ = id;
     }
 }
@@ -196,7 +198,8 @@ void VoteManager::parse_vote(Json::Value& val) {
     
     if (override) {
         DJController::instance().set_next_song(song_id);
-        DJController::instance().transition();
+        //DJController::instance().transition();
+        DJController::instance().set_transition_next_loop(true);
     }
 
 }

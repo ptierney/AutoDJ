@@ -106,6 +106,8 @@ public:
     void update_nodes_after_user_change(UserPtr);
 
     static void resize_photo(ci::Surface& original, ci::Surface& resized);
+    
+    bool has_pending_queries();
 
 private:
     UserFactory();

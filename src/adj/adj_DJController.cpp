@@ -13,6 +13,7 @@
 #include <adj/adj_GraphNodeFactory.h>
 #include <adj/adj_GraphNode.h>
 #include <adj/adj_CalloutBox.h>
+#include <adj/adj_User.h>
 
 namespace adj {
 
@@ -20,6 +21,8 @@ DJController* DJController::instance_ = NULL;
 
 DJController::DJController() {
     has_next_song_ = false;
+    transition_next_loop_ = false;
+    counter_ = 0;
 }
 
 void DJController::init() {
@@ -118,6 +121,21 @@ void DJController::set_next_song_randomly() {
 
     next_song_ = possible_id;
     has_next_song_ = true;
+}
+    
+void DJController::update() {
+	if (transition_next_loop_ && GraphNodeFactory::instance().pair_requests().empty()
+        && !UserFactory::instance().has_pending_queries()) {
+        
+        if (counter_ > 0) {
+    		transition();
+        	transition_next_loop_ = false;
+            counter_ = 0;
+        } else {
+            ++counter_;
+        }
+
+    }
 }
 
 DJController& DJController::instance() {

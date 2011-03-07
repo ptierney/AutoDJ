@@ -142,11 +142,13 @@ private:
 
     ci::ColorA node_color_;
     ci::ColorA node_highlight_color_;
+    ci::Color background_color_;
 
     bool is_valid_; // has a song that can be played
     bool visible_;
 
     float circle_radius_;
+    float inner_circle_radius_;
 
     ci::Surface highlight_circle_;
     ci::gl::Texture highlight_circle_texture_;

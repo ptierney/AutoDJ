@@ -56,6 +56,8 @@ public:
 
     void add_edge(std::pair<GraphNodePtr, GraphNodePtr>&);
     void remove_edge(std::pair<GraphNodePtr, GraphNodePtr>&);
+    
+    std::deque<PairRequest>& pair_requests() { return pair_requests_; }
 
 private:
     GraphNodeFactory();

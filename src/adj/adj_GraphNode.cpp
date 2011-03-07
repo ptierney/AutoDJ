@@ -18,6 +18,7 @@
 #include <adj/adj_CalloutBox.h>
 #include <adj/adj_VoteManager.h>
 #include <adj/adj_GraphPhysics.h>
+#include <adj/adj_Renderer.h>
 
 #include <Resources.h>
 
@@ -26,11 +27,13 @@ namespace adj {
 GraphNode::GraphNode() {
     is_valid_ = false;
     circle_radius_ = 5.0f;
+    inner_circle_radius_ = 2.0f;
     // Crowdtap medium grey
     node_color_ = ci::ColorA(120.0f / 255.f, 122.f / 255.f, 
         126.f / 255.f, 1.0f);
     // Crowdtap red
     node_highlight_color_ = ci::ColorA(255.f / 255.f, 51.f / 255.f, 0.f, 1.f);
+    background_color_ = Renderer::instance().background_color();
     scale_ = 1.0f;
     max_scale_ = 1.0f;
     min_scale_ = 0.35f;
@@ -174,6 +177,9 @@ void GraphNode::draw_node() {
     } else {
         ci::gl::color(node_color_);
         ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
+        
+        ci::gl::color(background_color_);
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), inner_circle_radius_);
     }
 }
 
