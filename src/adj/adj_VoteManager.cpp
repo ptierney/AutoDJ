@@ -14,6 +14,7 @@
 #include "adj/adj_User.h"
 #include "adj/adj_GraphNodeFactory.h"
 #include <adj/adj_DJController.h>
+#include <adj/adj_GraphNode.h>
 
 namespace adj {
 
@@ -83,6 +84,7 @@ VoteManager::VoteManager() {
     //vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
     vote_server_ = "http://glebden.com/djdp3000/get_votes.php";
     thread_finished_ = true;
+	// last_id_ should remain empty on init
 }
 
 void VoteManager::init() {
@@ -142,7 +144,8 @@ void VoteManager::parse_new_votes() {
 
         parse_vote(*it);
 
-        last_id_ = id;
+        if (boost::lexical_cast<int>(id) > boost::lexical_cast<int>(last_id_))
+            last_id_ = id;
     }
 }
 
@@ -151,30 +154,51 @@ VoteId VoteManager::get_id_from_vote(Json::Value& val) {
 }
 	
 bool VoteManager::check_override_vote(Json::Value& val) {
-	if (val["override"].empty())
+	if (val["transition"].asString() == std::string("0"))
         return false;
-    
-    SongId id = val["song_id"].asInt();
-    
-    DJController::instance().set_next_song(id);
-    DJController::instance().transition();
     
     return true;
 }
 
 void VoteManager::parse_vote(Json::Value& val) {
-	if (check_override_vote(val))
-		return;
-	
-	
-    VotePtr vote(new Vote());
-    vote->id = get_id_from_vote(val);
-    vote->song_id = boost::lexical_cast<int>(val["song_id"].asString());
-    vote->user = UserFactory::instance().get_user_from_value(val["user"]);
-    vote->user->register_vote_for_song(vote->song_id);
+    bool override = check_override_vote(val);
+    bool previously_voted = false;
+    
+    SongId song_id = boost::lexical_cast<int>(val["song_id"].asString());
+    
+    // if override check if previously voted
+    if (override) {
+        std::vector<GraphNodePtr>& nodes = GraphNodeFactory::instance().nodes();
+        
+        for (std::vector<GraphNodePtr>::iterator it = nodes.begin();
+        	it != nodes.end(); ++it) {
+            
+         	if ((*it)->song().id() == song_id) {
+                previously_voted = true;
+                break;
+            }
+        }
+    }
+    
+    // if override vote and no one has voted for this
+    // or if not override
+    
+    if (!override || (override && !previously_voted)) {
+        VotePtr vote(new Vote());
+        vote->id = get_id_from_vote(val);
+        vote->song_id = song_id;
+        vote->user = UserFactory::instance().get_user_from_value(val["user"]);
+        vote->user->register_vote_for_song(vote->song_id);
 
-    // Inform graph of new vote
-    GraphNodeFactory::instance().update_graph_from_vote(vote);
+        // Inform graph of new vote
+        GraphNodeFactory::instance().update_graph_from_vote(vote);
+    }
+    
+    if (override) {
+        DJController::instance().set_next_song(song_id);
+        DJController::instance().transition();
+    }
+
 }
 
 void VoteManager::register_new_vote(Json::Value val) {
