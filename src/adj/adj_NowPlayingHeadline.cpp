@@ -22,7 +22,7 @@ NowPlayingHeadline::NowPlayingHeadline() {
 }
 
 void NowPlayingHeadline::init() {
-    text_font_ = ci::Font(ci::app::loadResource(RES_CROWTAP_FONT), 
+    text_font_ = ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
         static_cast<float>(font_size_));
 }
 

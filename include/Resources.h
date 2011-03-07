@@ -8,5 +8,5 @@
 #define RES_BOLD_FONT       CINDER_RESOURCE(../resources/, isocpeur.ttf, 130, TFF)
 #define RES_DEFAULT_PROFILE CINDER_RESOURCE(../resources/, defaulticon.jpg, 131, IMAGE)
 #define RES_NODE_HIGHLIGHT  CINDER_RESOURCE(../resources/, blue_ring.png, 132, IMAGE)
-#define RES_CROWTAP_FONT    CINDER_RESOURCE(../resources/, HouschkaPro-DemiBold.ttf, 133, TTF)
-#define RES_CROWTAP_FONT_BOLD CINDER_RESOURCE(../resources/, HouschkaPro-Bold.ttf, 134, TTF)
+#define RES_CROWDTAP_FONT   CINDER_RESOURCE(../resources/, HouschkaPro-Medium.otf, 133, TTF)
+#define RES_CROWDTAP_FONT_BOLD CINDER_RESOURCE(../resources/, HouschkaPro-Bold.otf, 134, TTF)

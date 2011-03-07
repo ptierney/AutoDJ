@@ -129,6 +129,8 @@ void SongFactory::load_song_database() {
         song_id = song["id"].asInt();
 
         song_map_[song_id] = create_song(song_id, song);
+		
+		ci::app::console() << "Loaded song with id = " << song_id << std::endl;
     }
 }
 

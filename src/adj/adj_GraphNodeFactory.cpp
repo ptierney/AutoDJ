@@ -63,6 +63,7 @@ void GraphNodeFactory::add_new_to_node(GraphNodePtr p) {
 GraphNodePtr GraphNodeFactory::create_new_node(SongId id) {
     GraphNodePtr q(new GraphNode());
     q->song_ = SongFactory::instance().lookup_song(id);
+	
     q->init();
 
     graph_nodes_.push_back(q);
@@ -112,11 +113,20 @@ void GraphNodeFactory::update_graph_from_vote(VotePtr vote) {
 
 void GraphNodeFactory::create_new_node_from_vote(VotePtr vote) {
     // create a new node. This doesn't create a particle
-    GraphNodePtr new_node = create_new_node(vote->song_id);
-    new_node->register_vote(vote);
+    GraphNodePtr new_node;
+	
+	try {
+		new_node = create_new_node(vote->song_id);
+	} catch (std::exception ex) {
+		ci::app::console() << "Error creating new node from vote." << std::endl;
+		ci::app::console() << ex.what() << std::endl;
+		return;
+	}
 
     ci::app::console() << "Creating new node for song: " << 
         new_node->song().name() << std::endl;
+	
+	new_node->register_vote(vote);
 
     // if it's the first, show it, return
     if (graph_nodes_.size() == 1) {

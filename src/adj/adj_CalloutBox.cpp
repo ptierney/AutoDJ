@@ -55,7 +55,7 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
 void CalloutBox::init() {
     box_coords_.resize(4);
 
-    medium_font_ = ci::Font(ci::app::loadResource(RES_CROWTAP_FONT), 
+    medium_font_ = ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
         static_cast<float>(font_size_));
 
     hide();
@@ -408,7 +408,7 @@ void CalloutBox::set_contents() {
 // create a new text texture
 void CalloutBox::refresh_text() {
     ci::TextLayout layout;
-    layout.setFont(ci::Font(ci::app::loadResource(RES_CROWTAP_FONT), 
+    layout.setFont(ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
         static_cast<float>(font_size_)));
     layout.setColor(text_color_);
     layout.addCenteredLine(node_.song().name());

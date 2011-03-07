@@ -12,6 +12,11 @@
 		CD245F5C131D5B6100BA37CB /* blue_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = CD245F5B131D5B6100BA37CB /* blue_ring.png */; };
 		CD245FE013204AC500BA37CB /* adj_DJController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD245FDE13204AC500BA37CB /* adj_DJController.cpp */; };
 		CD245FE113204AC500BA37CB /* adj_NowPlayingHeadline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD245FDF13204AC500BA37CB /* adj_NowPlayingHeadline.cpp */; };
+		CDD8491D132455AF00CA3949 /* HouschkaPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDD8491C132455AF00CA3949 /* HouschkaPro-Medium.ttf */; };
+		CDD84924132455E300CA3949 /* HouschkaPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDD84922132455E300CA3949 /* HouschkaPro-Bold.ttf */; };
+		CDD84925132455E300CA3949 /* HouschkaPro-DemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDD84923132455E300CA3949 /* HouschkaPro-DemiBold.ttf */; };
+		CDD849971324804700CA3949 /* HouschkaPro-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD849961324804700CA3949 /* HouschkaPro-Medium.otf */; };
+		CDD849991324805700CA3949 /* HouschkaPro-DemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD849981324805700CA3949 /* HouschkaPro-DemiBold.otf */; };
 		CDF9CCA91311DE6B0094E56F /* adj_CalloutBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC8E1311DE6B0094E56F /* adj_CalloutBox.cpp */; };
 		CDF9CCAA1311DE6B0094E56F /* adj_Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC8F1311DE6B0094E56F /* adj_Camera.cpp */; };
 		CDF9CCAB1311DE6B0094E56F /* adj_GraphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC901311DE6B0094E56F /* adj_GraphNode.cpp */; };
@@ -64,6 +69,11 @@
 		CD245FDD13204AB600BA37CB /* adj_NowPlayingHeadline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adj_NowPlayingHeadline.h; sourceTree = "<group>"; };
 		CD245FDE13204AC500BA37CB /* adj_DJController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_DJController.cpp; sourceTree = "<group>"; };
 		CD245FDF13204AC500BA37CB /* adj_NowPlayingHeadline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_NowPlayingHeadline.cpp; sourceTree = "<group>"; };
+		CDD8491C132455AF00CA3949 /* HouschkaPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-Medium.ttf"; path = "../resources/HouschkaPro-Medium.ttf"; sourceTree = SOURCE_ROOT; };
+		CDD84922132455E300CA3949 /* HouschkaPro-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-Bold.ttf"; path = "../resources/HouschkaPro-Bold.ttf"; sourceTree = SOURCE_ROOT; };
+		CDD84923132455E300CA3949 /* HouschkaPro-DemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-DemiBold.ttf"; path = "../resources/HouschkaPro-DemiBold.ttf"; sourceTree = SOURCE_ROOT; };
+		CDD849961324804700CA3949 /* HouschkaPro-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-Medium.otf"; path = "../resources/HouschkaPro-Medium.otf"; sourceTree = SOURCE_ROOT; };
+		CDD849981324805700CA3949 /* HouschkaPro-DemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-DemiBold.otf"; path = "../resources/HouschkaPro-DemiBold.otf"; sourceTree = SOURCE_ROOT; };
 		CDF9CC8E1311DE6B0094E56F /* adj_CalloutBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_CalloutBox.cpp; sourceTree = "<group>"; };
 		CDF9CC8F1311DE6B0094E56F /* adj_Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_Camera.cpp; sourceTree = "<group>"; };
 		CDF9CC901311DE6B0094E56F /* adj_GraphNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_GraphNode.cpp; sourceTree = "<group>"; };
@@ -202,6 +212,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CDD849981324805700CA3949 /* HouschkaPro-DemiBold.otf */,
+				CDD849961324804700CA3949 /* HouschkaPro-Medium.otf */,
+				CDD84922132455E300CA3949 /* HouschkaPro-Bold.ttf */,
+				CDD84923132455E300CA3949 /* HouschkaPro-DemiBold.ttf */,
+				CDD8491C132455AF00CA3949 /* HouschkaPro-Medium.ttf */,
 				CD245F5B131D5B6100BA37CB /* blue_ring.png */,
 				CDF9CD691311E5EF0094E56F /* isocpeui.ttf */,
 				CDF9CD6A1311E5EF0094E56F /* isocpeur.ttf */,
@@ -410,6 +425,11 @@
 				CDF9CD6B1311E5EF0094E56F /* isocpeui.ttf in Resources */,
 				CDF9CD6C1311E5EF0094E56F /* isocpeur.ttf in Resources */,
 				CD245F5C131D5B6100BA37CB /* blue_ring.png in Resources */,
+				CDD8491D132455AF00CA3949 /* HouschkaPro-Medium.ttf in Resources */,
+				CDD84924132455E300CA3949 /* HouschkaPro-Bold.ttf in Resources */,
+				CDD84925132455E300CA3949 /* HouschkaPro-DemiBold.ttf in Resources */,
+				CDD849971324804700CA3949 /* HouschkaPro-Medium.otf in Resources */,
+				CDD849991324805700CA3949 /* HouschkaPro-DemiBold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
