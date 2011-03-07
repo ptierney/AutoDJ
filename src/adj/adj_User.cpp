@@ -86,7 +86,7 @@ void UserFactory::resize_photo(ci::Surface& original, ci::Surface& resized) {
 }
 
 UserFactory::UserFactory() {
-    default_name_ = "AutoDJ User";
+    default_name_ = "Someone";
     image_url_base_ = "http://ptierney.com/~patrick/user_photos/";
     max_threads_ = 5;
     query_rate_ = 1; // spawn threads at least query_rate_ seconds apart
