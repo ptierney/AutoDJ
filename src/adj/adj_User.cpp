@@ -2,6 +2,7 @@
 #include <assert.h>
 
 #include <algorithm>
+#include <utility>
 
 #include "boost/lexical_cast.hpp"
 #include "boost/thread.hpp"
@@ -29,23 +30,27 @@ void User::register_vote_for_song(SongId id) {
     voted_songs_.push_back(id);
 }
 
-ProfileQuery::ProfileQuery(const std::vector<UserId>& ids, std::string base)
+	ProfileQuery::ProfileQuery(const std::vector<std::pair<UserId, std::string> >& ids, std::string base)
     : query_list_(ids), url_base_(base) {
 }
 
 // NOTE THIS RUNS IN A SEPARATE THREAD
 void ProfileQuery::operator()() {
-    for (std::vector<UserId>::const_iterator it = query_list_.begin();
+    for (std::vector<std::pair<UserId, std::string> >::const_iterator it = query_list_.begin();
         it != query_list_.end(); ++it) {
 
         download_profile(*it);
     }
 }
 
-void ProfileQuery::download_profile(UserId id) {
-    std::string url = url_base_ + boost::lexical_cast<std::string>(id) +
-        ".jpg";
+void ProfileQuery::download_profile(std::pair<UserId, std::string> q) {
+    //std::string url = url_base_ + boost::lexical_cast<std::string>(id) +
+    //    ".jpg";
 
+	UserId id = q.first;
+	
+	std::string url = q.second;
+	
     QueryReplyPtr reply(new QueryReply());
 
     try {
@@ -134,12 +139,24 @@ UserPtr UserFactory::get_user_from_value(Json::Value& val) {
 UserPtr UserFactory::create_user(Json::Value& val) {
     UserPtr user(new User());
     user->id_ = get_id_from_value(val);
-    user->name_ = val["name"].asString();
-
-    if (user->name_.empty())
+    
+    std::string fname = val["fname"].asString();
+    std::string lname = val["lname"].asString();
+    
+    if (fname.empty() && lname.empty())
         user->name_ = default_name_;
+    else if (fname.empty())
+        user->name_ = lname;
+    else if (lname.empty())
+        user->name_ = fname;
+    else 
+        user->name_ = fname + " " + lname;
+    
+	user->photo_url_ = val["avatar"].asString();
 
-    pending_queries_.push_back(user->id_);
+	std::pair<UserId, std::string> p(user->id_, user->photo_url_);
+	
+    pending_queries_.push_back(p);
 
     user->photo_ = default_photo_;
     user->photo_resized_ = default_photo_resized_;
@@ -188,10 +205,15 @@ void UserFactory::parse_query_replies() {
 
         QueryReplyPtr reply = *it;
 
-        std::vector<UserId>::iterator pending_it = 
-            std::find(pending_queries_.begin(), pending_queries_.end(),
-            reply->id);
-
+        std::vector<std::pair<UserId, std::string> >::iterator pending_it;
+		
+		for (pending_it = pending_queries_.begin(); pending_it != pending_queries_.end();
+			 ++pending_it) {
+			
+			if (pending_it->first == reply->id)
+				break;
+		}
+		
         // must have already been answered
         if (pending_it == pending_queries_.end())
             continue;

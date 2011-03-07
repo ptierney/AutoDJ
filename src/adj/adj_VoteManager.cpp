@@ -2,6 +2,7 @@
 #include <set>
 
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include <boost/lexical_cast.hpp>
 
 #include "json/reader.h"
 #include "json/value.h"
@@ -12,6 +13,7 @@
 #include "adj/adj_VoteManager.h"
 #include "adj/adj_User.h"
 #include "adj/adj_GraphNodeFactory.h"
+#include <adj/adj_DJController.h>
 
 namespace adj {
 
@@ -78,8 +80,8 @@ void VoteServerQuery::parse_votes(Json::Value& val) {
 
 VoteManager::VoteManager() {
     query_time_ = 5; // in seconds
-    vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
-    //vote_server_ = "http://glebden.com/djdp3000/get_votes.php";
+    //vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
+    vote_server_ = "http://glebden.com/djdp3000/get_votes.php";
     thread_finished_ = true;
 }
 
@@ -147,11 +149,27 @@ void VoteManager::parse_new_votes() {
 VoteId VoteManager::get_id_from_vote(Json::Value& val) {
     return val["id"].asString();
 }
+	
+bool VoteManager::check_override_vote(Json::Value& val) {
+	if (val["override"].empty())
+        return false;
+    
+    SongId id = val["song_id"].asInt();
+    
+    DJController::instance().set_next_song(id);
+    DJController::instance().transition();
+    
+    return true;
+}
 
 void VoteManager::parse_vote(Json::Value& val) {
+	if (check_override_vote(val))
+		return;
+	
+	
     VotePtr vote(new Vote());
     vote->id = get_id_from_vote(val);
-    vote->song_id = val["vote"].asInt();
+    vote->song_id = boost::lexical_cast<int>(val["song_id"].asString());
     vote->user = UserFactory::instance().get_user_from_value(val["user"]);
     vote->user->register_vote_for_song(vote->song_id);
 

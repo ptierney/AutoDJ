@@ -6,6 +6,7 @@
 #include "adj/adj_Adj.h"
 #include <map>
 #include <deque>
+#include <utility>
 
 #include "boost/thread.hpp"
 #include "boost/thread/mutex.hpp"
@@ -41,6 +42,7 @@ public:
 
     std::string name_;
     UserId id_;
+	std::string photo_url_;
     ci::Surface photo_;
     ci::Surface photo_resized_;
     ci::gl::Texture photo_texture_;
@@ -58,14 +60,14 @@ typedef std::shared_ptr<User> UserPtr;
 
 class ProfileQuery {
 public:
-    ProfileQuery(const std::vector<UserId>&, std::string url_base);
+    ProfileQuery(const std::vector<std::pair<UserId, std::string> >&, std::string url_base);
 
     void operator()();
 
 private:
-    void download_profile(UserId);
+    void download_profile(std::pair<UserId, std::string>);
 
-    std::vector<UserId> query_list_;
+    std::vector<std::pair<UserId, std::string> > query_list_;
     std::string url_base_;
 };
 
@@ -124,7 +126,7 @@ private:
 
     static UserFactory* instance_;
 
-    std::vector<UserId> pending_queries_;
+    std::vector<std::pair<UserId, std::string> > pending_queries_;
 
     int max_threads_;
     int query_rate_; // in seconds
