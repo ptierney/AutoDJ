@@ -2,6 +2,7 @@
 #include <fstream>
 #include <exception>
 #include <deque>
+#include <cassert>
 
 #include "boost/uuid/uuid.hpp"
 #include "boost/uuid/uuid_io.hpp"
@@ -94,23 +95,32 @@ SongFactory::SongFactory() {
 }
 
 void SongFactory::parse_song_database_file() {
-    Json::Reader reader;
-
-    std::string msg;
-    std::string line;
-
-    std::ifstream input(song_database_file_.c_str());
-
-    if (input.is_open()) {
-        while (input.good()) {
-            getline (input, line);
-            msg += line;
-            msg += "\n"; // restore the chomped endl
-        }
-        input.close();
+	
+	// update, get the database file off the internet
+	// makes this situation a whole lot easier
+	
+    ci::IStreamUrlRef urlRef;
+	
+    std::string url_string = "http://ptierney.com/~patrick/crowdtap.json";
+	
+    try {
+        urlRef = ci::IStreamUrl::createRef(url_string);
+    } catch (...) { // it can't connect to the servre
+        assert(0); // ffffffffff!
     }
-
-    reader.parse(msg, song_database_);
+	
+    ci::Buffer buf = loadStreamBuffer(urlRef);
+    unsigned char* j = (unsigned char*) buf.getData();
+	
+    // assign the char array to string using the size of the buffer array
+	std::string root;
+    root.assign(j,j+buf.getDataSize());
+	
+    // root now contains the vote json
+    Json::Reader reader;
+    Json::Value votes;
+	
+    reader.parse(root, song_database_);
 }
 
 // 
@@ -129,8 +139,6 @@ void SongFactory::load_song_database() {
         song_id = song["id"].asInt();
 
         song_map_[song_id] = create_song(song_id, song);
-		
-		ci::app::console() << "Loaded song with id = " << song_id << std::endl;
     }
 }
 
