@@ -1,6 +1,11 @@
 
 #pragma once
 
+/**************
+ * OK, so tihs isn't really a strict
+ * 'Now Playing' bar, just a URL.
+ ***************************/
+
 #include <adj/adj_Adj.h>
 
 #include <string>
@@ -37,6 +42,14 @@ private:
     int font_size_;
     int top_offset_;
     int side_offset_;
+    
+    double dash_length_;
+    
+    ci::Vec2i surface_size_;
+    double border_line_width_;
+    ci::Color highlight_color_;
+    ci::Color top_grad_color_;
+    ci::Color corner_grad_color_;
 
     ci::gl::Texture texture_;
     std::shared_ptr<ci::cairo::SurfaceImage> surface_;

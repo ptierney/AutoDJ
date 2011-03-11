@@ -82,12 +82,14 @@ void Visualizer::add_node() {
 }
 
 bool Visualizer::mouse_drag(ci::app::MouseEvent) {
-    add_node();
+    //add_node();
 
     return true;
 }
 
 bool Visualizer::key_down(ci::app::KeyEvent key) {
+    return true;
+    
     if (key.getChar() == 'a')
         add_node();
     else if (key.getChar() == ' ')

@@ -27,6 +27,9 @@ Renderer::Renderer() {
     network_color_ = ci::ColorA(1.0f, 1.0f, 1.0f, 0.25f);
     line_width_ = 6.0f;
     highlight_width_ = line_width_ * 2.0f;
+    
+    // Crowdtap Red
+    highlight_color_ = ci::ColorA(255.f / 255.f, 51.f / 255.f, 0.f, 1.f);
 }
 
 void Renderer::init() {

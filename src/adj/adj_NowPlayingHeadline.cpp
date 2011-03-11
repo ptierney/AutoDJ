@@ -8,6 +8,7 @@
 #include <adj/adj_PlayManager.h>
 #include <adj/adj_GraphNode.h>
 #include <adj/adj_Song.h>
+#include <adj/adj_Renderer.h>
 
 #include <Resources.h>
 
@@ -18,12 +19,31 @@ NowPlayingHeadline* NowPlayingHeadline::instance_ = NULL;
 NowPlayingHeadline::NowPlayingHeadline() {
     font_size_ = 45;
     top_offset_ = 8;
-    side_offset_ = 8;
+    side_offset_ = 15;
+    
+    dash_length_ = 10.0;
+    
+    border_line_width_ = 1.5;
+    
+    //top_grad_color_ = ci::Color(0.25, 0.25, 0.25);
+    top_grad_color_ = ci::Color(Renderer::instance().background_color().r * 2.f,
+    Renderer::instance().background_color().g * 2.f,
+    Renderer::instance().background_color().b * 2.f);
+    
+    corner_grad_color_ = ci::Color(0.15, 0.15, 0.15);
 }
 
 void NowPlayingHeadline::init() {
     text_font_ = ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
         static_cast<float>(font_size_));
+        
+    surface_size_ = ci::Vec2i(5.0f * AdjApp::instance().getWindowWidth() / 12.0f, 
+        font_size_ * 2);
+        
+    highlight_color_ = Renderer::instance().highlight_color();
+
+    // create texture
+    create_cairo_surface();
 }
 
 void NowPlayingHeadline::update() {
@@ -36,33 +56,91 @@ void NowPlayingHeadline::update() {
 
     song_name_ = now_playing_->song().name();
     artist_name_ = now_playing_->song().artist();
-
-    // create texture
-    create_cairo_surface();
 }
 
 void NowPlayingHeadline::draw() {
-    if (now_playing_.get() == NULL)
-        return;
+    /*
+    glBegin(GL_QUADS);
+    glColor3f(top_grad_color_); 
+    glVertex2f(0, 0);
+    glColor3f(corner_grad_color_); 
+    glVertex2f(surface_size_.x, 0);
+    glColor3f(Renderer::instance().background_color()); 
+    glVertex2f(surface_size_.x, surface_size_.y);    
+    glColor3f(corner_grad_color_);
+    glVertex2f(0, surface_size_.y);
+    glEnd();    
+    */
+    
+    glBegin(GL_QUADS);
+    glColor3f(top_grad_color_); 
+    glVertex2f(0, 0);
+    glVertex2f(surface_size_.x, 0);
+    glColor3f(Renderer::instance().background_color()); 
+    glVertex2f(surface_size_.x, surface_size_.y);    
+    glVertex2f(0, surface_size_.y);
+    glEnd(); 
 
     ci::gl::color(ci::Color::white());
-    ci::gl::draw(texture_, ci::Vec2f(top_offset_, side_offset_));
+    ci::gl::draw(texture_, ci::Vec2f::zero());
 }
 
 void NowPlayingHeadline::create_cairo_surface() {
     surface_ = std::shared_ptr<ci::cairo::SurfaceImage>(new 
-        ci::cairo::SurfaceImage(AdjApp::instance().getWindowWidth(), 
-        font_size_ * 2, true));
+        ci::cairo::SurfaceImage(surface_size_.x,
+        surface_size_.y, true));
 
     context_ = std::shared_ptr<ci::cairo::Context>(new ci::cairo::Context(*surface_));
 
+    /*
+    // draw background
+    context_->setSourceRgb(Renderer::instance().background_color().r,
+        Renderer::instance().background_color().g, 
+        Renderer::instance().background_color().b);
+    context_->setSourceRgb(g);
+    context_->rectangle(0.0, 0.0, surface_size_.x, surface_size_.y);
+    context_->fill();
+    */
+
+    context_->setSourceRgb(highlight_color_.r,
+        highlight_color_.g, highlight_color_.b);
+
+    context_->setLineCap(ci::cairo::LINE_CAP_SQUARE);
+    context_->setLineWidth(border_line_width_);
+
+    std::vector<double> dash;
+    dash.push_back(dash_length_); // dash size
+    dash.push_back(dash_length_ * 2); // gap size
+
+    context_->setDash(dash);
+    
+    context_->newPath();
+    context_->moveTo(border_line_width_, surface_size_.y - 
+        border_line_width_);
+    context_->lineTo(surface_size_.x - border_line_width_, surface_size_.y - 
+        border_line_width_);
+    context_->lineTo(surface_size_.x - border_line_width_, border_line_width_);
+    //context_->closePath();
+    context_->stroke();
+    
+    /*
+    context_->newPath();
+    context_->moveTo(border_line_width_, border_line_width_);
+    context_->lineTo(surface_size_.x - border_line_width_, border_line_width_);
+    context_->lineTo(surface_size_.x - border_line_width_, surface_size_.y - 
+        border_line_width_);
+    context_->lineTo(border_line_width_, surface_size_.y - border_line_width_);
+    context_->closePath();
+    context_->stroke();
+    */
+    
     context_->setFont(text_font_);
     context_->setFontSize(static_cast<double>(font_size_));
     context_->setSourceRgb(1.0f, 1.0f, 1.0f);
 
-    context_->moveTo(ci::Vec2f(0, font_size_));
+    context_->moveTo(ci::Vec2f(side_offset_, top_offset_ + font_size_));
 
-    context_->showText("Now Playing: " + song_name_ + " - " + artist_name_);
+    context_->showText("Vote at dj.ctap.it");
 
     texture_ = ci::gl::Texture(surface_->getSurface());
 }

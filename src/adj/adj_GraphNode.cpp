@@ -32,7 +32,7 @@ GraphNode::GraphNode() {
     node_color_ = ci::ColorA(120.0f / 255.f, 122.f / 255.f, 
         126.f / 255.f, 1.0f);
     // Crowdtap red
-    node_highlight_color_ = ci::ColorA(255.f / 255.f, 51.f / 255.f, 0.f, 1.f);
+    node_highlight_color_ = Renderer::instance().highlight_color();
     background_color_ = Renderer::instance().background_color();
     scale_ = 1.0f;
     max_scale_ = 1.0f;

@@ -31,6 +31,9 @@ public:
     void remove_graphic_item(GraphicItem*);
 
     std::vector<GraphicItem*>& graphic_items() { return graphic_items_; }
+    
+    // Crowdtap Red
+    ci::ColorA& highlight_color() { return highlight_color_; }
 
 private:
     Renderer();
@@ -43,6 +46,7 @@ private:
 
     ci::Color background_color_;
     ci::ColorA network_color_;
+    ci::ColorA highlight_color_;
 
     float line_width_;
     float highlight_width_;
