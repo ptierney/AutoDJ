@@ -30,6 +30,8 @@ public:
 
     void remove_now_playing();
     void remove_now_playing(GraphNodePtr);
+    
+    ci::Vec2i size() { return surface_size_; }
 
 private:
     void create_cairo_surface();

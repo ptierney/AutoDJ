@@ -10,6 +10,7 @@
 #include <adj/adj_GraphPhysics.h>
 #include <adj/adj_CalloutBox.h>
 #include <adj/adj_Renderer.h>
+#include <adj/adj_NowPlayingHeadline.h>
 
 namespace adj {
 
@@ -83,6 +84,8 @@ void Camera::update_centroid() {
 
     target_x -= width_border_ / scale_;
     target_y -= height_border_ / scale_;
+    
+    target_y -= NowPlayingHeadline::instance().size().y / scale_;
 
     ci::Vec2f centroid_target = ci::Vec2f(target_x, target_y);
 
@@ -92,7 +95,7 @@ void Camera::update_centroid() {
         2 * width_border_) / 
         (delta_x);
     float height_scale = static_cast<float>(AdjApp::instance().getWindowHeight() - 
-        2 * height_border_) / 
+        2 * height_border_ - NowPlayingHeadline::instance().size().y) / 
         (delta_y);
 
     float abs_scale = ci::math<float>::min(width_scale, height_scale);
