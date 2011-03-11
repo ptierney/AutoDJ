@@ -23,12 +23,12 @@ NowPlayingHeadline::NowPlayingHeadline() {
     
     dash_length_ = 10.0;
     
-    border_line_width_ = 1.5;
+    border_line_width_ = 1.7;
     
     //top_grad_color_ = ci::Color(0.25, 0.25, 0.25);
-    top_grad_color_ = ci::Color(Renderer::instance().background_color().r * 1.5f,
-    Renderer::instance().background_color().g * 1.5f,
-    Renderer::instance().background_color().b * 1.5f);
+    top_grad_color_ = ci::Color(Renderer::instance().background_color().r * 1.3f,
+    Renderer::instance().background_color().g * 1.3f,
+    Renderer::instance().background_color().b * 1.3f);
     
     corner_grad_color_ = ci::Color(0.15, 0.15, 0.15);
 }
