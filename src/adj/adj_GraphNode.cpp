@@ -44,7 +44,7 @@ GraphNode::GraphNode() {
     distance_from_current_ = 0;
     visible_ = false;
     fade_time_ = 1000; // in milliseconds
-    display_time_ = 6000; // in milliseconds
+    display_time_ = 15000; // in milliseconds
     path_trigger_delay_time_ = 400; // in ms
 
     relax_time_ = 120000; // in milliseconds
