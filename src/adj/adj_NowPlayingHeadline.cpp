@@ -26,9 +26,9 @@ NowPlayingHeadline::NowPlayingHeadline() {
     border_line_width_ = 1.5;
     
     //top_grad_color_ = ci::Color(0.25, 0.25, 0.25);
-    top_grad_color_ = ci::Color(Renderer::instance().background_color().r * 2.f,
-    Renderer::instance().background_color().g * 2.f,
-    Renderer::instance().background_color().b * 2.f);
+    top_grad_color_ = ci::Color(Renderer::instance().background_color().r * 1.5f,
+    Renderer::instance().background_color().g * 1.5f,
+    Renderer::instance().background_color().b * 1.5f);
     
     corner_grad_color_ = ci::Color(0.15, 0.15, 0.15);
 }

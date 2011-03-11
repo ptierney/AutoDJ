@@ -9,6 +9,7 @@
 #include <cinder/app/App.h>
 #include <cinder/Utilities.h>
 #include <cinder/CinderMath.h>
+#include <cinder/Rand.h>
 
 #include <graph/graph_Particle.h>
 #include <graph/graph_Spring.h>
@@ -67,6 +68,12 @@ void GraphNode::init() {
     circle_texture_scale_ = circle_radius_ * 2.0f / highlight_circle_.getWidth();
 
     last_vote_time_ = boost::posix_time::microsec_clock::universal_time();
+    
+    ci::Rand rand;
+    rand.randomize();
+
+    circle_radius_ = rand.randFloat(4.5f, 5.5f);
+    inner_circle_radius_ = rand.randFloat(1.5f, 2.5f);
 }
 
 GraphNode::~GraphNode() {
@@ -168,12 +175,11 @@ void GraphNode::draw_node() {
     //    0, 10, max_scale_, min_scale_));
 
     if (highlight_connection()) {
-        ci::gl::pushMatrices();
-            ci::gl::translate(ci::Vec2f(-circle_radius_, -circle_radius_));
-            ci::gl::scale(ci::Vec3f::one() * circle_texture_scale_);
-            ci::gl::color(ci::Color::white());
-            ci::gl::draw(highlight_circle_texture_);
-        ci::gl::popMatrices();
+        ci::gl::color(node_highlight_color_);
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
+        
+        ci::gl::color(background_color_);
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), inner_circle_radius_);        
     } else {
         ci::gl::color(node_color_);
         ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
