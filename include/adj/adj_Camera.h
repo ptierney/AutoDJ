@@ -36,7 +36,12 @@ private:
     void init();
 
     void update_centroid();
-
+    
+    void get_min_max_over_all(float& x_min, float& x_max,
+        float& y_min, float& y_max);
+    void get_min_max_over_active(float& x_min, float& x_max,
+        float& y_min, float& y_max);
+    
     static Camera* instance_;
 
     float width_border_;
@@ -44,6 +49,8 @@ private:
 
     float scale_;
     ci::Vec2f centroid_;
+
+    int node_crop_cuttoff_;
 
     float scale_damping_;
     float centroid_damping_;

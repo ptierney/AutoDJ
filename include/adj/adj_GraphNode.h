@@ -96,6 +96,8 @@ public:
     void hide();
 
     friend class DJController;
+    
+    CalloutBox& callout_box() { return *callout_box_; }
 
 private:
     void draw_current_song();
