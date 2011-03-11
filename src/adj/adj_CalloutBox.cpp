@@ -37,6 +37,7 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     visible_ = true;
     text_color_ = ci::ColorA(1.0f, 0.0f, 1.0f, 1.0f);
     font_size_ = 48;
+    font_size_large_ = 60;
     
     is_left_of_node_ = false;
     side_margin_ = 40;
@@ -97,7 +98,8 @@ void CalloutBox::calculate_surface_size() {
         extra_vert_dim = font_size_ + text_spacing_ * 3;
 
 
-    int height = extra_vert_dim + top_margin_ * 2 + font_size_ * 3 + 
+    int height = extra_vert_dim + top_margin_ * 2 + font_size_ * 1 + 
+        font_size_large_ * 2 +
         text_spacing_ * 4 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
 
     for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin();
@@ -309,7 +311,7 @@ float CalloutBox::calculate_surface_width() {
 
     // CHANGE THIS IF THE TEXT IS GOING OUTSIDE CALLOUT BOX
     // ====================================================
-    float letter_width = 2.2f / scale_;
+    float letter_width = 3.f / scale_;
 
     if (user_name_max)
         return kMaxImageWidth + photo_spacing_ * 2.f + 
@@ -322,6 +324,7 @@ float CalloutBox::calculate_surface_width() {
 void CalloutBox::set_contents() {
     ci::Vec2f text_pos(side_margin_, top_margin_ + font_size_);
     ci::Vec2f font_height_offset(0.0f, font_size_ + text_spacing_);
+    ci::Vec2f font_height_offset_large(0.0f, font_size_large_ + text_spacing_);
 
     // draw background
     context_->setSourceRgb(Renderer::instance().background_color().r,
@@ -340,16 +343,21 @@ void CalloutBox::set_contents() {
         context_->showText("Now Playing:");
         text_pos += ci::Vec2f(0.0f, font_size_ + text_spacing_ * 3);
     }
+    
+    context_->setFontSize(static_cast<double>(font_size_large_));
 
     context_->moveTo(text_pos);
     context_->showText(node_.song().name());
 
-    text_pos += font_height_offset;
+    text_pos += font_height_offset_large;
 
     context_->moveTo(text_pos);
     context_->showText(node_.song().artist());
 
-    text_pos += font_height_offset;
+    text_pos += font_height_offset_large;
+    
+    context_->setFontSize(static_cast<double>(font_size_));
+    
     text_pos += ci::Vec2f(0.0f, 2.f * text_spacing_);
 
     context_->moveTo(text_pos);

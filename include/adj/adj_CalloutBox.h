@@ -89,6 +89,7 @@ private:
     bool visible_;
 
     int font_size_;
+    int font_size_large_;
     ci::ColorA text_color_;
     ci::gl::Texture text_texture_;
     ci::gl::Texture connection_texture_;
