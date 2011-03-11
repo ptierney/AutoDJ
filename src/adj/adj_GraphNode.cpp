@@ -47,10 +47,10 @@ GraphNode::GraphNode() {
     display_time_ = 15000; // in milliseconds
     path_trigger_delay_time_ = 400; // in ms
 
-    relax_time_ = 120000; // in milliseconds
+    relax_time_ = 600000; // in milliseconds
     closest_spring_length_ = 20.0f;
     closest_spring_strength_ = 0.2f;
-    farthest_spring_length_ = 50.0f;
+    farthest_spring_length_ = 70.0f;
     farthest_spring_strength_ = 0.1f;
 
     is_fading_in_ = false;
