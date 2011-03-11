@@ -100,7 +100,7 @@ void CalloutBox::calculate_surface_size() {
 
     int height = extra_vert_dim + top_margin_ * 2 + font_size_ * 1 + 
         font_size_large_ * 2 +
-        text_spacing_ * 4 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
+        text_spacing_ * 7 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
 
     for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin();
         it != resized_user_photos_.end(); ++it) {
@@ -370,6 +370,8 @@ void CalloutBox::set_contents() {
 
     photo_coords_.clear();
 
+    bool added_extra_space = false;
+
     std::deque<ci::gl::Texture>::iterator texture_it = resized_user_photos_.begin();
     for (std::deque<UserPtr>::iterator user_it = node_.song().users().begin();
         user_it != node_.song().users().end(); ++user_it) {
@@ -381,6 +383,12 @@ void CalloutBox::set_contents() {
         photo_coords_.push_back(photo_pos);
 
         context_->moveTo(text_pos);
+        
+        if (!added_extra_space)
+            context_->setFontSize(static_cast<double>(font_size_large_));
+        else 
+            context_->setFontSize(static_cast<double>(font_size_));
+        
         context_->showText((*user_it)->name_);
 
         offset += ci::Vec2f(0.0f, photo_spacing_);
@@ -388,8 +396,18 @@ void CalloutBox::set_contents() {
         text_pos += offset;
         photo_pos += offset;
 
-        if (texture_it != resized_user_photos_.end())
+        if (texture_it != resized_user_photos_.end()) {
             ++texture_it;
+            
+            if (!added_extra_space) {
+            
+                photo_pos += ci::Vec2f(0.0f, text_spacing_ * 3);
+                text_pos += ci::Vec2f(0.0f, text_spacing_ * 3);
+            
+                added_extra_space = true;
+            }
+            
+        }
     }
 
     // draw boarder
