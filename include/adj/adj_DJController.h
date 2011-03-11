@@ -24,6 +24,9 @@ public:
     bool transition_next_loop() { return transition_next_loop_; }
     
     static DJController& instance();
+    
+    bool has_next_song() { return has_next_song_; }
+    SongId next_song() { return next_song_; }
 
 private:
     void set_next_song_randomly();

@@ -3,25 +3,28 @@
 
 #include <map>
 
-#include "boost/thread.hpp"
-#include "boost/thread/mutex.hpp"
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
 
-#include "cinder/Rand.h"
-#include "cinder/app/App.h"
+#include <cinder/Rand.h>
+#include <cinder/app/App.h>
 
-#include "adj/adj_GraphNodeFactory.h"
-#include "adj/adj_GraphNode.h"
-#include "adj/adj_GraphPhysics.h"
-#include "adj/adj_PlayManager.h"
-#include "adj/adj_Song.h"
-#include "adj/adj_VoteManager.h"
-#include "adj/adj_GraphOracle.h"
-#include "adj/adj_NowPlayingHeadline.h"
+#include <graph/graph_ParticleSystem.h>
+
+#include <adj/adj_GraphNodeFactory.h>
+#include <adj/adj_GraphNode.h>
+#include <adj/adj_GraphPhysics.h>
+#include <adj/adj_PlayManager.h>
+#include <adj/adj_Song.h>
+#include <adj/adj_VoteManager.h>
+#include <adj/adj_GraphOracle.h>
+#include <adj/adj_NowPlayingHeadline.h>
+#include <adj/adj_DJController.h>
 
 namespace adj {
 
 GraphNodeFactory::GraphNodeFactory() {
-    // nothing here
+    max_nodes_in_simulation_ = 25;
 }
 
 void GraphNodeFactory::init() {
@@ -100,6 +103,42 @@ void GraphNodeFactory::assert_node_has_particle(GraphNodePtr p) {
 void GraphNodeFactory::update_graph_from_vote(VotePtr vote) {
     SongId song_id = vote->song_id;
 
+    // if the size of the graph nodes is too big,
+    // delete on of the nodes
+    // don't delete the now playing node, or the node 
+    // that this  would add to
+    
+    if (graph_nodes_.size() > max_nodes_in_simulation_) {
+        int max_votes = 0;
+        SongId now_playing_id = PlayManager::instance().now_playing()->song().id();
+        SongId next_id = DJController::instance().next_song();
+        bool has_next_song = DJController::instance().has_next_song();   
+        
+        GraphNodePtr to_delete;
+
+        // find the node with the least number of votes
+        for (std::vector<GraphNodePtr>::iterator it = graph_nodes_.begin();
+            it != graph_nodes_.end(); ++it) {
+            
+            SongId id = (*it)->song().id();
+            
+            if (id == now_playing_id || id == song_id || 
+                (has_next_song && id == next_id))
+                continue;
+            
+            if ((*it)->song().num_votes() < max_votes)
+                continue;
+                
+            max_votes = (*it)->song().num_votes();
+            to_delete = *it;
+        }
+        
+        // properly delete node using 
+        
+        delete_node_and_connections(to_delete);
+    }
+    
+    
     // search through nodes for song id 
     song_map_it_ = song_map_.find(song_id);
     if (song_map_it_ != song_map_.end()) {
@@ -206,6 +245,54 @@ void GraphNodeFactory::remove_edge(std::pair<GraphNodePtr, GraphNodePtr>& edge) 
         ++it;
     }
 }
+
+void GraphNodeFactory::delete_node_and_connections(GraphNodePtr& node) {
+    // delete all attractions
+    GraphPhysics::instance().clear_all_node_connections();
+    
+    delete_node(node);
+    
+    assert(node.unique());
+    
+    node.reset();
+    
+    // make "choose 2" separations between nodes
+    ParticleSystemPtr system = GraphPhysics::instance().particle_system();
+    std::vector<ParticlePtr>& particles = system->particles_;
+
+    for (std::vector<ParticlePtr>::iterator it_a = particles.begin();
+        it_a != particles.end(); ++it_a) {
+
+        for (std::vector<ParticlePtr>::iterator it_b = particles.begin();
+            it_b != particles.end(); ++it_b) {
+
+            if (*it_a == *it_b)
+                continue;
+
+            GraphPhysics::instance().make_separation_between_node_particles(*it_a, *it_b);
+        }
+    }
+    
+    // make n-1 springs to now playing
+
+    GraphNodePtr now_playing = PlayManager::instance().now_playing();
+    
+    std::vector<GraphNodePtr>& nodes = GraphNodeFactory::instance().nodes();
+	
+	std::pair<GraphNodePtr, GraphNodePtr> temp_pair;
+
+    for (std::vector<GraphNodePtr>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
+        if (*it == now_playing)
+            continue;
+
+        GraphPhysics::instance().link_nodes(now_playing, *it);
+		
+		temp_pair = std::pair<GraphNodePtr, GraphNodePtr>(now_playing, *it);
+        GraphNodeFactory::instance().add_edge(temp_pair);
+    }
+    
+}
+
 
 void GraphNodeFactory::delete_node(GraphNodePtr node) {
     // remove from main vector

@@ -44,6 +44,8 @@ public:
     void add_new_to_node(GraphNodePtr node);
 
     void delete_node(GraphNodePtr);
+    // passed in node is set to NULL after the method
+    void delete_node_and_connections(GraphNodePtr&);
 
     std::vector<GraphNodePtr>& nodes() { return graph_nodes_; }
     std::map<SongId, GraphNodePtr>& song_map() { return song_map_; }
@@ -70,6 +72,8 @@ private:
     void check_pair_requests();
     void pair_nodes(SongId, SongId);
     void assert_node_has_particle(GraphNodePtr);
+    
+    int max_nodes_in_simulation_;
 
     static GraphNodeFactory* instance_;
 
