@@ -361,7 +361,7 @@ void CalloutBox::set_contents() {
     text_pos += ci::Vec2f(0.0f, 2.f * text_spacing_);
 
     context_->moveTo(text_pos);
-    context_->showText("Voted By:");
+    context_->showText("Just Voted By:");
 
     text_pos += ci::Vec2f(0.0f, photo_spacing_);
     ci::Vec2f photo_pos = text_pos + ci::Vec2f(kMaxImageWidth / 2.0f, 0.0f);

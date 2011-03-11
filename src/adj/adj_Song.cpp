@@ -194,9 +194,15 @@ SongId SongFactory::get_random_song_id() {
     return get_random_song()->id();
 }
 
+// CalloutBox would like the user / votes to be 
+// in lastest = first order. That is why this is 
+// push_front
 void Song::register_vote(VotePtr vote) {
-    votes_.push_back(vote);
-    users_.push_back(vote->user);
+    votes_.push_front(vote);
+    users_.push_front(vote->user);
+
+    //votes_.push_back(vote);
+    //users_.push_back(vote->user);
 }
 
 // TODO: should be nullptr
