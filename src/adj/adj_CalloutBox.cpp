@@ -96,11 +96,13 @@ void CalloutBox::calculate_surface_size() {
 
     if (node_.is_current_song())
         extra_vert_dim = font_size_ + text_spacing_ * 3;
-
+        
+    if (node_.song().votes().size() > 1)
+        extra_vert_dim += text_spacing_ * 3;
 
     int height = extra_vert_dim + top_margin_ * 2 + font_size_ * 1 + 
         font_size_large_ * 2 +
-        text_spacing_ * 7 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
+        text_spacing_ * 4 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
 
     for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin();
         it != resized_user_photos_.end(); ++it) {
@@ -311,7 +313,7 @@ float CalloutBox::calculate_surface_width() {
 
     // CHANGE THIS IF THE TEXT IS GOING OUTSIDE CALLOUT BOX
     // ====================================================
-    float letter_width = 3.f / scale_;
+    float letter_width = 3.5f / scale_;
 
     if (user_name_max)
         return kMaxImageWidth + photo_spacing_ * 2.f + 
@@ -444,7 +446,7 @@ void CalloutBox::refresh_text() {
     ci::Surface8u rendered = layout.render(true);
     // this might want to go in another thread
     text_texture_ = ci::gl::Texture(rendered);
-}
+}		
 
 void CalloutBox::context_setup_dash(std::shared_ptr<ci::cairo::Context> ctx) {
     // scale_ division needed to transform from parent coordinates

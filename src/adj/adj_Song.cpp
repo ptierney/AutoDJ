@@ -31,6 +31,8 @@ Song::Song(SongId id, std::string name, std::string file_name, int duration,
     : id_(id), name_(name), file_name_(file_name), duration_(duration),
     artist_(artist), album_(album) {
     is_playing_ = false;
+    
+    is_surprise_ = id == SongFactory::instance().surprise_id();
 }
 
 void Song::init() {
@@ -140,6 +142,9 @@ void SongFactory::load_song_database() {
 
         song_map_[song_id] = create_song(song_id, song);
     }
+    
+    // create the entry for the surprise songs
+    song_map_[surprise_id()] = create_surprise_song();
 }
 
 boost::posix_time::ptime SongFactory::get_current_time() {
@@ -159,6 +164,18 @@ SongPtr SongFactory::create_song(SongId id, Json::Value& song) {
         
     song_ptr->init(); // loads the file
 
+    return song_ptr;
+}
+
+// this is the dummy song used when the DJ plays a song 
+// that's not in the database
+SongPtr SongFactory::create_surprise_song() {
+    SongPtr song_ptr = SongPtr(new Song(surprise_id(),
+        "DJ's Choice", "NULL", 240, " ",
+        "album"));
+        
+    song_ptr->init();
+    
     return song_ptr;
 }
 
@@ -198,6 +215,9 @@ SongId SongFactory::get_random_song_id() {
 // in lastest = first order. That is why this is 
 // push_front
 void Song::register_vote(VotePtr vote) {
+    if (is_surprise_ && !votes_.empty())
+        return;
+
     votes_.push_front(vote);
     users_.push_front(vote->user);
 

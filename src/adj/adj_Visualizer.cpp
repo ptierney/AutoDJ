@@ -88,6 +88,10 @@ bool Visualizer::mouse_drag(ci::app::MouseEvent) {
 }
 
 bool Visualizer::key_down(ci::app::KeyEvent key) {
+
+	if( key.getChar() == 'f' )
+		AdjApp::instance().setFullScreen(!AdjApp::instance().isFullScreen());
+
     return true;
     
     if (key.getChar() == 'a')

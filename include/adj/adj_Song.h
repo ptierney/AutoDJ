@@ -61,6 +61,8 @@ private:
     std::string artist_;
     std::string album_;
     int duration_;
+    
+    bool is_surprise_;
 
     bool is_playing_;
     boost::posix_time::ptime play_start_;
@@ -92,10 +94,13 @@ public:
         return base_song_directory_path_; }
 
     boost::posix_time::ptime get_current_time();
+    
+    SongId surprise_id() { return -1; }
 
 private:
     SongFactory();
     void parse_song_database_file();
+    SongPtr create_surprise_song();
 
     std::string get_uuid();
 

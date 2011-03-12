@@ -65,6 +65,7 @@ private:
     VoteId get_id_from_vote(Json::Value&);
     void update_last_query_time();
 	bool check_override_vote(Json::Value& val);
+    bool check_surprise_vote(Json::Value& val);
 
     void parse_new_votes();
     void parse_vote(Json::Value&);

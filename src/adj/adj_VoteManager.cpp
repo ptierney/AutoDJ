@@ -156,20 +156,36 @@ VoteId VoteManager::get_id_from_vote(Json::Value& val) {
 }
 	
 bool VoteManager::check_override_vote(Json::Value& val) {
-	if (val["transition"].asString() == std::string("0"))
-        return false;
+	if (val["transition"].asString() == std::string("1"))
+        return true;
     
-    return true;
+    return false;
+}
+
+bool VoteManager::check_surprise_vote(Json::Value& val) {
+    if (val["transition"].asString() == std::string("2"))
+        return true;
+        
+    return false;
 }
 
 void VoteManager::parse_vote(Json::Value& val) {
     bool override = check_override_vote(val);
-    bool previously_voted = false;
+    bool surprise = check_surprise_vote(val);
     
-    SongId song_id = boost::lexical_cast<int>(val["song_id"].asString());
+    SongId song_id;
+    
+    // surprise songs aren't in the database and so don't really
+    // have the concept of a song ID
+    if (surprise)
+        song_id = SongFactory::instance().surprise_id();
+    else
+        song_id = boost::lexical_cast<int>(val["song_id"].asString());
     
     // if override check if previously voted
-    if (override) {
+    bool previously_voted = false;
+    
+    if (override || surprise) {
         std::vector<GraphNodePtr>& nodes = GraphNodeFactory::instance().nodes();
         
         for (std::vector<GraphNodePtr>::iterator it = nodes.begin();
@@ -185,7 +201,8 @@ void VoteManager::parse_vote(Json::Value& val) {
     // if override vote and no one has voted for this
     // or if not override
     
-    if (!override || (override && !previously_voted)) {
+    if (!(override || surprise) || 
+        ((override || surprise) && !previously_voted)) {
         VotePtr vote(new Vote());
         vote->id = get_id_from_vote(val);
         vote->song_id = song_id;
@@ -196,7 +213,7 @@ void VoteManager::parse_vote(Json::Value& val) {
         GraphNodeFactory::instance().update_graph_from_vote(vote);
     }
     
-    if (override) {
+    if (override || surprise) {
         DJController::instance().set_next_song(song_id);
         //DJController::instance().transition();
         DJController::instance().set_transition_next_loop(true);
