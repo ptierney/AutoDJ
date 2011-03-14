@@ -37,7 +37,7 @@ void NowPlayingHeadline::init() {
     text_font_ = ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
         static_cast<float>(font_size_));
         
-    surface_size_ = ci::Vec2i(5.0f * AdjApp::instance().getWindowWidth() / 12.0f, 
+    surface_size_ = ci::Vec2i(AdjApp::instance().getWindowWidth(), 
         font_size_ * 2);
         
     highlight_color_ = Renderer::instance().highlight_color();
@@ -119,7 +119,7 @@ void NowPlayingHeadline::create_cairo_surface() {
         border_line_width_);
     context_->lineTo(surface_size_.x - border_line_width_, surface_size_.y - 
         border_line_width_);
-    context_->lineTo(surface_size_.x - border_line_width_, border_line_width_);
+    //context_->lineTo(surface_size_.x - border_line_width_, border_line_width_);
     //context_->closePath();
     context_->stroke();
     

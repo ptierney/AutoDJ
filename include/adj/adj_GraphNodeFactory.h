@@ -73,6 +73,8 @@ private:
     void pair_nodes(SongId, SongId);
     void assert_node_has_particle(GraphNodePtr);
     
+    int sim_counter_;
+    
     int max_nodes_in_simulation_;
 
     static GraphNodeFactory* instance_;

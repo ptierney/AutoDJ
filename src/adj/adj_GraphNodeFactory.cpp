@@ -10,6 +10,7 @@
 #include <cinder/app/App.h>
 
 #include <graph/graph_ParticleSystem.h>
+#include <graph/graph_Particle.h>
 
 #include <adj/adj_GraphNodeFactory.h>
 #include <adj/adj_GraphNode.h>
@@ -25,6 +26,7 @@ namespace adj {
 
 GraphNodeFactory::GraphNodeFactory() {
     max_nodes_in_simulation_ = 25;
+    sim_counter_ = 0;
 }
 
 void GraphNodeFactory::init() {
@@ -33,6 +35,24 @@ void GraphNodeFactory::init() {
 
 void GraphNodeFactory::update() {
     check_pair_requests();
+    
+    ci::Rand rand;
+    rand.randomize();
+    
+    float r_scale = 0.7f;
+    
+    if (sim_counter_ > 150) {
+        sim_counter_ = 0;
+    
+    for (std::vector<GraphNodePtr>::iterator it = graph_nodes_.begin();
+         it != graph_nodes_.end(); ++it) {
+         
+         (*it)->particle()->position().x += rand.randFloat(-r_scale, r_scale);
+         (*it)->particle()->position().y += rand.randFloat(-r_scale, r_scale);
+    }
+    
+    }
+    sim_counter_++;
 }
 
 void GraphNodeFactory::add_empty_node() {

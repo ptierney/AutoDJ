@@ -82,7 +82,7 @@ void VoteServerQuery::parse_votes(Json::Value& val) {
 VoteManager::VoteManager() {
     query_time_ = 5; // in seconds
     //vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
-    vote_server_ = "http://glebden.com/djdp3000/get_votes.php";
+    vote_server_ = "http://dj.ctap.it/get_votes.php";
     thread_finished_ = true;
 	// last_id_ should remain empty on init
 }
