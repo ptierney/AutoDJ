@@ -28,7 +28,7 @@ Camera::Camera() {
     scale_damping_ = 0.03;
     centroid_damping_ = 0.03;
     
-    node_crop_cuttoff_ = 30;
+    node_crop_cuttoff_ = 5;
 }
 
 void Camera::init() {
