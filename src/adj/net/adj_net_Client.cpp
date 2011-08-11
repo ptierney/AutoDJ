@@ -15,6 +15,8 @@ ClientQuery::ClientQuery(Client& c, const Request& r)
 
     timer_io_ = std::shared_ptr<boost::asio::io_service>(
             new boost::asio::io_service());
+    resolver_io_ = std::shared_ptr<boost::asio::io_service>(
+            new boost::asio::io_service());
 
     address_ = client_.address();
     port_ = boost::lexical_cast<std::string>(client_.port());
@@ -39,6 +41,9 @@ void ClientQuery::operator()() {
 // establish a connection with the server
 void ClientQuery::connect() {
     try {
+        resolver_ = std::shared_ptr<boost::asio::ip::tcp::resolver>(
+            new boost::asio::ip::tcp::resolver(*resolver_io_));
+        
         io_service_ = std::shared_ptr<boost::asio::io_service>(
             new boost::asio::io_service());
 

@@ -49,7 +49,7 @@ void VoteServerQuery::query_vote_server() {
     }
 
     try {
-        urlRef = ci::IStreamUrl::createRef(url_string);
+        urlRef = ci::IStreamUrl::createRef(ci::Url(url_string));
     } catch (...) { // it can't connect to the server
         return;
     }

@@ -41,6 +41,7 @@ private:
     void socket_read();
 
     std::shared_ptr<boost::asio::ip::tcp::resolver> resolver_;
+    std::shared_ptr<boost::asio::io_service> resolver_io_;
     std::shared_ptr<boost::asio::ip::tcp::resolver::query> query_;
     std::shared_ptr<boost::asio::io_service> io_service_;
     std::shared_ptr<boost::asio::ip::tcp::socket> socket_;

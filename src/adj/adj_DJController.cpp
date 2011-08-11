@@ -22,7 +22,7 @@ DJController* DJController::instance_ = NULL;
 DJController::DJController() {
     has_next_song_ = false;
     transition_next_loop_ = false;
-    counter_ = 0;
+    counter_ = 0; 
 }
 
 void DJController::init() {
