@@ -103,10 +103,10 @@ void SongFactory::parse_song_database_file() {
 	
     ci::IStreamUrlRef urlRef;
 	
-    std::string url_string = "http://ptierney.com/~patrick/crowdtap.json";
+    std::string url_string = "http://djdp.njoubert.com/songs.json";
 	
     try {
-        urlRef = ci::IStreamUrl::createRef(ci::Url(url_string));
+        urlRef = ci::IStreamUrl::createRef(url_string);
     } catch (...) { // it can't connect to the servre
         assert(0); // ffffffffff!
     }

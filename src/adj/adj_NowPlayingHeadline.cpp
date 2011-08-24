@@ -140,7 +140,7 @@ void NowPlayingHeadline::create_cairo_surface() {
 
     context_->moveTo(ci::Vec2f(side_offset_, top_offset_ + font_size_));
 
-    context_->showText("Vote at dj.ctap.it");
+    context_->showText("Vote at vmworldparty.com");
 
     texture_ = ci::gl::Texture(surface_->getSurface());
 }

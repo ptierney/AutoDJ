@@ -49,7 +49,7 @@ void VoteServerQuery::query_vote_server() {
     }
 
     try {
-        urlRef = ci::IStreamUrl::createRef(ci::Url(url_string));
+        urlRef = ci::IStreamUrl::createRef(url_string);
     } catch (...) { // it can't connect to the server
         return;
     }
@@ -82,7 +82,7 @@ void VoteServerQuery::parse_votes(Json::Value& val) {
 VoteManager::VoteManager() {
     query_time_ = 5; // in seconds
     //vote_server_ = "http://ptierney.com/~patrick/votes/votes.cgi";
-    vote_server_ = "http://dj.ctap.it/get_votes.php";
+    vote_server_ = "http://djdp.njoubert.com/get_votes.php";
     thread_finished_ = true;
 	// last_id_ should remain empty on init
 }
