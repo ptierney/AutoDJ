@@ -44,7 +44,7 @@ void Visualizer::setup() {
         // load database from file, create song objects
         SongFactory::instance().load_song_database();
     } catch (...) {
-        ci::app::console() << "Could not find database file, exiting." << std::endl;
+        ci::app::console() << "Could not build song database." << std::endl;
         exit;
     }
 }

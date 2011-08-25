@@ -245,7 +245,7 @@ void UserFactory::update_nodes_after_user_change(UserPtr user) {
 
     for (std::deque<SongId>::iterator it = user->voted_songs().begin();
         it != user->voted_songs().end(); ++it) {
-        
+        printf("Updating nodes after user change, song id: %d\n", *it);
         song_map[*it]->update_appearance();
     }
 }

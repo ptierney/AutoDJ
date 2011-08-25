@@ -91,9 +91,7 @@ int Song::time_remaining() {
 SongFactory::SongFactory() {
     base_song_directory_path_ = "/data/songs/";
 
-    // This should be a resource. Sadly, Windows has issues 
-    // loading a text as a resource.
-    song_database_file_ = "/data/crowdtap.json";
+
 }
 
 void SongFactory::parse_song_database_file() {
@@ -103,7 +101,7 @@ void SongFactory::parse_song_database_file() {
 	
     ci::IStreamUrlRef urlRef;
 	
-    std::string url_string = "http://djdp.njoubert.com/songs.json";
+    std::string url_string = "http://djdp.njoubert.com/songs_json.php";
 	
     try {
         urlRef = ci::IStreamUrl::createRef(url_string);
@@ -117,12 +115,14 @@ void SongFactory::parse_song_database_file() {
     // assign the char array to string using the size of the buffer array
 	std::string root;
     root.assign(j,j+buf.getDataSize());
-	
+		
     // root now contains the vote json
     Json::Reader reader;
     Json::Value votes;
 	
-    reader.parse(root, song_database_);
+    if (!reader.parse(root, song_database_)) {
+		printf("JSON could not parse\n");
+	}
 }
 
 // 
@@ -132,14 +132,16 @@ void SongFactory::load_song_database() {
     Json::Value& songs_array = song_database_["songs"];
 
     if (songs_array.empty())
-        throw (std::runtime_error("Could not find song database file."));
+        throw (std::runtime_error("Song database is empty"));
 
     SongId song_id;
 
     for (Json::Value::iterator it = songs_array.begin(); it != songs_array.end(); ++it) {
         Json::Value& song = (*it);
-        song_id = song["id"].asInt();
-
+		song_id = boost::lexical_cast<int>(song["id"].asString().c_str());
+		
+		printf("Creating song with id %d\n", song_id);
+		
         song_map_[song_id] = create_song(song_id, song);
     }
     

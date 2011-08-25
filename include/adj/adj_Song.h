@@ -105,7 +105,6 @@ private:
     std::string get_uuid();
 
     std::string base_song_directory_path_;
-    std::string song_database_file_;
     Json::Value song_database_;
 
     std::map<SongId, SongPtr> song_map_;
