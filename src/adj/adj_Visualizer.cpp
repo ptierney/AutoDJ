@@ -92,6 +92,9 @@ bool Visualizer::key_down(ci::app::KeyEvent key) {
 	if( key.getChar() == 'f' )
 		AdjApp::instance().setFullScreen(!AdjApp::instance().isFullScreen());
 
+	if( key.getChar() == 'q' )
+		exit(0);
+
     return true;
     
     if (key.getChar() == 'a')

@@ -13,10 +13,10 @@ AdjApp::AdjApp() {
 void AdjApp::prepareSettings(Settings* settings) {
 	//settings->setWindowSize(1024, 768);
 	settings->setFrameRate(60.0f);
-//	settings->setResizable(false);
-//	settings->setFullScreen(true);
-	settings->setResizable(true);
-	settings->setFullScreen(false);
+	settings->setResizable(false);
+	settings->setFullScreen(true);
+//	settings->setResizable(true);
+//	settings->setFullScreen(false);
 
     settings->setTitle("Auto DJ");
 }
