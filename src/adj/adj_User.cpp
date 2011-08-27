@@ -87,6 +87,7 @@ void UserFactory::resize_photo(ci::Surface& original, ci::Surface& resized) {
 
 UserFactory::UserFactory() {
     default_name_ = "Someone";
+    // TODO: this needs to be updated. Where are the images stored?
     image_url_base_ = "http://ptierney.com/~patrick/user_photos/";
     max_threads_ = 5;
     query_rate_ = 1; // spawn threads at least query_rate_ seconds apart
@@ -245,7 +246,10 @@ void UserFactory::update_nodes_after_user_change(UserPtr user) {
 
     for (std::deque<SongId>::iterator it = user->voted_songs().begin();
         it != user->voted_songs().end(); ++it) {
-        printf("Updating nodes after user change, song id: %d\n", *it);
+
+        ci::app::console() << "Updating nodes after user change, song id: " << 
+            *it << std::endl;
+
         song_map[*it]->update_appearance();
     }
 }

@@ -121,7 +121,7 @@ void SongFactory::parse_song_database_file() {
     Json::Value votes;
 	
     if (!reader.parse(root, song_database_)) {
-		printf("JSON could not parse\n");
+        ci::app::console() << "JSON could not parse" << std::endl;
 	}
 }
 
@@ -140,7 +140,7 @@ void SongFactory::load_song_database() {
         Json::Value& song = (*it);
 		song_id = boost::lexical_cast<int>(song["id"].asString().c_str());
 		
-		printf("Creating song with id %d\n", song_id);
+        ci::app::console() << "Creating song with id" << song_id << std::endl;
 		
         song_map_[song_id] = create_song(song_id, song);
     }
