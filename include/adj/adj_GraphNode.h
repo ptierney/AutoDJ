@@ -151,10 +151,7 @@ private:
 
     float circle_radius_;
     float inner_circle_radius_;
-
-    ci::Surface highlight_circle_;
-    ci::gl::Texture highlight_circle_texture_;
-    float circle_texture_scale_;
+    int num_segments_;
 
     int relax_time_; // in milliseconds
     float closest_spring_length_;

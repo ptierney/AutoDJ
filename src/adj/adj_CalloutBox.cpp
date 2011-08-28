@@ -36,7 +36,7 @@ float CalloutBox::max_scale_ = 0.0f;
 
 CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     visible_ = true;
-    text_color_ = ci::ColorA(1.0f, 0.0f, 1.0f, 1.0f);
+    text_color_ = ci::Color::black();
     font_size_ = 48;
     font_size_large_ = 60;
     
@@ -344,7 +344,7 @@ void CalloutBox::set_contents() {
     // draw text
     context_->setFont(medium_font_);
     context_->setFontSize(static_cast<double>(font_size_));
-    context_->setSourceRgb(1.0f, 1.0f, 1.0f);
+    context_->setSourceRgb(text_color_.r, text_color_.g, text_color_.b);
 
     if (node_.is_current_song()) {
         context_->moveTo(text_pos);

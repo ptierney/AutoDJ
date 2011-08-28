@@ -30,11 +30,14 @@ GraphNode::GraphNode() {
     is_valid_ = false;
     circle_radius_ = 5.0f;
     inner_circle_radius_ = 2.0f;
+    num_segments_ = 30; // this controls the "resolution" of the circles
 
-    // Pantone yellow
-    node_color_ = Renderer::instance().color_palette()[3];
+    // Pantone light blue
+    node_color_ = Renderer::instance().color_palette()[1];
 
-    node_highlight_color_ = Renderer::instance().highlight_color();
+    //node_highlight_color_ = Renderer::instance().highlight_color();
+    node_highlight_color_ = Renderer::instance().color_palette()[4];
+
     background_color_ = Renderer::instance().background_color();
 
     scale_ = 1.0f;
@@ -64,16 +67,6 @@ void GraphNode::init() {
     // Graph nodes must have a song at the moment
     if (song_.get() == NULL)
         throw(std::runtime_error("Trying to create a graph node without a song"));
-
-    try {
-        highlight_circle_ = ci::loadImage(ci::app::loadResource(RES_NODE_HIGHLIGHT));
-    } catch (...) {
-        ci::app::console() << "Unable to load node resource" << std::endl;
-        AdjApp::instance().quit();
-    }
-
-    highlight_circle_texture_ = ci::gl::Texture(highlight_circle_);
-    circle_texture_scale_ = circle_radius_ * 2.0f / highlight_circle_.getWidth();
 
     last_vote_time_ = boost::posix_time::microsec_clock::universal_time();
     
@@ -178,22 +171,20 @@ void GraphNode::draw_current_song() {
 }
 
 void GraphNode::draw_node() {
-    // TODO: cache this value
-    //ci::gl::scale(ci::Vec3f::one() * ci::lmap<float>(distance_from_current_,
-    //    0, 10, max_scale_, min_scale_));
-
     if (highlight_connection()) {
         ci::gl::color(node_highlight_color_);
-        ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_, num_segments_);
         
         ci::gl::color(background_color_);
-        ci::gl::drawSolidCircle(ci::Vec2f::zero(), inner_circle_radius_);        
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), inner_circle_radius_, 
+            num_segments_);        
     } else {
         ci::gl::color(node_color_);
-        ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_);
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), circle_radius_, num_segments_);
         
         ci::gl::color(background_color_);
-        ci::gl::drawSolidCircle(ci::Vec2f::zero(), inner_circle_radius_);
+        ci::gl::drawSolidCircle(ci::Vec2f::zero(), inner_circle_radius_,
+            num_segments_);
     }
 }
 

@@ -142,7 +142,8 @@ void NowPlayingHeadline::create_cairo_surface() {
     
     context_->setFont(text_font_);
     context_->setFontSize(static_cast<double>(font_size_));
-    context_->setSourceRgb(1.0f, 1.0f, 1.0f);
+    context_->setSourceRgb(highlight_color_.r,
+        highlight_color_.g, highlight_color_.b);
 
     context_->moveTo(ci::Vec2f(side_offset_, top_offset_ + font_size_));
 

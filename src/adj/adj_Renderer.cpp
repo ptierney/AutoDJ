@@ -44,8 +44,8 @@ Renderer::Renderer() {
     color_palette_.push_back(ci::ColorA(196.f / 255.f, 38.f / 255.f, 
         46.f / 255.f, 1.f));
 
-    background_color_ = ci::Color::black();
-    network_color_ = color_palette_[1];
+    background_color_ = ci::Color::white();
+    network_color_ = ci::Color::black();
 }
 
 void Renderer::init() {
