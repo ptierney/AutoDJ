@@ -237,6 +237,12 @@ void CalloutBox::render_connection() {
     connect_context_ = std::shared_ptr<ci::cairo::Context>(new
         ci::cairo::Context(*connect_surface_));
 
+    connect_context_->setSourceRgba(Renderer::instance().background_color().r,
+        Renderer::instance().background_color().g, 
+        Renderer::instance().background_color().b, 0.0);
+    connect_context_->rectangle(0.0, 0.0, surface_width, surface_height);
+    connect_context_->fill();
+
     connect_context_->setSourceRgb(node_.node_highlight_color().r, 
         node_.node_highlight_color().g, node_.node_highlight_color().b);
 
