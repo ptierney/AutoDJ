@@ -16,6 +16,7 @@
 #include <adj/adj_NowPlayingHeadline.h>
 #include <adj/adj_DJController.h>
 #include <adj/adj_NodeMover.h>
+#include <adj/adj_CloudBackground.h>
 //#include <adj/adj_SocialConnector.h>
 
 
@@ -28,6 +29,7 @@ Visualizer::Visualizer() {
 Visualizer::~Visualizer() {
     AdjApp::instance().unregisterMouseDrag(mouse_drag_cb_id_);
     AdjApp::instance().unregisterKeyDown(key_cb_id_);
+    AdjApp::instance().unregisterResize(resize_id_);
 }
 
 void Visualizer::setup() {
@@ -35,6 +37,8 @@ void Visualizer::setup() {
         this, &Visualizer::mouse_drag);
     key_cb_id_ = AdjApp::instance().registerKeyDown(this, 
         &Visualizer::key_down);
+    resize_id_ = AdjApp::instance().registerResize(this, 
+        &Visualizer::resize);
 
     Renderer::instance().setup();
     Camera::instance().setup();
@@ -85,6 +89,13 @@ void Visualizer::add_node() {
 
 bool Visualizer::mouse_drag(ci::app::MouseEvent) {
     //add_node();
+
+    return true;
+}
+
+bool Visualizer::resize(ci::app::ResizeEvent) {
+    CloudBackground::instance().resize_photos();
+    Renderer::instance().setup();
 
     return true;
 }

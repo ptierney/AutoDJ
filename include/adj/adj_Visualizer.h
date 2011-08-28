@@ -27,12 +27,14 @@ public:
 
     bool mouse_drag(ci::app::MouseEvent);
     bool key_down(ci::app::KeyEvent);
+    bool resize(ci::app::ResizeEvent);
 
 private:
     void add_node();
 
     ci::CallbackId mouse_drag_cb_id_;
     ci::CallbackId key_cb_id_;
+    ci::CallbackId resize_id_;
 };
 
 }

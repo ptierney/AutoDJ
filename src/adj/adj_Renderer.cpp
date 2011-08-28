@@ -17,6 +17,7 @@
 #include <adj/adj_GraphNode.h>
 #include <adj/adj_GraphicItem.h>
 #include <adj/adj_NodeMover.h>
+#include <adj/adj_CloudBackground.h>
 
 namespace adj {
 
@@ -47,7 +48,7 @@ Renderer::Renderer() {
     color_palette_.push_back(ci::ColorA(196.f / 255.f, 38.f / 255.f, 
         46.f / 255.f, 1.f));
 
-    background_color_ = ci::Color::white();
+    background_color_ = ci::Color::black();
     network_color_ = ci::Color::black();
 }
 
@@ -64,6 +65,8 @@ void Renderer::setup() {
 void Renderer::draw() {
     ci::gl::setMatricesWindow(AdjApp::instance().getWindowSize());
     ci::gl::clear(background_color_);
+
+    CloudBackground::instance().draw();
 
     ci::gl::pushMatrices();
 

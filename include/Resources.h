@@ -14,3 +14,5 @@
 
 #define RES_VM_FONT         CINDER_RESOURCE(../resources/, GothamRounded-Book.ttf, 140, TTF)
 #define RES_VM_FONT_BOLD    CINDER_RESOURCE(../resources/, GothamRounded-Medium.ttf, 141, TTF)
+
+#define RES_CLOUD_PHOTO    CINDER_RESOURCE(../resources/, h_crop.png, 142, IMAGE)
