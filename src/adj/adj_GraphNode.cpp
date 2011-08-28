@@ -14,6 +14,7 @@
 #include <graph/graph_Particle.h>
 #include <graph/graph_Spring.h>
 
+#include <AdjApp.h>
 #include <adj/adj_GraphNode.h>
 #include <adj/adj_Song.h>
 #include <adj/adj_CalloutBox.h>
@@ -29,12 +30,13 @@ GraphNode::GraphNode() {
     is_valid_ = false;
     circle_radius_ = 5.0f;
     inner_circle_radius_ = 2.0f;
-    // Crowdtap medium grey
-    node_color_ = ci::ColorA(120.0f / 255.f, 122.f / 255.f, 
-        126.f / 255.f, 1.0f);
-    // Crowdtap red
+
+    // Pantone yellow
+    node_color_ = Renderer::instance().color_palette()[3];
+
     node_highlight_color_ = Renderer::instance().highlight_color();
     background_color_ = Renderer::instance().background_color();
+
     scale_ = 1.0f;
     max_scale_ = 1.0f;
     min_scale_ = 0.35f;
@@ -63,7 +65,13 @@ void GraphNode::init() {
     if (song_.get() == NULL)
         throw(std::runtime_error("Trying to create a graph node without a song"));
 
-    highlight_circle_ = ci::loadImage(ci::app::loadResource(RES_NODE_HIGHLIGHT));
+    try {
+        highlight_circle_ = ci::loadImage(ci::app::loadResource(RES_NODE_HIGHLIGHT));
+    } catch (...) {
+        ci::app::console() << "Unable to load node resource" << std::endl;
+        AdjApp::instance().quit();
+    }
+
     highlight_circle_texture_ = ci::gl::Texture(highlight_circle_);
     circle_texture_scale_ = circle_radius_ * 2.0f / highlight_circle_.getWidth();
 

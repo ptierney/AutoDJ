@@ -4,21 +4,22 @@
 #include <algorithm>
 #include <utility>
 
-#include "boost/lexical_cast.hpp"
-#include "boost/thread.hpp"
-#include "boost/thread/mutex.hpp"
+#include <boost/lexical_cast.hpp>
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
 
-#include "cinder/app/App.h"
-#include "cinder/ImageIo.h"
-#include "cinder/Surface.h"
-#include "cinder/Url.h"
-#include "cinder/ip/Resize.h"
+#include <cinder/app/App.h>
+#include <cinder/ImageIo.h>
+#include <cinder/Surface.h>
+#include <cinder/Url.h>
+#include <cinder/ip/Resize.h>
 
-#include "adj/adj_User.h"
-#include "adj/adj_GraphNodeFactory.h"
-#include "adj/adj_GraphNode.h"
-#include "adj/adj_CalloutBox.h"
-#include "Resources.h"
+#include <AdjApp.h>
+#include <adj/adj_User.h>
+#include <adj/adj_GraphNodeFactory.h>
+#include <adj/adj_GraphNode.h>
+#include <adj/adj_CalloutBox.h>
+#include <Resources.h>
 
 namespace adj {
 
@@ -94,7 +95,13 @@ UserFactory::UserFactory() {
 }
 
 void UserFactory::init() {
-    default_photo_ = ci::loadImage(ci::app::loadResource(RES_DEFAULT_PROFILE));
+    try {
+        default_photo_ = ci::loadImage(ci::app::loadResource(
+            RES_DEFAULT_PROFILE));
+    } catch (...) {
+        ci::app::console() << "Unable to load default user photo." << std::endl;
+        AdjApp::instance().quit();
+    }
     resize_photo(default_photo_, default_photo_resized_);
     update_last_query_time();
 }

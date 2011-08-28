@@ -45,7 +45,7 @@ void Visualizer::setup() {
         SongFactory::instance().load_song_database();
     } catch (...) {
         ci::app::console() << "Could not build song database." << std::endl;
-        exit;
+        AdjApp::instance().quit();
     }
 }
 
@@ -92,10 +92,8 @@ bool Visualizer::key_down(ci::app::KeyEvent key) {
 	if( key.getChar() == 'f' )
 		AdjApp::instance().setFullScreen(!AdjApp::instance().isFullScreen());
 
-	if( key.getChar() == 'q' ) {
-        AdjApp::instance().shutdown();
-		exit(0);
-    }
+	if( key.getChar() == 'q' )
+        AdjApp::instance().quit();
 
     return true;
     

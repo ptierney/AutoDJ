@@ -34,8 +34,14 @@ NowPlayingHeadline::NowPlayingHeadline() {
 }
 
 void NowPlayingHeadline::init() {
-    text_font_ = ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
-        static_cast<float>(font_size_));
+    try {
+        text_font_ = ci::Font(ci::app::loadResource(RES_VM_FONT), 
+            static_cast<float>(font_size_));
+    } catch (...) {
+        ci::app::console() << "Unable to set headline font." << std::endl;
+        AdjApp::instance().quit();
+        exit(-1); // really quit
+    }
         
     surface_size_ = ci::Vec2i(AdjApp::instance().getWindowWidth(), 
         font_size_ * 2);

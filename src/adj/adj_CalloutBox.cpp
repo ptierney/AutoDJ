@@ -1,28 +1,29 @@
 
 #include <assert.h>
 
-#include "boost/lexical_cast.hpp"
+#include <boost/lexical_cast.hpp>
 
-#include "cinder/gl/gl.h"
-#include "cinder/gl/Texture.h"
-#include "cinder/Text.h"
-#include "cinder/Font.h"
-#include "cinder/Utilities.h"
-#include "cinder/Surface.h"
-#include "cinder/cairo/Cairo.h"
-#include "cinder/ImageIo.h"
-#include "cinder/app/AppNative.h"
-#include "cinder/CinderMath.h"
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
+#include <cinder/Text.h>
+#include <cinder/Font.h>
+#include <cinder/Utilities.h>
+#include <cinder/Surface.h>
+#include <cinder/cairo/Cairo.h>
+#include <cinder/ImageIo.h>
+#include <cinder/app/AppNative.h>
+#include <cinder/CinderMath.h>
 
-#include "graph/graph_Particle.h"
+#include <graph/graph_Particle.h>
 
-#include "adj/adj_CalloutBox.h"
-#include "adj/adj_GraphNode.h"
-#include "adj/adj_Song.h"
-#include "Resources.h"
-#include "adj/adj_GraphPhysics.h"
-#include "adj/adj_User.h"
-#include "adj/adj_Renderer.h"
+#include <AdjApp.h>
+#include <adj/adj_CalloutBox.h>
+#include <adj/adj_GraphNode.h>
+#include <adj/adj_Song.h>
+#include <Resources.h>
+#include <adj/adj_GraphPhysics.h>
+#include <adj/adj_User.h>
+#include <adj/adj_Renderer.h>
 
 namespace adj {
 
@@ -56,8 +57,13 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
 void CalloutBox::init() {
     box_coords_.resize(4);
 
-    medium_font_ = ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
-        static_cast<float>(font_size_));
+    try {
+        medium_font_ = ci::Font(ci::app::loadResource(RES_VM_FONT), 
+            static_cast<float>(font_size_));
+    } catch (...) {
+        ci::app::console() << "Unable to set callout box font." << std::endl;
+        AdjApp::instance().quit();
+    }
 
     hide();
 }
@@ -436,8 +442,13 @@ void CalloutBox::set_contents() {
 // create a new text texture
 void CalloutBox::refresh_text() {
     ci::TextLayout layout;
-    layout.setFont(ci::Font(ci::app::loadResource(RES_CROWDTAP_FONT), 
-        static_cast<float>(font_size_)));
+    try {
+        layout.setFont(ci::Font(ci::app::loadResource(RES_VM_FONT), 
+            static_cast<float>(font_size_)));
+    } catch (...) {
+        ci::app::console() << "Unable to set callout box font." << std::endl;
+        AdjApp::instance().quit();
+    }
     layout.setColor(text_color_);
     layout.addCenteredLine(node_.song().name());
     layout.addCenteredLine(node_.song().artist());

@@ -21,15 +21,31 @@ namespace adj {
 
 Renderer::Renderer() {
     node_size_ = 10.0f;
-    // Crowdtap dark grey
-    background_color_ = ci::Color(30.f / 255.0f, 32.f / 255.0f,
-        35.0f / 255.0f);
-    network_color_ = ci::ColorA(1.0f, 1.0f, 1.0f, 0.25f);
+
     line_width_ = 6.0f;
     highlight_width_ = line_width_ * 2.0f;
     
-    // Crowdtap Red
-    highlight_color_ = ci::ColorA(255.f / 255.f, 51.f / 255.f, 0.f, 1.f);
+    // Pantone 307 
+    color_palette_.push_back(ci::ColorA(0.f / 255.f, 115.f / 255.f, 
+        164.f / 255.f, 1.f));
+
+    // Pantone 305 
+    color_palette_.push_back(ci::ColorA(92.f / 255.f, 205.f / 255.f, 
+        235.f / 255.f, 1.f));
+
+    // Pantone 368 
+    color_palette_.push_back(ci::ColorA(97.f / 255.f, 181.f / 255.f, 
+        68.f / 255.f, 1.f));
+
+    // Pantone 7408 
+    color_palette_.push_back(ci::ColorA(242.f / 255.f, 175.f / 255.f, 0.f, 1.f));
+    
+    // Pantone 1797 
+    color_palette_.push_back(ci::ColorA(196.f / 255.f, 38.f / 255.f, 
+        46.f / 255.f, 1.f));
+
+    background_color_ = ci::Color::black();
+    network_color_ = color_palette_[1];
 }
 
 void Renderer::init() {

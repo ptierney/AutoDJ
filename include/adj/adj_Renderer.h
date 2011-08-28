@@ -26,14 +26,14 @@ public:
     void draw();
 
     const ci::Color& background_color() { return background_color_; } 
+    ci::ColorA& highlight_color() { return color_palette_[0]; }
+
+    std::vector<ci::ColorA>& color_palette() { return color_palette_; }
 
     void register_new_graphic_item(GraphicItem*);
     void remove_graphic_item(GraphicItem*);
 
     std::vector<GraphicItem*>& graphic_items() { return graphic_items_; }
-    
-    // Crowdtap Red
-    ci::ColorA& highlight_color() { return highlight_color_; }
 
 private:
     Renderer();
@@ -47,6 +47,8 @@ private:
     ci::Color background_color_;
     ci::ColorA network_color_;
     ci::ColorA highlight_color_;
+
+    std::vector<ci::ColorA> color_palette_;
 
     float line_width_;
     float highlight_width_;
