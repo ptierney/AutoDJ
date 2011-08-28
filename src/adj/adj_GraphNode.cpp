@@ -32,8 +32,7 @@ GraphNode::GraphNode() {
     inner_circle_radius_ = 2.0f;
     num_segments_ = 30; // this controls the "resolution" of the circles
 
-    // Pantone light blue
-    node_color_ = Renderer::instance().color_palette()[1];
+
 
     //node_highlight_color_ = Renderer::instance().highlight_color();
     node_highlight_color_ = Renderer::instance().color_palette()[4];
@@ -71,10 +70,12 @@ void GraphNode::init() {
     last_vote_time_ = boost::posix_time::microsec_clock::universal_time();
     
     ci::Rand rand;
-    rand.randomize();
+    rand.seed(song_->id());
 
     circle_radius_ = rand.randFloat(4.5f, 5.5f);
-    inner_circle_radius_ = rand.randFloat(1.5f, 2.5f);
+    inner_circle_radius_ = rand.randFloat(1.5f, 3.5f);
+
+    node_color_ = Renderer::instance().color_palette()[rand.randFloat(1, 4)];
 }
 
 GraphNode::~GraphNode() {

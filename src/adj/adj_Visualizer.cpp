@@ -97,6 +97,10 @@ bool Visualizer::key_down(ci::app::KeyEvent key) {
 	if( key.getChar() == 'q' )
         AdjApp::instance().quit();
 
+    if( key.getChar() == 'd' )
+        NodeMover::instance().rotate_clockwise() = 
+            !NodeMover::instance().rotate_clockwise();
+
     return true;
     
     if (key.getChar() == 'a')
