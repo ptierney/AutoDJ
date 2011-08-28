@@ -65,24 +65,11 @@ void NowPlayingHeadline::update() {
 }
 
 void NowPlayingHeadline::draw() {
-    /*
-    glBegin(GL_QUADS);
-    glColor3f(top_grad_color_); 
-    glVertex2f(0, 0);
-    glColor3f(corner_grad_color_); 
-    glVertex2f(surface_size_.x, 0);
     glColor3f(Renderer::instance().background_color()); 
-    glVertex2f(surface_size_.x, surface_size_.y);    
-    glColor3f(corner_grad_color_);
-    glVertex2f(0, surface_size_.y);
-    glEnd();    
-    */
-    
+
     glBegin(GL_QUADS);
-    glColor3f(top_grad_color_); 
     glVertex2f(0, 0);
     glVertex2f(surface_size_.x, 0);
-    glColor3f(Renderer::instance().background_color()); 
     glVertex2f(surface_size_.x, surface_size_.y);    
     glVertex2f(0, surface_size_.y);
     glEnd(); 
@@ -98,15 +85,12 @@ void NowPlayingHeadline::create_cairo_surface() {
 
     context_ = std::shared_ptr<ci::cairo::Context>(new ci::cairo::Context(*surface_));
 
-    /*
     // draw background
     context_->setSourceRgb(Renderer::instance().background_color().r,
         Renderer::instance().background_color().g, 
         Renderer::instance().background_color().b);
-    context_->setSourceRgb(g);
     context_->rectangle(0.0, 0.0, surface_size_.x, surface_size_.y);
     context_->fill();
-    */
 
     context_->setSourceRgb(highlight_color_.r,
         highlight_color_.g, highlight_color_.b);
