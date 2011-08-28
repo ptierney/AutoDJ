@@ -27,6 +27,7 @@ namespace adj {
 GraphNodeFactory::GraphNodeFactory() {
     max_nodes_in_simulation_ = 25;
     sim_counter_ = 0;
+    agitate_nodes_ = false;
 }
 
 void GraphNodeFactory::init() {
@@ -40,16 +41,19 @@ void GraphNodeFactory::update() {
     rand.randomize();
     
     float r_scale = 0.7f;
+
+    if (!agitate_nodes_)
+        return;
     
     if (sim_counter_ > 150) {
         sim_counter_ = 0;
     
-    for (std::vector<GraphNodePtr>::iterator it = graph_nodes_.begin();
-         it != graph_nodes_.end(); ++it) {
+        for (std::vector<GraphNodePtr>::iterator it = graph_nodes_.begin();
+             it != graph_nodes_.end(); ++it) {
          
-         (*it)->particle()->position().x += rand.randFloat(-r_scale, r_scale);
-         (*it)->particle()->position().y += rand.randFloat(-r_scale, r_scale);
-    }
+             (*it)->particle()->position().x += rand.randFloat(-r_scale, r_scale);
+             (*it)->particle()->position().y += rand.randFloat(-r_scale, r_scale);
+        }
     
     }
     sim_counter_++;

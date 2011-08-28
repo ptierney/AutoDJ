@@ -74,6 +74,7 @@ private:
     void assert_node_has_particle(GraphNodePtr);
     
     int sim_counter_;
+    bool agitate_nodes_;
     
     int max_nodes_in_simulation_;
 
