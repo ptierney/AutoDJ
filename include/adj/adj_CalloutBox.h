@@ -119,6 +119,7 @@ private:
     std::vector<ci::Vec2f> box_coords_;
 
     ci::Font medium_font_;
+    ci::Font bold_font_;
     // I can't seem to figure out how to use italic fonts with cairo atm
     //ci::Font italic_font_;
     //ci::Font bold_font_;

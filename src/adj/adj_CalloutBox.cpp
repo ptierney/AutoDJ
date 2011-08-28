@@ -36,7 +36,7 @@ float CalloutBox::max_scale_ = 0.0f;
 
 CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     visible_ = true;
-    text_color_ = ci::Color::black();
+    text_color_ = ci::Color::white();
     font_size_ = 48;
     font_size_large_ = 60;
     
@@ -59,6 +59,8 @@ void CalloutBox::init() {
 
     try {
         medium_font_ = ci::Font(ci::app::loadResource(RES_VM_FONT), 
+            static_cast<float>(font_size_));
+        bold_font_ = ci::Font(ci::app::loadResource(RES_VM_FONT_BOLD), 
             static_cast<float>(font_size_));
     } catch (...) {
         ci::app::console() << "Unable to set callout box font." << std::endl;
@@ -341,11 +343,37 @@ void CalloutBox::set_contents() {
     ci::Vec2f font_height_offset_large(0.0f, font_size_large_ + text_spacing_);
 
     // draw background
-    context_->setSourceRgb(Renderer::instance().background_color().r,
+    context_->setSourceRgba(Renderer::instance().background_color().r,
         Renderer::instance().background_color().g, 
-        Renderer::instance().background_color().b);
+        Renderer::instance().background_color().b, 0.0);
     context_->rectangle(0.0, 0.0, surface_size_.x, surface_size_.y);
     context_->fill();
+
+    // draw boarder
+    context_->setSourceRgb(node_.node_highlight_color().r, 
+        node_.node_highlight_color().g, node_.node_highlight_color().b);
+
+    if (node_.is_current_song())
+        context_setup_solid(context_);
+    else
+        context_setup_dash(context_);
+
+    double width = surface_size_.x;
+    double height = surface_size_.y;
+    double radius = 40;
+    double degrees = M_PI / 180.0;
+    double x = 0;
+    double y = 0;
+
+    context_->newSubPath();
+    context_->arc(x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+    context_->arc(x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+    context_->arc(x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
+    context_->arc(x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+    context_->closePath();
+    
+    context_->fill();
+    context_->stroke();
 
     // draw text
     context_->setFont(medium_font_);
@@ -360,6 +388,7 @@ void CalloutBox::set_contents() {
     
     context_->setFontSize(static_cast<double>(font_size_large_));
 
+    context_->setFont(bold_font_);
     context_->moveTo(text_pos);
     context_->showText(node_.song().name());
 
@@ -370,6 +399,7 @@ void CalloutBox::set_contents() {
 
     text_pos += font_height_offset_large;
     
+    context_->setFont(medium_font_);
     context_->setFontSize(static_cast<double>(font_size_));
     
     text_pos += ci::Vec2f(0.0f, 2.f * text_spacing_);
@@ -424,23 +454,7 @@ void CalloutBox::set_contents() {
         }
     }
 
-    // draw boarder
 
-    context_->setSourceRgb(node_.node_highlight_color().r, node_.node_highlight_color().g,
-        node_.node_highlight_color().b);
-
-    if (node_.is_current_song())
-        context_setup_solid(context_);
-    else
-        context_setup_dash(context_);
-
-    context_->newPath();
-    context_->moveTo(line_width_, line_width_);
-    context_->lineTo(surface_size_.x - line_width_, line_width_);
-    context_->lineTo(surface_size_.x - line_width_, surface_size_.y - line_width_);
-    context_->lineTo(line_width_, surface_size_.y - line_width_);
-    context_->closePath();
-    context_->stroke();
     
     text_texture_ = ci::gl::Texture(surface_->getSurface());
 }
