@@ -15,6 +15,7 @@
 #include <adj/adj_User.h>
 #include <adj/adj_NowPlayingHeadline.h>
 #include <adj/adj_DJController.h>
+#include <adj/adj_NodeMover.h>
 //#include <adj/adj_SocialConnector.h>
 
 
@@ -59,6 +60,7 @@ void Visualizer::update() {
     //SocialConnector::instance().update();
     NowPlayingHeadline::instance().update();
     DJController::instance().update();
+    NodeMover::instance().update();
 }
 
 void Visualizer::draw() {

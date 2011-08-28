@@ -19,7 +19,9 @@ private:
     void init();
 
     ci::BSpline2f track_;
+    std::vector<ci::Vec2f> track_points_;
 
+    static NodeMover* instance_;
 };
 
 }

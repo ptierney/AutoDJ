@@ -16,6 +16,7 @@
 #include <adj/adj_GraphNodeFactory.h>
 #include <adj/adj_GraphNode.h>
 #include <adj/adj_GraphicItem.h>
+#include <adj/adj_NodeMover.h>
 
 namespace adj {
 
@@ -71,6 +72,8 @@ void Renderer::draw() {
         if (draw_connections_)
             draw_connections();
         draw_nodes();
+
+        NodeMover::instance().draw();
 
     ci::gl::popMatrices();
 }
