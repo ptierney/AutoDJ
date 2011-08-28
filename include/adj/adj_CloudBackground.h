@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <cinder/Surface.h>
 #include <cinder/gl/gl.h>
 #include <cinder/gl/Texture.h>
@@ -19,10 +21,15 @@ public:
 private:
     CloudBackground();
     void init();
+    void generate_resized(ci::Surface& photo);
+    ci::Area get_random_area(ci::Surface& photo);
+
+    int target_height_;
 
     static CloudBackground* instance_;
 
-    ci::Surface cloud_photo_;
+    std::vector<ci::Surface> cloud_photos_;
+
     ci::Surface resized_photo_;
     ci::gl::Texture cloud_texture_;
 

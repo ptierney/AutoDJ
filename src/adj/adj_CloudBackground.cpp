@@ -5,6 +5,8 @@
 #include <cinder/gl/gl.h>
 #include <cinder/gl/Texture.h>
 #include <cinder/ip/Resize.h>
+#include <cinder/ip/Trim.h>
+#include <cinder/Rand.h>
 
 #include <AdjApp.h>
 #include <adj/adj_CloudBackground.h>
@@ -23,7 +25,14 @@ CloudBackground::CloudBackground() {
 
 void CloudBackground::init() {
     try {
-        cloud_photo_ = ci::loadImage(ci::app::loadResource(RES_CLOUD_PHOTO));
+        cloud_photos_.push_back(ci::loadImage(ci::app::loadResource(
+            RES_CLOUD_PHOTO_1)));
+        cloud_photos_.push_back(ci::loadImage(ci::app::loadResource(
+            RES_CLOUD_PHOTO_2)));
+        cloud_photos_.push_back(ci::loadImage(ci::app::loadResource(
+            RES_CLOUD_PHOTO_3)));
+        cloud_photos_.push_back(ci::loadImage(ci::app::loadResource(
+            RES_CLOUD_PHOTO_4)));
     } catch (...) {
         ci::app::console() << "Unable to load cloud." << std::endl;
         AdjApp::instance().quit();
@@ -35,18 +44,54 @@ void CloudBackground::init() {
 void CloudBackground::resize_photos() {
     height_offset_ = NowPlayingHeadline::instance().size().y;
 
-    int photo_width = cloud_photo_.getWidth();
-    int photo_height = cloud_photo_.getHeight();
+    ci::Rand rand;
+    rand.randomize();
 
-    int target_height = AdjApp::instance().getWindowHeight() - height_offset_;
+    generate_resized(cloud_photos_[rand.randInt(4)]);
+}
 
-    resized_photo_ = ci::ip::resizeCopy(cloud_photo_,
-        ci::Area(0, 0, photo_width, photo_height), ci::Vec2i(
-        static_cast<float>(target_height) / 
-        static_cast<float>(photo_height) * static_cast<float>(photo_width),
-        target_height));
+void CloudBackground::generate_resized(ci::Surface& photo) {
+    int photo_width = photo.getWidth();
+    int photo_height = photo.getHeight();
+
+    target_height_ = AdjApp::instance().getWindowHeight() - height_offset_;
+
+    if (true) {
+        ci::Area rand_area = get_random_area(photo);
+
+        ci::app::console() << rand_area << std::endl;
+
+        resized_photo_ = ci::Surface(AdjApp::instance().getWindowWidth(),
+            target_height_, true, photo.getChannelOrder());
+
+        resized_photo_.copyFrom(photo, rand_area, ci::Vec2i(-rand_area.x1,
+            -rand_area.y1));
+    } else {
+        resized_photo_ = ci::ip::resizeCopy(photo,
+            ci::Area(0, 0, photo_width, photo_height), ci::Vec2i(
+            static_cast<float>(target_height_) / 
+            static_cast<float>(photo_height) * static_cast<float>(photo_width),
+            target_height_));
+    }
 
     cloud_texture_ = ci::gl::Texture(resized_photo_);
+}
+
+ci::Area CloudBackground::get_random_area(ci::Surface& photo) {
+    int photo_width = photo.getWidth();
+    int photo_height = photo.getHeight();
+
+    int x_range = photo.getWidth() - AdjApp::instance().getWindowWidth();
+    int y_range = photo.getHeight() - target_height_;
+
+    ci::Rand rand;
+    rand.randomize();
+
+    int rand_x = rand.randInt(x_range);
+    int rand_y = rand.randInt(y_range);
+
+    return ci::Area(rand_x, rand_y, AdjApp::instance().getWindowWidth() + rand_x,
+        rand_y + target_height_);
 }
 
 void CloudBackground::draw() {
