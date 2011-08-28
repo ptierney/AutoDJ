@@ -54,6 +54,8 @@ private:
     float highlight_width_;
     float node_size_;
 
+    bool draw_connections_;
+
     ParticleSystemPtr p_system_;
 
     std::vector<GraphicItem*> graphic_items_;

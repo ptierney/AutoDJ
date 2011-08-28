@@ -22,6 +22,8 @@ namespace adj {
 Renderer::Renderer() {
     node_size_ = 10.0f;
 
+    draw_connections_ = false;
+
     line_width_ = 6.0f;
     highlight_width_ = line_width_ * 2.0f;
     
@@ -66,7 +68,8 @@ void Renderer::draw() {
 
         Camera::instance().transform_draw();
 
-        draw_connections();
+        if (draw_connections_)
+            draw_connections();
         draw_nodes();
 
     ci::gl::popMatrices();
