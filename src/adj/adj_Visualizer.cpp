@@ -65,7 +65,6 @@ void Visualizer::update() {
     NowPlayingHeadline::instance().update();
     DJController::instance().update();
     NodeMover::instance().update();
-    CloudBackground::instance().update();
 }
 
 void Visualizer::draw() {
@@ -95,7 +94,6 @@ bool Visualizer::mouse_drag(ci::app::MouseEvent) {
 }
 
 bool Visualizer::resize(ci::app::ResizeEvent) {
-    CloudBackground::instance().resize_photos();
     Renderer::instance().setup();
 
     return true;
@@ -112,10 +110,6 @@ bool Visualizer::key_down(ci::app::KeyEvent key) {
     if (key.getChar() == 'd')
         NodeMover::instance().rotate_clockwise() = 
             !NodeMover::instance().rotate_clockwise();
-
-    if (key.getChar() == 'c')
-        CloudBackground::instance().show_clouds() = 
-        !CloudBackground::instance().show_clouds();
 
     return true;
     

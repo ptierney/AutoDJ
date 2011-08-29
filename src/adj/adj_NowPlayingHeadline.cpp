@@ -46,7 +46,8 @@ void NowPlayingHeadline::init() {
     surface_size_ = ci::Vec2i(AdjApp::instance().getWindowWidth(), 
         font_size_ * 2);
         
-    highlight_color_ = Renderer::instance().highlight_color();
+    //highlight_color_ = Renderer::instance().highlight_color();
+    highlight_color_ = ci::Color::white();
 
     // create texture
     create_cairo_surface();

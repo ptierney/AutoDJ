@@ -44,6 +44,7 @@ void CloudBackground::init() {
 
     cloud_2_timer_ += cycle_length_ / 2;
 
+    /*
     try {
         cloud_photos_.push_back(ci::loadImage(ci::app::loadResource(
             RES_CLOUD_PHOTO_1)));
@@ -57,6 +58,7 @@ void CloudBackground::init() {
         ci::app::console() << "Unable to load cloud." << std::endl;
         AdjApp::instance().quit();
     }
+    */
 
     resize_photos();
 }

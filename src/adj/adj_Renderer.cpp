@@ -66,8 +66,6 @@ void Renderer::draw() {
     ci::gl::setMatricesWindow(AdjApp::instance().getWindowSize());
     ci::gl::clear(background_color_);
 
-    CloudBackground::instance().draw();
-
     ci::gl::pushMatrices();
 
         Camera::instance().transform_draw();
