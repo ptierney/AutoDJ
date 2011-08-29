@@ -35,7 +35,7 @@ GraphNode::GraphNode() {
 
 
     //node_highlight_color_ = Renderer::instance().highlight_color();
-    node_highlight_color_ = Renderer::instance().color_palette()[4];
+    //node_highlight_color_ = Renderer::instance().color_palette()[4];
 
     background_color_ = Renderer::instance().background_color();
 
@@ -76,6 +76,7 @@ void GraphNode::init() {
     inner_circle_radius_ = rand.randFloat(1.5f, 3.5f);
 
     node_color_ = Renderer::instance().color_palette()[rand.randFloat(1, 4)];
+    node_highlight_color_ = node_color_;
 }
 
 GraphNode::~GraphNode() {
@@ -269,6 +270,8 @@ void GraphNode::register_vote(VotePtr vote) {
 }
 
 void GraphNode::register_song_playing() {
+    node_highlight_color_ = Renderer::instance().color_palette()[4];
+
     // begin transition
     start_callout_fadein();
 
