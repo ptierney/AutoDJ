@@ -65,6 +65,7 @@ void Visualizer::update() {
     NowPlayingHeadline::instance().update();
     DJController::instance().update();
     NodeMover::instance().update();
+    CloudBackground::instance().update();
 }
 
 void Visualizer::draw() {
@@ -102,15 +103,19 @@ bool Visualizer::resize(ci::app::ResizeEvent) {
 
 bool Visualizer::key_down(ci::app::KeyEvent key) {
 
-	if( key.getChar() == 'f' )
+	if (key.getChar() == 'f')
 		AdjApp::instance().setFullScreen(!AdjApp::instance().isFullScreen());
 
-	if( key.getChar() == 'q' )
+	if (key.getChar() == 'q')
         AdjApp::instance().quit();
 
-    if( key.getChar() == 'd' )
+    if (key.getChar() == 'd')
         NodeMover::instance().rotate_clockwise() = 
             !NodeMover::instance().rotate_clockwise();
+
+    if (key.getChar() == 'c')
+        CloudBackground::instance().show_clouds() = 
+        !CloudBackground::instance().show_clouds();
 
     return true;
     
