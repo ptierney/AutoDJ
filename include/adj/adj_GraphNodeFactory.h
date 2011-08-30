@@ -43,9 +43,12 @@ public:
     void add_new_to_random_node();
     void add_new_to_node(GraphNodePtr node);
 
+    
     void delete_node(GraphNodePtr);
     // passed in node is set to NULL after the method
     void delete_node_and_connections(GraphNodePtr&);
+    // this assumes that GraphNode exists, but is not in the ParticleSystem
+    void shallow_delete(GraphNodePtr&);
 
     std::vector<GraphNodePtr>& nodes() { return graph_nodes_; }
     std::map<SongId, GraphNodePtr>& song_map() { return song_map_; }
@@ -61,6 +64,8 @@ public:
     
     std::deque<PairRequest>& pair_requests() { return pair_requests_; }
 
+    bool song_has_node(SongId);
+
 private:
     GraphNodeFactory();
     void init();
@@ -72,6 +77,10 @@ private:
     void check_pair_requests();
     void pair_nodes(SongId, SongId);
     void assert_node_has_particle(GraphNodePtr);
+
+    void remove_from_factory(GraphNodePtr node);
+    void remove_from_other_classes(GraphNodePtr node);
+    void remove_from_graph(GraphNodePtr node);
     
     int sim_counter_;
     bool agitate_nodes_;

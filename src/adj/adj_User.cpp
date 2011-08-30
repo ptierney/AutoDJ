@@ -254,6 +254,10 @@ void UserFactory::update_nodes_after_user_change(UserPtr user) {
     for (std::deque<SongId>::iterator it = user->voted_songs().begin();
         it != user->voted_songs().end(); ++it) {
 
+        // Node may have been deleted while image was downloading
+        if (!GraphNodeFactory::instance().song_has_node(*it))
+            continue;
+
         ci::app::console() << "Updating nodes after user change, song id: " << 
             *it << std::endl;
 

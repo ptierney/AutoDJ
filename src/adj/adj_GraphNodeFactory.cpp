@@ -157,9 +157,16 @@ void GraphNodeFactory::update_graph_from_vote(VotePtr vote) {
             to_delete = *it;
         }
         
-        // properly delete node using 
+        assert(to_delete);
+
         
-        delete_node_and_connections(to_delete);
+        if (to_delete->particle())
+            // properly delete node and rebuild particle system
+            delete_node_and_connections(to_delete);  
+        else // node hasn't been set up yet
+            shallow_delete(to_delete);
+
+        assert(!to_delete);
     }
     
     
@@ -244,7 +251,12 @@ void GraphNodeFactory::check_pair_requests() {
     for (std::deque<PairRequest>::iterator it = pair_requests_.begin();
         it != pair_requests_.end(); ++it) {
 
-         pair_nodes(it->first, it->second);
+        // the song may have been deleted while the program waited to hear back
+        // from the GraphOracle
+        if (!song_has_node(it->first) || !song_has_node(it->second))
+            continue;
+
+        pair_nodes(it->first, it->second);
     }
 
     pair_requests_.clear();
@@ -300,6 +312,8 @@ void GraphNodeFactory::delete_node_and_connections(GraphNodePtr& node) {
     // make n-1 springs to now playing
 
     GraphNodePtr now_playing = PlayManager::instance().now_playing();
+
+    assert(now_playing);
     
     std::vector<GraphNodePtr>& nodes = GraphNodeFactory::instance().nodes();
 	
@@ -309,6 +323,8 @@ void GraphNodeFactory::delete_node_and_connections(GraphNodePtr& node) {
         if (*it == now_playing)
             continue;
 
+        assert(*it);
+
         GraphPhysics::instance().link_nodes(now_playing, *it);
 		
 		temp_pair = std::pair<GraphNodePtr, GraphNodePtr>(now_playing, *it);
@@ -317,14 +333,51 @@ void GraphNodeFactory::delete_node_and_connections(GraphNodePtr& node) {
     
 }
 
-
 void GraphNodeFactory::delete_node(GraphNodePtr node) {
+    remove_from_factory(node);
+    remove_from_other_classes(node);
+    remove_from_graph(node);
+}
+
+void GraphNodeFactory::shallow_delete(GraphNodePtr& node) {
+    remove_from_factory(node);
+    remove_from_other_classes(node);
+    
+    assert(node.unique());
+    
+    node.reset();
+}
+
+void GraphNodeFactory::remove_from_factory(GraphNodePtr node) {
     // remove from main vector
     std::vector<GraphNodePtr>::iterator vec_it = std::find(
         graph_nodes_.begin(), graph_nodes_.end(), node);
     
     graph_nodes_.erase(vec_it);
 
+    // remove from song map
+    song_map_it_ = song_map_.find(node->song().id());
+
+    song_map_.erase(song_map_it_);
+}
+
+void GraphNodeFactory::remove_from_other_classes(GraphNodePtr node) {
+    // check the PlayManager
+
+    if (PlayManager::instance().next_song_ == node)
+        PlayManager::instance().next_song_.reset();
+
+    if (PlayManager::instance().now_playing_ == node)
+        PlayManager::instance().now_playing_.reset();
+
+    // check if it's in the Now Playing Headline
+
+    NowPlayingHeadline::instance().remove_now_playing(node);
+}
+
+
+
+void GraphNodeFactory::remove_from_graph(GraphNodePtr node) {
     // remove from edges
 
     for (std::vector<std::pair<GraphNodePtr, GraphNodePtr> >::iterator
@@ -338,11 +391,6 @@ void GraphNodeFactory::delete_node(GraphNodePtr node) {
 
         ++it;
     }
-
-    // remove from song map
-    song_map_it_ = song_map_.find(node->song().id());
-
-    song_map_.erase(song_map_it_);
 
     // remove from any nodes's children
 
@@ -361,18 +409,11 @@ void GraphNodeFactory::delete_node(GraphNodePtr node) {
 
         (*it)->delete_parent();
     }
+}
 
-    // check the PlayManager
-
-    if (PlayManager::instance().next_song_ == node)
-        PlayManager::instance().next_song_.reset();
-
-    if (PlayManager::instance().now_playing_ == node)
-        PlayManager::instance().now_playing_.reset();
-
-    // check if it's in the Now Playing Headline
-
-    NowPlayingHeadline::instance().remove_now_playing(node);
+bool GraphNodeFactory::song_has_node(SongId id) {
+    song_map_it_ = song_map_.find(id);
+    return song_map_it_ != song_map_.end();
 }
 
 
