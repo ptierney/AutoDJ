@@ -273,6 +273,9 @@ void GraphNode::register_vote(VotePtr vote) {
 
 void GraphNode::register_song_playing() {
     node_highlight_color_ = Renderer::instance().color_palette()[4];
+    
+    if (callout_box_)
+        callout_box_->update_contents();
 
     // begin transition
     start_callout_fadein();
