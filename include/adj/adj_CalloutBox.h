@@ -69,6 +69,10 @@ private:
 
     void draw_connection();
     void render_connection();
+    
+    bool collapsed() { return resized_user_photos_.size() > max_displayed_users_; }
+    int get_num_photos();
+    int get_photos_height();
 
     bool ccw(const ci::Vec2f& a, const ci::Vec2f& b, const ci::Vec2f& c) {
         return (c.y-a.y)*(b.x-a.x) > (b.y-a.y)*(c.x-a.x);
@@ -140,6 +144,8 @@ private:
 
     static int max_width_;
     static int max_height_;
+    
+    int max_displayed_users_;
 };
 
 }

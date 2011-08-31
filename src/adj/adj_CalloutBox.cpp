@@ -54,6 +54,8 @@ CalloutBox::CalloutBox(GraphNode& parent) : node_(parent) {
     scale_ = 0.08f;
 
     alpha_ = 1.0f;
+    
+    max_displayed_users_ = 5;
 }
 
 void CalloutBox::init() {
@@ -100,7 +102,7 @@ void CalloutBox::update_maxima() {
 
 void CalloutBox::calculate_surface_size() {
     int width = calculate_surface_width(); 
-    int num_photos = resized_user_photos_.size();
+    int num_photos = get_num_photos();
 
     int extra_vert_dim = 0;
 
@@ -112,15 +114,34 @@ void CalloutBox::calculate_surface_size() {
 
     int height = extra_vert_dim + top_margin_ * 2 + font_size_ * 1 + 
         font_size_large_ * 2 +
-        text_spacing_ * 4 + num_photos * photo_spacing_; // extra 2 text spacing for "Voted by:" extra gap
+        // extra 2 text spacing for "Voted by:" extra gap
+        text_spacing_ * 4 + num_photos * photo_spacing_; 
 
-    for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin();
-        it != resized_user_photos_.end(); ++it) {
-        
-        height += it->getHeight();
-    }
+    height += get_photos_height();
+    
+    // "Plus n more ..."
+    // need extra padding for some reason
+    if (collapsed())
+        height += text_spacing_ * 2 + font_size_ + font_size_ + text_spacing_;
 
     surface_size_ = ci::Vec2i(width, height);
+}
+
+int CalloutBox::get_num_photos() {
+    return collapsed() ? max_displayed_users_ : resized_user_photos_.size();
+}
+
+int CalloutBox::get_photos_height() {
+    int num_photos = get_num_photos();
+    int height = 0;
+    int count = 0;
+    
+    for (std::deque<ci::gl::Texture>::iterator it = resized_user_photos_.begin(); 
+        it != resized_user_photos_.end() && count < num_photos; ++it, ++count) {
+        height += it->getHeight();
+    }
+    
+    return height;
 }
 
 void CalloutBox::create_surface() {
@@ -183,9 +204,11 @@ void CalloutBox::draw() {
     ci::Vec2f origin = ci::Vec2f(-surface_size_.x, -surface_size_.y) * 0.5f;
     ci::gl::draw(text_texture_, origin);
 
+    int count = 0;
     std::deque<ci::Vec2f>::iterator pos_it = photo_coords_.begin();
     for (std::deque<ci::gl::Texture>::iterator text_it = resized_user_photos_.begin();
-        text_it != resized_user_photos_.end(); ++text_it) {
+        text_it != resized_user_photos_.end() && count < max_displayed_users_; 
+        ++text_it, ++count) {
 
         ci::gl::draw(*text_it, origin + *pos_it - text_it->getSize() * 0.5f);
 
@@ -418,9 +441,11 @@ void CalloutBox::set_contents() {
 
     bool added_extra_space = false;
 
+    int count = 0;
     std::deque<ci::gl::Texture>::iterator texture_it = resized_user_photos_.begin();
-    for (std::deque<UserPtr>::iterator user_it = node_.song().users().begin();
-        user_it != node_.song().users().end(); ++user_it) {
+    for (std::deque<UserPtr>::iterator user_it = node_.song().users().begin(); 
+        user_it != node_.song().users().end() && count < max_displayed_users_; 
+        ++user_it, ++count) {
         ci::Vec2f offset = ci::Vec2f(0.0f, texture_it->getHeight() / 2.0f);
 
         photo_pos += offset;
@@ -456,8 +481,16 @@ void CalloutBox::set_contents() {
         }
     }
 
+    if (collapsed()) {
+        std::string collapse_info = "And " + 
+            boost::lexical_cast<std::string>(node_.song().users().size()) +
+            " more votes...";
+        
+        text_pos += ci::Vec2f(0.f, font_size_);
+        context_->moveTo(text_pos);
+        context_->showText(collapse_info);
+    }
 
-    
     text_texture_ = ci::gl::Texture(surface_->getSurface());
 }
 
