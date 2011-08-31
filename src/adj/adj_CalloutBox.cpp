@@ -3,6 +3,8 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include <adj/adj_Adj.h>
+
 #include <cinder/gl/gl.h>
 #include <cinder/gl/Texture.h>
 #include <cinder/Text.h>

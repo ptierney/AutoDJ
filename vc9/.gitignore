@@ -1,0 +1,12 @@
+Debug
+Release
+*.sdf
+*.suo
+*.vcxproj.user
+ipch
+*.opensdf
+*.png
+*.dxf
+*.aps
+*.ncb
+*.user

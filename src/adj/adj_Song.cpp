@@ -13,6 +13,8 @@
 #include "json/reader.h"
 #include "json/value.h"
 
+#include <adj/adj_Adj.h>
+
 #include "cinder/app/App.h"
 #include "cinder/audio/Output.h"
 #include "cinder/audio/Io.h"

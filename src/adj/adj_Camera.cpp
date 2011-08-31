@@ -1,4 +1,6 @@
 
+#include <adj/adj_Adj.h>
+
 #include <cinder/gl/gl.h>
 #include <cinder/CinderMath.h>
 

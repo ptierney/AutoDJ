@@ -1,6 +1,6 @@
 
 #pragma once
-
+/*
 #include <string>
 
 #include <adj/net/adj_net_Client.h>
@@ -37,3 +37,4 @@ private:
 };
 
 }
+*/

@@ -6,6 +6,8 @@
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include <adj/adj_Adj.h>
+
 #include <cinder/Rand.h>
 #include <cinder/app/App.h>
 

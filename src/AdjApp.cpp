@@ -1,8 +1,10 @@
 
-#include "cinder/app/AppNative.h"
+#include <adj/adj_Adj.h>
 
-#include "AdjApp.h"
-#include "adj/adj_Visualizer.h"
+#include <cinder/app/AppNative.h>
+
+#include <AdjApp.h>
+#include <adj/adj_Visualizer.h>
 
 AdjApp* AdjApp::instance_;
 

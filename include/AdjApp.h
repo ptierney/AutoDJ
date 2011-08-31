@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "adj/adj_Adj.h"
+#include <adj/adj_Adj.h>
 
-#include "cinder/app/AppNative.h"
+#include <cinder/app/AppNative.h>
 
 namespace adj {
     class Visualizer;

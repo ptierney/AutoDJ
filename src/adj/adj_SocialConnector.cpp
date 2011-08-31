@@ -1,4 +1,6 @@
 
+/*
+
 #include <cinder/app/App.h>
 
 #include <adj/adj_SocialConnector.h>
@@ -54,3 +56,5 @@ void SocialConnector::cleanup() {
 }
 
 }
+
+*/

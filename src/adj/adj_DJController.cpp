@@ -2,6 +2,8 @@
 #include <cassert>
 #include <utility>
 
+#include <adj/adj_Adj.h>
+
 #include <cinder/Rand.h>
 #include <cinder/app/App.h>
 

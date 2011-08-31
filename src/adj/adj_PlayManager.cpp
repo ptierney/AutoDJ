@@ -1,6 +1,8 @@
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+#include <adj/adj_Adj.h>
+
 #include "cinder/app/App.h"
 #include "cinder/Rand.h"
 

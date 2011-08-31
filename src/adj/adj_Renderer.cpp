@@ -2,6 +2,8 @@
 #include <deque>
 #include <algorithm>
 
+#include <adj/adj_Adj.h>
+
 #include <cinder/gl/gl.h>
 #include <cinder/Color.h>
 

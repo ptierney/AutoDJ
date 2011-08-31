@@ -1,18 +1,24 @@
 
+
+
 #include <set>
 
-#include "boost/date_time/posix_time/posix_time.hpp"
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include "json/reader.h"
-#include "json/value.h"
+#include <json/reader.h>
+#include <json/value.h>
 
-#include "cinder/app/App.h"
-#include "cinder/Url.h"
+#include <adj/adj_Adj.h>
 
-#include "adj/adj_VoteManager.h"
-#include "adj/adj_User.h"
-#include "adj/adj_GraphNodeFactory.h"
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
+#include <cinder/app/App.h>
+#include <cinder/Url.h>
+
+#include <adj/adj_VoteManager.h>
+#include <adj/adj_User.h>
+#include <adj/adj_GraphNodeFactory.h>
 #include <adj/adj_DJController.h>
 #include <adj/adj_GraphNode.h>
 

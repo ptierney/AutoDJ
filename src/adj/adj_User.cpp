@@ -8,6 +8,9 @@
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include <adj/adj_Adj.h>
+
+#include <cinder/gl/gl.h>
 #include <cinder/app/App.h>
 #include <cinder/ImageIo.h>
 #include <cinder/Surface.h>

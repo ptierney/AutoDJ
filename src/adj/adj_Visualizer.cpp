@@ -1,4 +1,7 @@
 
+#include <adj/adj_Adj.h>
+
+#include <cinder/gl/gl.h>
 #include <cinder/app/App.h>
 
 #include <graph/graph_ParticleSystem.h>

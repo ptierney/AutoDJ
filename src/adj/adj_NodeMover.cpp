@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <adj/adj_Adj.h>
+
 #include <cinder/BSpline.h>
 #include <cinder/app/App.h>
 
