@@ -326,6 +326,10 @@ void GraphNodeFactory::delete_node_and_connections(GraphNodePtr& node) {
             continue;
 
         assert(*it);
+        
+        // look out for nodes which haven't been set up yet
+        if (!(*it)->particle())
+            continue;
 
         GraphPhysics::instance().link_nodes(now_playing, *it);
 		
