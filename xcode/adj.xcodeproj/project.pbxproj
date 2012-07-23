@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		CD245F55131D5B1700BA37CB /* adj_GraphicItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD245F54131D5B1700BA37CB /* adj_GraphicItem.cpp */; };
-		CD245F5C131D5B6100BA37CB /* blue_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = CD245F5B131D5B6100BA37CB /* blue_ring.png */; };
 		CD245FE013204AC500BA37CB /* adj_DJController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD245FDE13204AC500BA37CB /* adj_DJController.cpp */; };
 		CD245FE113204AC500BA37CB /* adj_NowPlayingHeadline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD245FDF13204AC500BA37CB /* adj_NowPlayingHeadline.cpp */; };
 		CDD8491D132455AF00CA3949 /* HouschkaPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDD8491C132455AF00CA3949 /* HouschkaPro-Medium.ttf */; };
@@ -17,6 +16,11 @@
 		CDD84925132455E300CA3949 /* HouschkaPro-DemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDD84923132455E300CA3949 /* HouschkaPro-DemiBold.ttf */; };
 		CDD849971324804700CA3949 /* HouschkaPro-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD849961324804700CA3949 /* HouschkaPro-Medium.otf */; };
 		CDD849991324805700CA3949 /* HouschkaPro-DemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD849981324805700CA3949 /* HouschkaPro-DemiBold.otf */; };
+		CDE7456715BCFD0C00254321 /* adj_NodeMover.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDE7456615BCFD0C00254321 /* adj_NodeMover.cpp */; };
+		CDE7456C15BCFD5000254321 /* GothamRounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDE7456815BCFD5000254321 /* GothamRounded-Bold.ttf */; };
+		CDE7456D15BCFD5000254321 /* GothamRounded-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDE7456915BCFD5000254321 /* GothamRounded-Book.ttf */; };
+		CDE7456E15BCFD5000254321 /* GothamRounded-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDE7456A15BCFD5000254321 /* GothamRounded-Light.ttf */; };
+		CDE7456F15BCFD5000254321 /* GothamRounded-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDE7456B15BCFD5000254321 /* GothamRounded-Medium.ttf */; };
 		CDF9CCA91311DE6B0094E56F /* adj_CalloutBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC8E1311DE6B0094E56F /* adj_CalloutBox.cpp */; };
 		CDF9CCAA1311DE6B0094E56F /* adj_Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC8F1311DE6B0094E56F /* adj_Camera.cpp */; };
 		CDF9CCAB1311DE6B0094E56F /* adj_GraphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF9CC901311DE6B0094E56F /* adj_GraphNode.cpp */; };
@@ -64,7 +68,6 @@
 		8D1107320486CEB800E47090 /* adj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD245F53131D5B0900BA37CB /* adj_GraphicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adj_GraphicItem.h; sourceTree = "<group>"; };
 		CD245F54131D5B1700BA37CB /* adj_GraphicItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_GraphicItem.cpp; sourceTree = "<group>"; };
-		CD245F5B131D5B6100BA37CB /* blue_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blue_ring.png; path = ../resources/blue_ring.png; sourceTree = SOURCE_ROOT; };
 		CD245FDC13204AB600BA37CB /* adj_DJController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adj_DJController.h; sourceTree = "<group>"; };
 		CD245FDD13204AB600BA37CB /* adj_NowPlayingHeadline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adj_NowPlayingHeadline.h; sourceTree = "<group>"; };
 		CD245FDE13204AC500BA37CB /* adj_DJController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_DJController.cpp; sourceTree = "<group>"; };
@@ -74,6 +77,12 @@
 		CDD84923132455E300CA3949 /* HouschkaPro-DemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-DemiBold.ttf"; path = "../resources/HouschkaPro-DemiBold.ttf"; sourceTree = SOURCE_ROOT; };
 		CDD849961324804700CA3949 /* HouschkaPro-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-Medium.otf"; path = "../resources/HouschkaPro-Medium.otf"; sourceTree = SOURCE_ROOT; };
 		CDD849981324805700CA3949 /* HouschkaPro-DemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HouschkaPro-DemiBold.otf"; path = "../resources/HouschkaPro-DemiBold.otf"; sourceTree = SOURCE_ROOT; };
+		CDE7456515BCFCFD00254321 /* adj_NodeMover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adj_NodeMover.h; sourceTree = "<group>"; };
+		CDE7456615BCFD0C00254321 /* adj_NodeMover.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_NodeMover.cpp; sourceTree = "<group>"; };
+		CDE7456815BCFD5000254321 /* GothamRounded-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Bold.ttf"; path = "../resources/GothamRounded-Bold.ttf"; sourceTree = "<group>"; };
+		CDE7456915BCFD5000254321 /* GothamRounded-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Book.ttf"; path = "../resources/GothamRounded-Book.ttf"; sourceTree = "<group>"; };
+		CDE7456A15BCFD5000254321 /* GothamRounded-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Light.ttf"; path = "../resources/GothamRounded-Light.ttf"; sourceTree = "<group>"; };
+		CDE7456B15BCFD5000254321 /* GothamRounded-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Medium.ttf"; path = "../resources/GothamRounded-Medium.ttf"; sourceTree = "<group>"; };
 		CDF9CC8E1311DE6B0094E56F /* adj_CalloutBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_CalloutBox.cpp; sourceTree = "<group>"; };
 		CDF9CC8F1311DE6B0094E56F /* adj_Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_Camera.cpp; sourceTree = "<group>"; };
 		CDF9CC901311DE6B0094E56F /* adj_GraphNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adj_GraphNode.cpp; sourceTree = "<group>"; };
@@ -212,12 +221,15 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CDE7456815BCFD5000254321 /* GothamRounded-Bold.ttf */,
+				CDE7456915BCFD5000254321 /* GothamRounded-Book.ttf */,
+				CDE7456A15BCFD5000254321 /* GothamRounded-Light.ttf */,
+				CDE7456B15BCFD5000254321 /* GothamRounded-Medium.ttf */,
 				CDD849981324805700CA3949 /* HouschkaPro-DemiBold.otf */,
 				CDD849961324804700CA3949 /* HouschkaPro-Medium.otf */,
 				CDD84922132455E300CA3949 /* HouschkaPro-Bold.ttf */,
 				CDD84923132455E300CA3949 /* HouschkaPro-DemiBold.ttf */,
 				CDD8491C132455AF00CA3949 /* HouschkaPro-Medium.ttf */,
-				CD245F5B131D5B6100BA37CB /* blue_ring.png */,
 				CDF9CD691311E5EF0094E56F /* isocpeui.ttf */,
 				CDF9CD6A1311E5EF0094E56F /* isocpeur.ttf */,
 				CDF9CD511311E4BF0094E56F /* defaulticon.jpg */,
@@ -258,6 +270,7 @@
 		CDF9CC8D1311DE6B0094E56F /* adj */ = {
 			isa = PBXGroup;
 			children = (
+				CDE7456615BCFD0C00254321 /* adj_NodeMover.cpp */,
 				CD245FDE13204AC500BA37CB /* adj_DJController.cpp */,
 				CD245FDF13204AC500BA37CB /* adj_NowPlayingHeadline.cpp */,
 				CD245F54131D5B1700BA37CB /* adj_GraphicItem.cpp */,
@@ -319,6 +332,7 @@
 		CDF9CCC21311DE7D0094E56F /* adj */ = {
 			isa = PBXGroup;
 			children = (
+				CDE7456515BCFCFD00254321 /* adj_NodeMover.h */,
 				CD245FDC13204AB600BA37CB /* adj_DJController.h */,
 				CD245FDD13204AB600BA37CB /* adj_NowPlayingHeadline.h */,
 				CD245F53131D5B0900BA37CB /* adj_GraphicItem.h */,
@@ -396,6 +410,7 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "adj" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -423,12 +438,15 @@
 				CDF9CD521311E4BF0094E56F /* defaulticon.jpg in Resources */,
 				CDF9CD6B1311E5EF0094E56F /* isocpeui.ttf in Resources */,
 				CDF9CD6C1311E5EF0094E56F /* isocpeur.ttf in Resources */,
-				CD245F5C131D5B6100BA37CB /* blue_ring.png in Resources */,
 				CDD8491D132455AF00CA3949 /* HouschkaPro-Medium.ttf in Resources */,
 				CDD84924132455E300CA3949 /* HouschkaPro-Bold.ttf in Resources */,
 				CDD84925132455E300CA3949 /* HouschkaPro-DemiBold.ttf in Resources */,
 				CDD849971324804700CA3949 /* HouschkaPro-Medium.otf in Resources */,
 				CDD849991324805700CA3949 /* HouschkaPro-DemiBold.otf in Resources */,
+				CDE7456C15BCFD5000254321 /* GothamRounded-Bold.ttf in Resources */,
+				CDE7456D15BCFD5000254321 /* GothamRounded-Book.ttf in Resources */,
+				CDE7456E15BCFD5000254321 /* GothamRounded-Light.ttf in Resources */,
+				CDE7456F15BCFD5000254321 /* GothamRounded-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,6 +481,7 @@
 				CD245F55131D5B1700BA37CB /* adj_GraphicItem.cpp in Sources */,
 				CD245FE013204AC500BA37CB /* adj_DJController.cpp in Sources */,
 				CD245FE113204AC500BA37CB /* adj_NowPlayingHeadline.cpp in Sources */,
+				CDE7456715BCFD0C00254321 /* adj_NodeMover.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
